@@ -15,18 +15,9 @@ public class CorridorsConfigMenu : MonoBehaviour
 
         for (var i = 0; i < corridorSprites.Length; ++i)
         {
-            SetupTileCounter(corridorCounter, i, origin, corridorSprites[i]);
+            var offset = new Vector3(i * 180, 0, 0);
+            ConfigMenu.SetupCounter(corridorCounter, origin, offset, corridorSprites[i]);
         }
-    }
-
-    private void SetupTileCounter(ElementCounter tileCounter, int index, Vector3 position, Sprite sprite)
-    {
-        var elementCounterInstance = Instantiate(tileCounter);
-        elementCounterInstance.transform.parent = transform;
-
-        elementCounterInstance.Image.sprite = sprite;
-        var offset = new Vector3(index * 180, 0, 0);
-        elementCounterInstance.transform.localPosition = position + offset;
     }
 
     public void SaveConfig()
