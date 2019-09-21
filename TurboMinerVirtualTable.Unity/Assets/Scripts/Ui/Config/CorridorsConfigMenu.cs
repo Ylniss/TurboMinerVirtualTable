@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CorridorsConfigMenu : MonoBehaviour
 {
     public ConfigMenu ConfigMenu;
 
     private Vector3 origin = new Vector3(-109, 232, 0);
+    private readonly string SubPath = "Corridors";
 
     void Start()
     {
@@ -22,12 +21,12 @@ public class CorridorsConfigMenu : MonoBehaviour
 
     public void SaveConfig()
     {
-        ConfigMenu.SaveConfig();
+        ConfigMenu.SaveConfig(SubPath);
     }
 
-    public void AddConfig()
+    public void LoadConfig(string name)
     {
-        ConfigMenu.AddConfig();
+        ConfigMenu.LoadConfig(SubPath, name);
     }
 
     public void RemoveConfig()

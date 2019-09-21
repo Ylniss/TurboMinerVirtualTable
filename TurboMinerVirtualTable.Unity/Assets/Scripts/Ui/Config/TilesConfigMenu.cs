@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TilesConfigMenu : MonoBehaviour
 {
@@ -8,7 +6,7 @@ public class TilesConfigMenu : MonoBehaviour
 
     private Vector3 origin = new Vector3(-126, 241, 0);
     private readonly int rowCount = 5;
-
+    private readonly string SubPath = "Tiles";
 
     void Start()
     {
@@ -24,12 +22,12 @@ public class TilesConfigMenu : MonoBehaviour
 
     public void SaveConfig()
     {
-        ConfigMenu.SaveConfig();
+        ConfigMenu.SaveConfig(SubPath);
     }
 
-    public void AddConfig()
+    public void LoadConfig(string name)
     {
-        ConfigMenu.AddConfig();
+        ConfigMenu.LoadConfig(SubPath, name);
     }
 
     public void RemoveConfig()

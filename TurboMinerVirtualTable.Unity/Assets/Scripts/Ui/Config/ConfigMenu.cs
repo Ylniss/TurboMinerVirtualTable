@@ -1,18 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using Assets.Scripts.Utils;
 
 public class ConfigMenu : MonoBehaviour
 {
-    public ScrollRect configList;
-    public TMP_InputField configName;
-
-    public ElementCounterToElementCountConverter converter;
+    public ScrollRect ConfigList;
+    public TMP_InputField ConfigName;
+    public ConfigSaver ConfigSaver;
+    public ConfigLoader ConfigLoader;
 
     private List<ElementCounter> elementCounters = new List<ElementCounter>();
 
@@ -26,33 +22,30 @@ public class ConfigMenu : MonoBehaviour
         elementCounters.Add(elementCounterInstance);
     }
 
-    public void SaveConfig()
+    public void SaveConfig(string subPath)
     {
-        var elementCounts = new ElementCount[elementCounters.Count];
-        for(var i = 0; i < elementCounters.Count; ++i)
+        if (ConfigName == null)
         {
-            var elementCount = converter.Convert(elementCounters[i]);
-            elementCounts[i] = elementCount;
+            return;
         }
 
-        var formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/" + configName.text + ".cfg";
-        var stream = new FileStream(path, FileMode.Create);
-
-        formatter.Serialize(stream, elementCounts);
-        stream.Close();
+        ConfigSaver.Save(elementCounters, subPath, ConfigName.text);
     }
 
-    public void AddConfig()
+    public void LoadConfig(string subPath, string name)
     {
+        var elementCounts = ConfigLoader.Load(subPath, name);
+       //todo: load to element counters!
+    }
 
+    public void GetConfigNames(string subPath)
+    {
+        ConfigLoader.GetConfigNames(subPath);
+        //todo: populate scroll view list
     }
 
     public void RemoveConfig()
     {
 
     }
-
-
-
 }
