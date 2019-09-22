@@ -35,7 +35,14 @@ public class ConfigMenu : MonoBehaviour
     public void LoadConfig(string subPath, string name)
     {
         var elementCounts = ConfigLoader.Load(subPath, name);
-       //todo: load to element counters!
+        //todo: load to element counters!
+
+        var cntrs = GetComponentsInParent<ElementCounter>();//GetComponents(typeof(ElementCounter));
+
+        for(var i = 0; i < elementCounts.Length; ++i)
+        {
+            elementCounters[i].CountInput.text = elementCounts[i].Count.ToString();
+        }
     }
 
     public void GetConfigNames(string subPath)
