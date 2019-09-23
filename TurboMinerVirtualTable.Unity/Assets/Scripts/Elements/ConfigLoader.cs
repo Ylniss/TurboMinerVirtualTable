@@ -25,17 +25,26 @@ public class ConfigLoader : MonoBehaviour
 
     public string[] GetConfigNames(string subPath)
     {
-        string path = $"{Application.persistentDataPath}/{subPath}";
-        var directoryInfo = new DirectoryInfo(path);
-        var files = directoryInfo.GetFiles("*.cfg");
-
-        var names = new string[files.Length];
-
-        for (var i = 0; i < files.Length; ++i)
+        string directory = $"{Application.persistentDataPath}/{subPath}";
+        if (Directory.Exists(directory))
         {
-            names[i] = files[i].Name.Remove(files[i].Name.Length - 4);
+            var directoryInfo = new DirectoryInfo(directory);
+            var files = directoryInfo.GetFiles("*.cfg");
+
+            var names = new string[files.Length];
+
+            for (var i = 0; i < files.Length; ++i)
+            {
+                names[i] = files[i].Name.Remove(files[i].Name.Length - 4);
+            }
+
+            return names;
+        }
+        else
+        {
+            Debug.Log($"Directory '{directory}' not found.");
+            return null;
         }
 
-        return names;
     }
 }
