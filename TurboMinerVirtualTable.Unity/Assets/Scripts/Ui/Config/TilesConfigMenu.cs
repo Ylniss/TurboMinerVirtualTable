@@ -4,7 +4,7 @@ public class TilesConfigMenu : MonoBehaviour
 {
     public ConfigMenu ConfigMenu;
 
-    private Vector3 origin = new Vector3(-126, 241, 0);
+    private Vector3 origin = new Vector3(-126, 216, 0);
     private readonly int rowCount = 5;
     private readonly string SubPath = "Tiles";
 

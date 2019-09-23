@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class ElementCounter : MonoBehaviour
@@ -10,39 +8,39 @@ public class ElementCounter : MonoBehaviour
 
     public int MaxCount;
 
-    private int count = 0;
+    private int count;
+    public int Count
+    {
+        get { return count; }
+        set
+        {
+            count = value;
+            CountInput.text = count.ToString();
+        }
+    }
 
     public void Start()
     {
-        SetCountInputText();
+        Count = 0;
     }
 
     public void UpCounter()
     {
-        ++count;
+        ++Count;
 
-        if (count > MaxCount)
+        if (Count > MaxCount)
         {
-            count = MaxCount;
+            Count = MaxCount;
         }
-
-        SetCountInputText();
     }
 
     public void DownCounter()
     {
-        --count;
+        --Count;
 
-        if(count < 0)
+        if(Count < 0)
         {
-            count = 0;
+            Count = 0;
         }
-
-        SetCountInputText();
-    }
-
-    private void SetCountInputText()
-    {
-        CountInput.text = count.ToString();
     }
 }

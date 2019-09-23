@@ -4,7 +4,7 @@ public class CorridorsConfigMenu : MonoBehaviour
 {
     public ConfigMenu ConfigMenu;
 
-    private Vector3 origin = new Vector3(-109, 232, 0);
+    private Vector3 origin = new Vector3(-109, 207, 0);
     private readonly string SubPath = "Corridors";
 
     void Start()

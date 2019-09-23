@@ -35,20 +35,12 @@ public class ConfigMenu : MonoBehaviour
     public void LoadConfig(string subPath, string name)
     {
         var elementCounts = ConfigLoader.Load(subPath, name);
-        //todo: load to element counters!
-
-        var cntrs = GetComponentsInParent<ElementCounter>();//GetComponents(typeof(ElementCounter));
+        var elementCounters = gameObject.transform.parent.GetComponentsInChildren<ElementCounter>();
 
         for(var i = 0; i < elementCounts.Length; ++i)
         {
-            elementCounters[i].CountInput.text = elementCounts[i].Count.ToString();
+            elementCounters[i].Count = elementCounts[i].Count;
         }
-    }
-
-    public void GetConfigNames(string subPath)
-    {
-        ConfigLoader.GetConfigNames(subPath);
-        //todo: populate scroll view list
     }
 
     public void RemoveConfig()
