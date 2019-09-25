@@ -1,45 +1,52 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Element : MonoBehaviour
 {
     public Transform FrontSide;
     public Transform BackSide;
-    public BoxCollider2D BoxCollider;
-    public RectTransform ButtonRect;
+    public bool Spinnable;
+    public CollisionHelper CollisionHelper;
+    public List<Transform> ContainedElements = new List<Transform>();
 
-    private float lastClick = 0f;
-    private float interval = 0.3f;
+    private BoxCollider2D boxCollider;
 
     void Start()
     {
         var frontSprite = FrontSide.GetComponent<SpriteRenderer>();
         var backSprite = BackSide.GetComponent<SpriteRenderer>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        
 
-        BoxCollider.size = frontSprite.bounds.size;
-        ButtonRect.sizeDelta = new Vector2(frontSprite.bounds.size.x, frontSprite.bounds.size.y);
+        if (frontSprite.bounds.size != backSprite.bounds.size)
+        {
+            Debug.Log($"Front sprite size '{frontSprite.bounds.size}' is different than back '{backSprite.bounds.size}'");
+        }
+
+        boxCollider.size = frontSprite.bounds.size;
     }
 
-    public void TurnOnOtherSide()
+    void OnTriggerStay2D(Collider2D otherCollider)
     {
-        // on double click
-        if ((lastClick + interval) > Time.time)
+        if (CollisionHelper.IsFullyContained(boxCollider, otherCollider))
         {
-            if (FrontSide.gameObject.activeInHierarchy)
-            {
-                BackSide.gameObject.SetActive(true);
-                FrontSide.gameObject.SetActive(false);
-            }
-            else
-            {
-                BackSide.gameObject.SetActive(false);
-                FrontSide.gameObject.SetActive(true);
-            }
-        }
-        else
-        {
-            // one click
-        }
+            var otherElement = otherCollider.transform;
 
-        lastClick = Time.time;
+            var otherElementContainedElements = otherElement.gameObject.GetComponent<Element>().ContainedElements;
+            var isOtherElementDragging = otherElement.GetComponent<MouseEvents>().IsDragging;
+            if (!otherElementContainedElements.Contains(transform) && !isOtherElementDragging)
+            {
+                otherElementContainedElements.Add(transform);
+            }
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        var element = collider.transform;
+        if (ContainedElements.Contains(element))
+        {
+            ContainedElements.Remove(element);
+        }
     }
 }
