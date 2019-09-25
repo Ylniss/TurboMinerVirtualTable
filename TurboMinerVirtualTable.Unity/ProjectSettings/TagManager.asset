@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Board
+    uniqueID: 744513155
+    locked: 0
+  - name: Corridors
+    uniqueID: 419421129
+    locked: 0
+  - name: Tiles
+    uniqueID: 4040218505
+    locked: 0
