@@ -7,6 +7,7 @@ public class Element : MonoBehaviour
     public Transform BackSide;
     public bool Spinnable;
     public CollisionHelper CollisionHelper;
+    public bool IsContained;
     public List<Transform> ContainedElements = new List<Transform>();
 
     private BoxCollider2D boxCollider;
@@ -34,8 +35,10 @@ public class Element : MonoBehaviour
 
             var otherElementContainedElements = otherElement.gameObject.GetComponent<Element>().ContainedElements;
             var isOtherElementDragging = otherElement.GetComponent<MouseEvents>().IsDragging;
-            if (!otherElementContainedElements.Contains(transform) && !isOtherElementDragging)
+            var isCurrentDragging = GetComponent<MouseEvents>().IsDragging;
+            if (!otherElementContainedElements.Contains(transform) && !isOtherElementDragging && isCurrentDragging)
             {
+                IsContained = true;
                 otherElementContainedElements.Add(transform);
             }
         }
@@ -43,6 +46,8 @@ public class Element : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collider)
     {
+        IsContained = false;
+
         var element = collider.transform;
         if (ContainedElements.Contains(element))
         {

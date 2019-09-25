@@ -1,37 +1,34 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MouseEvents : MonoBehaviour
 {
     public bool IsDragging;
 
-    private Transform frontSide;
-    private Transform backSide;
-    private bool spinnable;
-    private List<Transform> containedElements;
+    private Element element;
 
     void Start()
     {
-        var element = GetComponent<Element>();
-        
-        frontSide = element.FrontSide;
-        backSide = element.BackSide;
-        spinnable = element.Spinnable;
-        containedElements = element.ContainedElements;
+        element = GetComponent<Element>();
     }
 
-    private Vector3 screenPoint;
     private Vector3 offset;
-
     void OnMouseDown()
     {
         offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z));
+
+        // set Z to 0 when taking element to allow collisions with other ellements (Z axis has to be equal)
+        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
 
         OnDoubleClick();
     }
 
     void OnMouseUp()
     {
+        if (element.IsContained)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+        }
+
         IsDragging = false;
     }
 
@@ -42,7 +39,7 @@ public class MouseEvents : MonoBehaviour
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
         transform.position = curPosition;
 
-        foreach(var element in containedElements)
+        foreach(var element in element.ContainedElements)
         {
             element.position = new Vector3(curPosition.x, curPosition.y, element.position.z);
         }
@@ -52,9 +49,9 @@ public class MouseEvents : MonoBehaviour
 
     void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(1) && spinnable) // right mouse button
+        if (Input.GetMouseButtonDown(1) && element.Spinnable) // right mouse button
         {
-            frontSide.Rotate(0, 0, 90);
+            element.FrontSide.Rotate(0, 0, 90);
         }
     }
 
@@ -73,15 +70,15 @@ public class MouseEvents : MonoBehaviour
 
     private void TurnOnOtherSide()
     {
-        if (frontSide.gameObject.activeInHierarchy)
+        if (element.FrontSide.gameObject.activeInHierarchy)
         {
-            backSide.gameObject.SetActive(true);
-            frontSide.gameObject.SetActive(false);
+            element.BackSide.gameObject.SetActive(true);
+            element.FrontSide.gameObject.SetActive(false);
         }
         else
         {
-            backSide.gameObject.SetActive(false);
-            frontSide.gameObject.SetActive(true);
+            element.BackSide.gameObject.SetActive(false);
+            element.FrontSide.gameObject.SetActive(true);
         }
     }
 }
