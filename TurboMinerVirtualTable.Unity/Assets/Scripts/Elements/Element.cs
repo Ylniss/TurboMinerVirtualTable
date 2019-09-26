@@ -16,13 +16,10 @@ public class Element : MonoBehaviour
 
     void Start()
     {
-        var frontSprite = FrontSide.GetComponent<SpriteRenderer>();
+        var frontSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
 
         boxCollider = GetComponent<BoxCollider>();
-        boxCollider.size = new Vector3(frontSprite.bounds.size.x, frontSprite.bounds.size.y, 1);
-
-        // turn box collider towards smaller elements (up)
-        boxCollider.center = new Vector3(0, 0, -0.5f);
+        boxCollider.size = new Vector3(frontSpriteRenderer.bounds.size.x, frontSpriteRenderer.bounds.size.y, 1);
 
         // if area is small enough put it above (z = -1) and turn boxcollider towards bigger element (down)
         if (boxCollider.size.x* boxCollider.size.y < maximumAboveAllSize)
@@ -30,7 +27,11 @@ public class Element : MonoBehaviour
             transform.position = new Vector3(transform.position.x, transform.position.y, -1);
             boxCollider.center = new Vector3(0, 0, 0.5f);
         }
-        
+        else
+        {
+            // turn box collider towards smaller elements (up)
+            boxCollider.center = new Vector3(0, 0, -0.5f);
+        }       
     }
 
     void OnTriggerStay(Collider otherCollider)
@@ -60,9 +61,14 @@ public class Element : MonoBehaviour
 
     public void Rotate()
     {
+        Rotate(1);
+    }
+
+    public void Rotate(int numOfTimes)
+    {
         if (Spinnable)
         {
-            transform.Rotate(0, 0, 90);
+            transform.Rotate(0, 0, -90 * numOfTimes);
         }
     }
 
@@ -78,5 +84,23 @@ public class Element : MonoBehaviour
             BackSide.gameObject.SetActive(false);
             FrontSide.gameObject.SetActive(true);
         }
+    }
+
+    public void SetLayer(string layer)
+    {
+        var frontSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
+        var backSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
+
+        frontSpriteRenderer.sortingLayerName = layer;
+        backSpriteRenderer.sortingLayerName = layer;
+    }
+
+    public void SetLayerOrder(int order)
+    {
+        var frontSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
+        var backSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
+
+        frontSpriteRenderer.sortingOrder = order;
+        backSpriteRenderer.sortingOrder = order;
     }
 }

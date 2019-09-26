@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Settings;
+using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class Spawner : MonoBehaviour
         diamondTileInstance.Spinnable = false;
 
         SpritesLoader.Load(diamondTileInstance, "Graphics/Tiles/et_diamond_edit");
+        diamondTileInstance.SetLayer(SortingLayers.Tiles);
 
         return diamondTileInstance;
     }
@@ -31,13 +33,15 @@ public class Spawner : MonoBehaviour
         return diamondCorridorInstance;
     }
 
-    public Element SpawnTile(string pathFront, Vector2 position)
+    public Element SpawnTile(string tileFrontPath, Vector2 position)
     {
         var tileInstance = Instantiate(GetElementPrefab(), position, Quaternion.identity);
         tileInstance.Spinnable = false;
 
         var tileBackPath = "Graphics/Tiles/et_rubble__red_edit";
-        SpritesLoader.Load(tileInstance, pathFront, tileBackPath);
+        SpritesLoader.Load(tileInstance, tileFrontPath, tileBackPath);
+        tileInstance.SetLayer(SortingLayers.Tiles);
+
         return tileInstance;
     }
 
@@ -72,12 +76,23 @@ public class Spawner : MonoBehaviour
 
     public void SpawnPassage(Vector2 position)
     {
-        //todo: implement
+        var passage = Instantiate(GetElementPrefab(), position, Quaternion.identity);
+        passage.Spinnable = true;
+
+        //todo: finnish
+
     }
 
-    public void SpawnPawn(string color, Vector2 position)
+    public Element SpawnPawn(string color, Vector2 position)
     {
-        //todo: implement
+        var pawnInstance = Instantiate(GetElementPrefab(), position, Quaternion.identity);
+        pawnInstance.Spinnable = false; //todo: true, create back graphics for that -> :|
+
+        var pawnPath = $"Graphics/Pawns/pawn_{color}";
+        SpritesLoader.Load(pawnInstance, pawnPath);
+        pawnInstance.SetLayer(SortingLayers.Pawns);
+
+        return pawnInstance;
     }
 
     public void SpawnActionToken(Vector2 position)

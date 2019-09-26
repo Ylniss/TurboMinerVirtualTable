@@ -15,9 +15,9 @@ public class SpritesLoader : MonoBehaviour
     {
         var sprites = element.GetComponentsInChildren<SpriteRenderer>(true);
 
-        var spriteFront = Resources.Load<Sprite>(pathFront);
-        var spriteBack = Resources.Load<Sprite>(pathBack);
-        sprites[0].sprite = spriteFront;
-        sprites[1].sprite = spriteBack;
+        var frontSprite = Resources.Load<Sprite>(pathFront);
+        var backSprite = Resources.Load<Sprite>(pathBack);
+        sprites[0].sprite = frontSprite;
+        sprites[1].sprite = backSprite;
     }
 }

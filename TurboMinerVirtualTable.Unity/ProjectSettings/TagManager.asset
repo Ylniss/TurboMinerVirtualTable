@@ -50,3 +50,6 @@ TagManager:
   - name: Tiles
     uniqueID: 4040218505
     locked: 0
+  - name: Pawns
+    uniqueID: 3838113959
+    locked: 0

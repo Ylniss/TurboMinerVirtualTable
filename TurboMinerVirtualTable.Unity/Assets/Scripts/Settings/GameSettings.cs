@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Settings;
 using UnityEngine;
 
-public class GameSettings : MonoBehaviour
+public static class GameSettings
 {
     public static int NumberOfPlayers
     {
