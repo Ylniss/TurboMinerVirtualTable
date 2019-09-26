@@ -16,19 +16,11 @@ public class MouseEvents : MonoBehaviour
     {
         offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z));
 
-        // set Z to 0 when taking element to allow collisions with other ellements (Z axis has to be equal)
-        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
-
         OnDoubleClick();
     }
 
     void OnMouseUp()
     {
-        if (element.IsContained)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, -1);
-        }
-
         IsDragging = false;
     }
 
@@ -52,6 +44,7 @@ public class MouseEvents : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && element.Spinnable) // right mouse button
         {
             element.FrontSide.Rotate(0, 0, 90);
+            element.BackSide.Rotate(0, 0, 90);
         }
     }
 

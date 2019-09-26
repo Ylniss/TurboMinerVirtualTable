@@ -7,27 +7,33 @@ public class Element : MonoBehaviour
     public Transform BackSide;
     public bool Spinnable;
     public CollisionHelper CollisionHelper;
-    public bool IsContained;
     public List<Transform> ContainedElements = new List<Transform>();
 
-    private BoxCollider2D boxCollider;
+    private BoxCollider boxCollider;
+
+    // max size that will put above others on Z axis (to make little elements like tiles takeable from bigger elements lie corridors
+    private const int maximumAboveAllSize = 8;
 
     void Start()
     {
         var frontSprite = FrontSide.GetComponent<SpriteRenderer>();
-        var backSprite = BackSide.GetComponent<SpriteRenderer>();
-        boxCollider = GetComponent<BoxCollider2D>();
-        
 
-        if (frontSprite.bounds.size != backSprite.bounds.size)
+        boxCollider = GetComponent<BoxCollider>();
+        boxCollider.size = new Vector3(frontSprite.bounds.size.x, frontSprite.bounds.size.y, 1);
+
+        // turn box collider towards smaller elements (up)
+        boxCollider.center = new Vector3(0, 0, -0.5f);
+
+        // if area is small enough put it above (z = -1) and turn boxcollider towards bigger element (down)
+        if (boxCollider.size.x* boxCollider.size.y < maximumAboveAllSize)
         {
-            Debug.Log($"Front sprite size '{frontSprite.bounds.size}' is different than back '{backSprite.bounds.size}'");
+            transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+            boxCollider.center = new Vector3(0, 0, 0.5f);
         }
-
-        boxCollider.size = frontSprite.bounds.size;
+        
     }
 
-    void OnTriggerStay2D(Collider2D otherCollider)
+    void OnTriggerStay(Collider otherCollider)
     {
         if (CollisionHelper.IsFullyContained(boxCollider, otherCollider))
         {
@@ -38,16 +44,13 @@ public class Element : MonoBehaviour
             var isCurrentDragging = GetComponent<MouseEvents>().IsDragging;
             if (!otherElementContainedElements.Contains(transform) && !isOtherElementDragging && isCurrentDragging)
             {
-                IsContained = true;
                 otherElementContainedElements.Add(transform);
             }
         }
     }
 
-    void OnTriggerExit2D(Collider2D collider)
+    void OnTriggerExit(Collider collider)
     {
-        IsContained = false;
-
         var element = collider.transform;
         if (ContainedElements.Contains(element))
         {
