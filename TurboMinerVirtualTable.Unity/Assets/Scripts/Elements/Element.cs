@@ -11,7 +11,7 @@ public class Element : MonoBehaviour
 
     private BoxCollider boxCollider;
 
-    // max size that will put above others on Z axis (to make little elements like tiles takeable from bigger elements lie corridors
+    // max size that will put above others on Z axis (to make little elements like tiles takeable from bigger elements like corridors
     private const int maximumAboveAllSize = 8;
 
     void Start()
@@ -55,6 +55,28 @@ public class Element : MonoBehaviour
         if (ContainedElements.Contains(element))
         {
             ContainedElements.Remove(element);
+        }
+    }
+
+    public void Rotate()
+    {
+        if (Spinnable)
+        {
+            transform.Rotate(0, 0, 90);
+        }
+    }
+
+    public void TurnOnOtherSide()
+    {
+        if (FrontSide.gameObject.activeInHierarchy)
+        {
+            BackSide.gameObject.SetActive(true);
+            FrontSide.gameObject.SetActive(false);
+        }
+        else
+        {
+            BackSide.gameObject.SetActive(false);
+            FrontSide.gameObject.SetActive(true);
         }
     }
 }

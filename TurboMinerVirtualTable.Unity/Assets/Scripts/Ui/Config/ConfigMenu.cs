@@ -45,6 +45,6 @@ public class ConfigMenu : MonoBehaviour
 
     public void RemoveConfig()
     {
-
+        //todo: remove config
     }
 }

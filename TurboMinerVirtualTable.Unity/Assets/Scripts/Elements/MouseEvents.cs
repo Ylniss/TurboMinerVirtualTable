@@ -5,6 +5,7 @@ public class MouseEvents : MonoBehaviour
     public bool IsDragging;
 
     private Element element;
+    private Vector2[] ContainedElementsOffsets;
 
     void Start()
     {
@@ -15,6 +16,13 @@ public class MouseEvents : MonoBehaviour
     void OnMouseDown()
     {
         offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z));
+
+        ContainedElementsOffsets = new Vector2[element.ContainedElements.Count];
+
+        for(var i = 0; i < ContainedElementsOffsets.Length; ++i)
+        {
+            ContainedElementsOffsets[i] = transform.position - element.ContainedElements[i].position;
+        }
 
         OnDoubleClick();
     }
@@ -31,9 +39,9 @@ public class MouseEvents : MonoBehaviour
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
         transform.position = curPosition;
 
-        foreach(var element in element.ContainedElements)
+        for(var i = 0; i < element.ContainedElements.Count; ++i)
         {
-            element.position = new Vector3(curPosition.x, curPosition.y, element.position.z);
+            element.ContainedElements[i].position = new Vector3(curPosition.x - ContainedElementsOffsets[i].x, curPosition.y - ContainedElementsOffsets[i].y, element.ContainedElements[i].position.z);
         }
 
         IsDragging = true;
@@ -41,10 +49,9 @@ public class MouseEvents : MonoBehaviour
 
     void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(1) && element.Spinnable) // right mouse button
+        if (Input.GetMouseButtonDown(1)) // right mouse button
         {
-            element.FrontSide.Rotate(0, 0, 90);
-            element.BackSide.Rotate(0, 0, 90);
+            element.Rotate();
         }
     }
 
@@ -55,23 +62,9 @@ public class MouseEvents : MonoBehaviour
     {
         if ((lastClick + interval) > Time.time)
         {
-            TurnOnOtherSide();
+            element.TurnOnOtherSide();
         }
 
         lastClick = Time.time;
-    }
-
-    private void TurnOnOtherSide()
-    {
-        if (element.FrontSide.gameObject.activeInHierarchy)
-        {
-            element.BackSide.gameObject.SetActive(true);
-            element.FrontSide.gameObject.SetActive(false);
-        }
-        else
-        {
-            element.BackSide.gameObject.SetActive(false);
-            element.FrontSide.gameObject.SetActive(true);
-        }
     }
 }
