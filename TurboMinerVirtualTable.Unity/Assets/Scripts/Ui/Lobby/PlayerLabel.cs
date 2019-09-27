@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Assets.Scripts.Utils.Extensions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,7 @@ public class PlayerLabel : MonoBehaviour
     {
         get
         {
-            return ColorPicker.color.ToString();
+            return ColorPicker.color.ToColorString();
         }
     }
 

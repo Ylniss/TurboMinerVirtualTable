@@ -16,12 +16,14 @@ public class MouseEvents : MonoBehaviour
     void OnMouseDown()
     {
         offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z));
-
         ContainedElementsOffsets = new Vector2[element.ContainedElements.Count];
+        element.SetLayerOrder(++Element.MaxOrderInLayer);
 
         for(var i = 0; i < ContainedElementsOffsets.Length; ++i)
         {
             ContainedElementsOffsets[i] = transform.position - element.ContainedElements[i].position;
+            var containedElement = element.ContainedElements[i].gameObject.GetComponent<Element>();
+            containedElement.SetLayerOrder(Element.MaxOrderInLayer);
         }
 
         OnDoubleClick();

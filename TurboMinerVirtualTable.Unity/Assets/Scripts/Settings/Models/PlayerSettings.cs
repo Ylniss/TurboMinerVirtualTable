@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.Settings
+﻿namespace Assets.Scripts.Settings.Models
 {
     public class PlayerSettings
     {

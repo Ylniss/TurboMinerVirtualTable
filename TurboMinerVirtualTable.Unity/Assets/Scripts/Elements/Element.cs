@@ -9,6 +9,8 @@ public class Element : MonoBehaviour
     public CollisionHelper CollisionHelper;
     public List<Transform> ContainedElements = new List<Transform>();
 
+    public static int MaxOrderInLayer = 0;
+
     private BoxCollider boxCollider;
 
     // max size that will put above others on Z axis (to make little elements like tiles takeable from bigger elements like corridors
@@ -89,7 +91,7 @@ public class Element : MonoBehaviour
     public void SetLayer(string layer)
     {
         var frontSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
-        var backSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
+        var backSpriteRenderer = BackSide.GetComponent<SpriteRenderer>();
 
         frontSpriteRenderer.sortingLayerName = layer;
         backSpriteRenderer.sortingLayerName = layer;
@@ -98,7 +100,7 @@ public class Element : MonoBehaviour
     public void SetLayerOrder(int order)
     {
         var frontSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
-        var backSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
+        var backSpriteRenderer = BackSide.GetComponent<SpriteRenderer>();
 
         frontSpriteRenderer.sortingOrder = order;
         backSpriteRenderer.sortingOrder = order;

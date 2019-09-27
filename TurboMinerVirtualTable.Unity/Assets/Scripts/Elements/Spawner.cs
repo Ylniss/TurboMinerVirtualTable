@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Settings;
+﻿using Assets.Scripts.Elements;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -95,8 +95,29 @@ public class Spawner : MonoBehaviour
         return pawnInstance;
     }
 
-    public void SpawnActionToken(Vector2 position)
+    public Element SpawnGetActionToken(Vector2 position)
     {
-        //todo: implement
+        return SpawnActionToken("Graphics/Pawns/Tokens/grabitem_v3_edit", "Graphics/Pawns/Tokens/grabitem_v3_back_edit", position);
+    }
+
+    public Element SpawnUseActionToken(Vector2 position)
+    {
+        return SpawnActionToken("Graphics/Pawns/Tokens/tkn_useitem_v2_edit", "Graphics/Pawns/Tokens/tkn_useitem_v2_back_edit", position);
+    }
+
+    public Element SpawnControlActionToken(Vector2 position)
+    {
+        return SpawnActionToken("Graphics/Pawns/Tokens/tkn_control_edit", "Graphics/Pawns/Tokens/tkn_control_back_edit", position);
+    }
+
+    private Element SpawnActionToken(string frontPath, string backPath, Vector2 position)
+    {
+        var actionTokenInstance = Instantiate(GetElementPrefab(), position, Quaternion.identity);
+        actionTokenInstance.Spinnable = true;
+
+        SpritesLoader.Load(actionTokenInstance, frontPath, backPath);
+        actionTokenInstance.SetLayer(SortingLayers.Corridor);
+
+        return actionTokenInstance;
     }
 }

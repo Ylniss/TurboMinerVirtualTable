@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Settings;
-using UnityEngine;
+﻿using Assets.Scripts.Settings.Models;
 
 public static class GameSettings
 {

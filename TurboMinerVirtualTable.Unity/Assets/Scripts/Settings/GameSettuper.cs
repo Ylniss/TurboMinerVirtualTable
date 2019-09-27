@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Settings;
+﻿using Assets.Scripts.Settings.Models;
 using TMPro;
 using UnityEngine;
 

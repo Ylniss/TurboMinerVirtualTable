@@ -1,11 +1,35 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Table.Models;
+using UnityEngine;
 
 public class BoardPositioner : MonoBehaviour
 {
-    public SpriteRenderer boardSprite;
+    // initial board quarters and number of rotations to be towards center
+    public InitialPosition[] InitialPositions = new InitialPosition[]
+    {
+        new InitialPosition
+        {
+            BoardQuarter = new Vector2(1, 1),
+            Rotation = 3
+        },
+        new InitialPosition
+        {
+            BoardQuarter = new Vector2(-1, -1),
+            Rotation = 1
+        },
+        new InitialPosition
+        {
+            BoardQuarter = new Vector2(1, -1),
+            Rotation = 0
+        },
+        new InitialPosition
+        {
+            BoardQuarter = new Vector2(-1, 1),
+            Rotation = 2
+        }
+    };
 
-    private float borderToFieldRatio = 0.1125f;
-    private float fieldSize = 5.3f;
+    private const float borderToFieldRatio = 0.1125f;
+    private const float fieldSize = 5.3f;
 
     public Vector2 ToWorldPosition(Vector2 boardPosition)
     {
