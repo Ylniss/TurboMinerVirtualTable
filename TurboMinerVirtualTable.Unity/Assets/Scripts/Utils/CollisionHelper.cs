@@ -2,7 +2,8 @@
 
 public class CollisionHelper : MonoBehaviour
 {
-    public bool IsFullyContained(Collider collider, Collider otherCollider)
+    //todo: change to IsMostlyContained and also make colider of little objects higher - it should resolve the problem
+    public bool IsFullyContained(Collider collider, Collider otherCollider) 
     {
         if(collider == null || otherCollider == null)
         {

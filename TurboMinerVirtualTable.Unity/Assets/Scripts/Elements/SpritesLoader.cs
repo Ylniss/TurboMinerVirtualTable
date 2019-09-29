@@ -2,9 +2,17 @@
 
 public class SpritesLoader : MonoBehaviour
 {
+    /// <summary>
+    /// Gets front and back sprite renderer
+    /// </summary>
+    public SpriteRenderer[] GetSpriteRenderers(Element element)
+    {
+        return element.GetComponentsInChildren<SpriteRenderer>(true);
+    }
+
     public void Load(Element element, string path)
     {
-        var sprites = element.GetComponentsInChildren<SpriteRenderer>(true);
+        var sprites = GetSpriteRenderers(element);
 
         var sprite = Resources.Load<Sprite>(path);
         sprites[0].sprite = sprite;
@@ -13,7 +21,7 @@ public class SpritesLoader : MonoBehaviour
 
     public void Load(Element element, string pathFront, string pathBack)
     {
-        var sprites = element.GetComponentsInChildren<SpriteRenderer>(true);
+        var sprites = GetSpriteRenderers(element);
 
         var frontSprite = Resources.Load<Sprite>(pathFront);
         var backSprite = Resources.Load<Sprite>(pathBack);

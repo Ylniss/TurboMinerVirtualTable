@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Elements;
+using Assets.Scripts.Utils.Extensions;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -74,13 +75,13 @@ public class Spawner : MonoBehaviour
         return corridorInstance;
     }
 
-    public void SpawnPassage(Vector2 position)
+    public Element SpawnPassage(Vector2 position)
     {
-        var passage = Instantiate(GetElementPrefab(), position, Quaternion.identity);
-        passage.Spinnable = true;
+        var passageInstance = Instantiate(GetElementPrefab(), position, Quaternion.identity);
+        passageInstance.Spinnable = true;
 
-        //todo: finnish
-
+        SpritesLoader.Load(passageInstance, "Graphics/Corridors/road_explo2_tex_v2");
+        return passageInstance;
     }
 
     public Element SpawnPawn(string color, Vector2 position)
@@ -97,17 +98,17 @@ public class Spawner : MonoBehaviour
 
     public Element SpawnGetActionToken(Vector2 position)
     {
-        return SpawnActionToken("Graphics/Pawns/Tokens/grabitem_v3_edit", "Graphics/Pawns/Tokens/grabitem_v3_back_edit", position);
+        return SpawnActionToken("Graphics/Tokens/grabitem_v3_edit", "Graphics/Tokens/grabitem_v3_back_edit", position);
     }
 
     public Element SpawnUseActionToken(Vector2 position)
     {
-        return SpawnActionToken("Graphics/Pawns/Tokens/tkn_useitem_v2_edit", "Graphics/Pawns/Tokens/tkn_useitem_v2_back_edit", position);
+        return SpawnActionToken("Graphics/Tokens/tkn_useitem_v2_edit", "Graphics/Tokens/tkn_useitem_v2_back_edit", position);
     }
 
     public Element SpawnControlActionToken(Vector2 position)
     {
-        return SpawnActionToken("Graphics/Pawns/Tokens/tkn_control_edit", "Graphics/Pawns/Tokens/tkn_control_back_edit", position);
+        return SpawnActionToken("Graphics/Tokens/tkn_control_edit", "Graphics/Tokens/tkn_control_back_edit", position);
     }
 
     private Element SpawnActionToken(string frontPath, string backPath, Vector2 position)
@@ -116,8 +117,21 @@ public class Spawner : MonoBehaviour
         actionTokenInstance.Spinnable = true;
 
         SpritesLoader.Load(actionTokenInstance, frontPath, backPath);
-        actionTokenInstance.SetLayer(SortingLayers.Corridor);
 
         return actionTokenInstance;
     }
+
+    public PlayerPanel SpawnPlayerPanel(string color, string name, Vector2 position, Vector2 boardQuarter)
+    {
+        var playerPanelInstance = Instantiate(Resources.Load<PlayerPanel>("Prefabs/PlayerPanel"), position * boardQuarter, Quaternion.identity);
+
+        var spriteColor = new Color().ToColor(color);
+        spriteColor.a = 0.45f;
+        playerPanelInstance.Color = spriteColor;
+        playerPanelInstance.Name = name;
+
+        return playerPanelInstance;
+    }
+
+
 }

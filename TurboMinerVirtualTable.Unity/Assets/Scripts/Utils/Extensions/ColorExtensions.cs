@@ -16,5 +16,17 @@ namespace Assets.Scripts.Utils.Extensions
             return string.Empty;
         }
 
+        public static Color ToColor(this Color c, string color)
+        {
+            if (color == "white") return Color.white;
+            if (color == "black") return Color.black;
+            if (color == "red") return Color.red;
+            if (color == "green") return Color.green;
+            if (color == "blue") return Color.blue;
+            if (color == "yellow") return Color.yellow;
+
+            return c;
+        }
+
     }
 }
