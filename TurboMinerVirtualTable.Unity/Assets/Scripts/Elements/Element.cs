@@ -9,6 +9,8 @@ public class Element : MonoBehaviour
     public CollisionHelper CollisionHelper;
     public List<Transform> ContainedElements = new List<Transform>();
 
+    public string Name { get; private set; }
+
     public static int MaxOrderInLayer = 0;
 
     private BoxCollider boxCollider;
@@ -19,6 +21,7 @@ public class Element : MonoBehaviour
     void Start()
     {
         var frontSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
+        Name = frontSpriteRenderer.sprite.name;
 
         boxCollider = GetComponent<BoxCollider>();
         boxCollider.size = new Vector3(frontSpriteRenderer.bounds.size.x, frontSpriteRenderer.bounds.size.y, 1);
@@ -38,8 +41,9 @@ public class Element : MonoBehaviour
 
     void OnTriggerStay(Collider otherCollider)
     {
-        if (CollisionHelper.IsFullyContained(boxCollider, otherCollider))
+        if (boxCollider != null && boxCollider.name == otherCollider.name && CollisionHelper.IsFullyContained(boxCollider, otherCollider))
         {
+            //Debug.Log($"{boxCollider.name} - {boxCollider.transform.position} collides with {otherCollider.name} - {otherCollider.transform.position}");
             var otherElement = otherCollider.transform;
 
             var otherElementContainedElements = otherElement.gameObject.GetComponent<Element>().ContainedElements;

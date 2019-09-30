@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Elements;
 using Assets.Scripts.Utils.Extensions;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -51,21 +52,7 @@ public class Spawner : MonoBehaviour
         return SpawnCorridor("Graphics/Corridors/Common/road3_tex_p3p10", position);
     }
 
-    public Element SpawnTCorridor(Vector2 position)
-    {
-        return SpawnCorridor("Graphics/Corridors/Common/road2_tex_p3p10", position);
-    }
-
-    public Element SpawnXCorridor(Vector2 position)
-    {
-        return SpawnCorridor("Graphics/Corridors/Common/road1_tex_p3p10", position);
-    }
-    public Element SpawnICorridor(Vector2 position)
-    {
-        return SpawnCorridor("Graphics/Corridors/Common/road4_tex_p3p10", position);
-    }
-
-    private Element SpawnCorridor(string pathFront, Vector2 position)
+    public Element SpawnCorridor(string pathFront, Vector2 position)
     {
         var corridorInstance = Instantiate(GetElementPrefab(), position, Quaternion.identity);
         corridorInstance.Spinnable = true;
@@ -133,5 +120,12 @@ public class Spawner : MonoBehaviour
         return playerPanelInstance;
     }
 
+    public Stack SpawnStack(Vector2 position, List<string> elements)
+    {
+        var stack = Instantiate(Resources.Load<Stack>("Prefabs/Stack"), position, Quaternion.identity);
+        stack.Initialize(elements);
+        stack.SpawnOnTop();
 
+        return stack;
+    }
 }
