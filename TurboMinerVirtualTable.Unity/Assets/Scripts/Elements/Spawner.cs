@@ -101,7 +101,7 @@ public class Spawner : MonoBehaviour
     private Element SpawnActionToken(string frontPath, string backPath, Vector2 position)
     {
         var actionTokenInstance = Instantiate(GetElementPrefab(), position, Quaternion.identity);
-        actionTokenInstance.Spinnable = true;
+        actionTokenInstance.Spinnable = false;
 
         SpritesLoader.Load(actionTokenInstance, frontPath, backPath);
 

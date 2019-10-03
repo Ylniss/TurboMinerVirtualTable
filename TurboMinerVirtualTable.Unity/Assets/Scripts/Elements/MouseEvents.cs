@@ -3,27 +3,36 @@
 public class MouseEvents : MonoBehaviour
 {
     public bool IsDragging;
-
+   
     private Element element;
-    private Vector2[] ContainedElementsOffsets;
 
     void Start()
     {
-        element = GetComponent<Element>();
+        element = GetComponentInParent<Element>();
+
+        var boxCollider = GetComponent<BoxCollider>();
+        var frontSpriteRenderer = element.FrontSide.GetComponent<SpriteRenderer>();
+        var xSize = frontSpriteRenderer.bounds.size.x;
+        var ySize = frontSpriteRenderer.bounds.size.y;
+
+        var colliderHeight = 4 - xSize * ySize / 20;
+        boxCollider.size = new Vector3(xSize, ySize, colliderHeight);
+        boxCollider.center = new Vector3(0, 0, -colliderHeight/2);
     }
 
     private Vector3 offset;
+    private Vector2[] ContainedElementsOffsets;
     void OnMouseDown()
     {
         offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z));
         ContainedElementsOffsets = new Vector2[element.ContainedElements.Count];
-        element.SetLayerOrder(++Element.MaxOrderInLayer);
+        element.IncrementLayerOrder();
 
         for(var i = 0; i < ContainedElementsOffsets.Length; ++i)
         {
             ContainedElementsOffsets[i] = transform.position - element.ContainedElements[i].position;
             var containedElement = element.ContainedElements[i].gameObject.GetComponent<Element>();
-            containedElement.SetLayerOrder(Element.MaxOrderInLayer);
+            containedElement.IncrementLayerOrder();
         }
 
         OnDoubleClick();
@@ -39,7 +48,7 @@ public class MouseEvents : MonoBehaviour
         Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z);
 
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-        transform.position = curPosition;
+        element.transform.position = curPosition;
 
         for(var i = 0; i < element.ContainedElements.Count; ++i)
         {

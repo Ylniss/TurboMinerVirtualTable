@@ -10,6 +10,9 @@ public class Stack : MonoBehaviour
     private List<string> elements = new List<string>();
     private List<string> elementsRefill = new List<string>();
 
+    private Element lastSpawned;
+    private bool corridorsStack;
+
     public void Initialize(List<string> elements)
     {
         this.elements = elements;
@@ -18,6 +21,7 @@ public class Stack : MonoBehaviour
         if(sprite == null)
         {
             sprite = Resources.Load<Sprite>($"Graphics/Corridors/Common/{elements[0]}");
+            corridorsStack = true;
         }
 
         transform.localScale = new Vector3(sprite.rect.width / 100, sprite.rect.height / 100, 1);
@@ -27,19 +31,37 @@ public class Stack : MonoBehaviour
 
     void OnTriggerExit(Collider collider)
     {
-        SpawnOnTop(); //todo: spawn only when object already on top exited (not any element that slides through stack)
+        // only taking object that is on stack from it can spawn another element on top
+        if (collider.gameObject.GetComponentInParent<Element>().GetInstanceID() != lastSpawned.GetInstanceID())
+        {
+            return;
+        }
+
+        SpawnOnTop();
     }
 
     public Element SpawnOnTop()
     {
         var position = GetComponentsInChildren<Transform>().Last().position;
-        var spawnedElement = Spawner.SpawnTile($"Graphics/Tiles/Common/{elements.Last()}", position);
+
+        Element spawnedElement;
+
+        if (corridorsStack)
+        {
+            spawnedElement = Spawner.SpawnCorridor($"Graphics/Corridors/Common/{elements.Last()}", position);
+        }
+        else
+        {
+            spawnedElement = Spawner.SpawnTile($"Graphics/Tiles/Common/{elements.Last()}", position);
+        }
+
         elementsRefill.Add(elements.Last());
         elements.RemoveAt(elements.Count - 1);
         if (elements.Count == 0)
         {
             Refill();
         }
+        lastSpawned = spawnedElement;
         return spawnedElement;
     }
 

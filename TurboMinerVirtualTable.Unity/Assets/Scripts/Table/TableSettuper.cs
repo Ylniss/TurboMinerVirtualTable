@@ -17,7 +17,8 @@ public class TableSettuper : MonoBehaviour
         var boardPosition = new Vector2(GameSettings.MapSize.Width / 2, GameSettings.MapSize.Height / 2);
         var panelPosition = new Vector2(37.5f, 19f);
 
-        GetTilesStacks(panelPosition, BoardPositioner.InitialPositions);
+        SetupStacks("Tiles", GameSettings.TilesConfig, panelPosition, BoardPositioner.InitialPositions, new Vector2(1.1f, -6.0f));
+        SetupStacks("Corridors", GameSettings.CorridorsConfig, panelPosition, BoardPositioner.InitialPositions, new Vector2(-6.0f, -4.6f));
 
         for (var i = 0; i < GameSettings.NumberOfPlayers; ++i)
         {
@@ -44,21 +45,17 @@ public class TableSettuper : MonoBehaviour
         Spawner.SpawnControlActionToken(playerPanelPosition + new Vector2(3.5f, 3.5f));
     }
 
-    private Stack[] GetTilesStacks(Vector2 panelPosition, InitialPosition[] initialPosition)
+    private void SetupStacks(string subPath, string configName, Vector2 panelPosition, InitialPosition[] initialPosition, Vector2 offset)
     {
-        var elementCounts = ConfigLoader.Load("Tiles", GameSettings.TilesConfig);
+        var elementCounts = ConfigLoader.Load(subPath, configName);
         var elementsList = Stack.GetElements(elementCounts);
         int countInStack = elementsList.Count / GameSettings.NumberOfPlayers;
         elementsList.Shuffle();
         var stackElementLists = elementsList.ChunkBy(countInStack + 1);
 
-        var stacks = new Stack[GameSettings.NumberOfPlayers];
-
         for (var i = 0; i < stackElementLists.Count; ++i)
         {
-            stacks[i] = Spawner.SpawnStack(panelPosition * initialPosition[i].BoardQuarter + new Vector2(-1.5f, -4.5f), stackElementLists[i]);
+            Spawner.SpawnStack(panelPosition * initialPosition[i].BoardQuarter + offset, stackElementLists[i]);
         }
-
-        return stacks;
     }
 }

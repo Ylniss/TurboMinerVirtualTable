@@ -5,6 +5,7 @@ public class Element : MonoBehaviour
 {
     public Transform FrontSide;
     public Transform BackSide;
+    public MouseEvents MouseEvents;
     public bool Spinnable;
     public CollisionHelper CollisionHelper;
     public List<Transform> ContainedElements = new List<Transform>();
@@ -13,33 +14,18 @@ public class Element : MonoBehaviour
 
     public static int MaxOrderInLayer = 0;
 
-    private BoxCollider boxCollider;
-
-    // max size that will put above others on Z axis (to make little elements like tiles takeable from bigger elements like corridors
-    private const int maximumAboveAllSize = 8;
+    private BoxCollider2D boxCollider;
 
     void Start()
     {
         var frontSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
         Name = frontSpriteRenderer.sprite.name;
 
-        boxCollider = GetComponent<BoxCollider>();
-        boxCollider.size = new Vector3(frontSpriteRenderer.bounds.size.x, frontSpriteRenderer.bounds.size.y, 1);
-
-        // if area is small enough put it above (z = -1) and turn boxcollider towards bigger element (down)
-        if (boxCollider.size.x* boxCollider.size.y < maximumAboveAllSize)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, -1);
-            boxCollider.center = new Vector3(0, 0, 0.5f);
-        }
-        else
-        {
-            // turn box collider towards smaller elements (up)
-            boxCollider.center = new Vector3(0, 0, -0.5f);
-        }       
+        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider.size = new Vector2(frontSpriteRenderer.bounds.size.x, frontSpriteRenderer.bounds.size.y);   
     }
 
-    void OnTriggerStay(Collider otherCollider)
+    void OnTriggerStay2D(Collider2D otherCollider)
     {
         if (boxCollider != null && boxCollider.name == otherCollider.name && CollisionHelper.IsFullyContained(boxCollider, otherCollider))
         {
@@ -47,8 +33,8 @@ public class Element : MonoBehaviour
             var otherElement = otherCollider.transform;
 
             var otherElementContainedElements = otherElement.gameObject.GetComponent<Element>().ContainedElements;
-            var isOtherElementDragging = otherElement.GetComponent<MouseEvents>().IsDragging;
-            var isCurrentDragging = GetComponent<MouseEvents>().IsDragging;
+            var isOtherElementDragging = otherElement.GetComponentInChildren<MouseEvents>().IsDragging;
+            var isCurrentDragging = GetComponentInChildren<MouseEvents>().IsDragging;
             if (!otherElementContainedElements.Contains(transform) && !isOtherElementDragging && isCurrentDragging)
             {
                 otherElementContainedElements.Add(transform);
@@ -56,7 +42,7 @@ public class Element : MonoBehaviour
         }
     }
 
-    void OnTriggerExit(Collider collider)
+    void OnTriggerExit2D(Collider2D collider)
     {
         var element = collider.transform;
         if (ContainedElements.Contains(element))
@@ -101,12 +87,12 @@ public class Element : MonoBehaviour
         backSpriteRenderer.sortingLayerName = layer;
     }
 
-    public void SetLayerOrder(int order)
+    public void IncrementLayerOrder()
     {
         var frontSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
         var backSpriteRenderer = BackSide.GetComponent<SpriteRenderer>();
 
-        frontSpriteRenderer.sortingOrder = order;
-        backSpriteRenderer.sortingOrder = order;
+        frontSpriteRenderer.sortingOrder = ++MaxOrderInLayer;
+        backSpriteRenderer.sortingOrder = MaxOrderInLayer;
     }
 }
