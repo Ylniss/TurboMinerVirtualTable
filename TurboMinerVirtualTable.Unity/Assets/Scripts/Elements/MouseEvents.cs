@@ -9,15 +9,7 @@ public class MouseEvents : MonoBehaviour
     void Start()
     {
         element = GetComponentInParent<Element>();
-
-        var boxCollider = GetComponent<BoxCollider>();
-        var frontSpriteRenderer = element.FrontSide.GetComponent<SpriteRenderer>();
-        var xSize = frontSpriteRenderer.bounds.size.x;
-        var ySize = frontSpriteRenderer.bounds.size.y;
-
-        var colliderHeight = 4 - xSize * ySize / 20;
-        boxCollider.size = new Vector3(xSize, ySize, colliderHeight);
-        boxCollider.center = new Vector3(0, 0, -colliderHeight/2);
+        SetupMouseBoxCollider();
     }
 
     private Vector3 offset;
@@ -77,5 +69,14 @@ public class MouseEvents : MonoBehaviour
         }
 
         lastClick = Time.time;
+    }
+
+    private void SetupMouseBoxCollider()
+    {
+        var boxCollider = GetComponent<BoxCollider>();
+        var frontSpriteRenderer = element.FrontSide.GetComponent<SpriteRenderer>();
+        var xSize = frontSpriteRenderer.bounds.size.x;
+        var ySize = frontSpriteRenderer.bounds.size.y;
+        boxCollider.size = new Vector3(xSize, ySize, boxCollider.size.z);
     }
 }

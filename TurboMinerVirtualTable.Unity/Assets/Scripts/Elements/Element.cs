@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.Elements;
+using Assets.Scripts.Utils.Extensions;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Element : MonoBehaviour
@@ -85,6 +87,9 @@ public class Element : MonoBehaviour
 
         frontSpriteRenderer.sortingLayerName = layer;
         backSpriteRenderer.sortingLayerName = layer;
+
+        var mouseEventsBoxCollider = GetComponentInChildren<BoxCollider>();
+        mouseEventsBoxCollider.SetHeight(SortingLayers.LayerHeights[layer]);
     }
 
     public void IncrementLayerOrder()

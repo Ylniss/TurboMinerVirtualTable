@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Utils.Extensions;
+﻿using Assets.Scripts.Elements;
+using Assets.Scripts.Utils.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,18 +12,14 @@ public class Stack : MonoBehaviour
     private List<string> elementsRefill = new List<string>();
 
     private Element lastSpawned;
-    private bool corridorsStack;
+    private StackType stackType;
 
-    public void Initialize(List<string> elements)
+    public void Initialize(StackType stackType, string path, List<string> elements)
     {
         this.elements = elements;
+        this.stackType = stackType;
 
-        var sprite = Resources.Load<Sprite>($"Graphics/Tiles/Common/{elements[0]}");
-        if(sprite == null)
-        {
-            sprite = Resources.Load<Sprite>($"Graphics/Corridors/Common/{elements[0]}");
-            corridorsStack = true;
-        }
+        var sprite = Resources.Load<Sprite>($"{path}/{elements[0]}");
 
         transform.localScale = new Vector3(sprite.rect.width / 100, sprite.rect.height / 100, 1);
 
@@ -44,15 +41,19 @@ public class Stack : MonoBehaviour
     {
         var position = GetComponentsInChildren<Transform>().Last().position;
 
-        Element spawnedElement;
+        Element spawnedElement = null;
 
-        if (corridorsStack)
+        switch (stackType)
         {
-            spawnedElement = Spawner.SpawnCorridor($"Graphics/Corridors/Common/{elements.Last()}", position);
-        }
-        else
-        {
-            spawnedElement = Spawner.SpawnTile($"Graphics/Tiles/Common/{elements.Last()}", position);
+            case StackType.Corridor:
+                spawnedElement = Spawner.SpawnCorridor($"Graphics/Corridors/Common/{elements.Last()}", position);
+                break;
+            case StackType.Tile:
+                spawnedElement = Spawner.SpawnTile($"Graphics/Tiles/Common/{elements.Last()}", position);
+                break;
+            case StackType.Passage:
+                spawnedElement = Spawner.SpawnPassage(position);
+                break;
         }
 
         elementsRefill.Add(elements.Last());

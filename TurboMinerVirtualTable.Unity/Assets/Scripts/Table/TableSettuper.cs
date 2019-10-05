@@ -1,5 +1,7 @@
-﻿using Assets.Scripts.Table.Models;
+﻿using Assets.Scripts.Elements;
+using Assets.Scripts.Table.Models;
 using Assets.Scripts.Utils.Extensions;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TableSettuper : MonoBehaviour
@@ -17,8 +19,10 @@ public class TableSettuper : MonoBehaviour
         var boardPosition = new Vector2(GameSettings.MapSize.Width / 2, GameSettings.MapSize.Height / 2);
         var panelPosition = new Vector2(37.5f, 19f);
 
-        SetupStacks("Tiles", GameSettings.TilesConfig, panelPosition, BoardPositioner.InitialPositions, new Vector2(1.1f, -6.0f));
-        SetupStacks("Corridors", GameSettings.CorridorsConfig, panelPosition, BoardPositioner.InitialPositions, new Vector2(-6.0f, -4.6f));
+        SetupStacks(StackType.Tile, GameSettings.TilesConfig, panelPosition, BoardPositioner.InitialPositions, new Vector2(1.1f, -6.0f));
+        SetupStacks(StackType.Corridor, GameSettings.CorridorsConfig, panelPosition, BoardPositioner.InitialPositions, new Vector2(-6.0f, -4.6f));
+
+        Spawner.SpawnStack(StackType.Passage, new Vector2(31.0f, 3.0f), "Graphics/Corridors", new List<string> { "road_explo2_tex_v2" });
 
         for (var i = 0; i < GameSettings.NumberOfPlayers; ++i)
         {
@@ -45,8 +49,9 @@ public class TableSettuper : MonoBehaviour
         Spawner.SpawnControlActionToken(playerPanelPosition + new Vector2(3.5f, 3.5f));
     }
 
-    private void SetupStacks(string subPath, string configName, Vector2 panelPosition, InitialPosition[] initialPosition, Vector2 offset)
+    private void SetupStacks(StackType stackType, string configName, Vector2 panelPosition, InitialPosition[] initialPosition, Vector2 offset)
     {
+        var subPath = stackType.ToString() + "s";
         var elementCounts = ConfigLoader.Load(subPath, configName);
         var elementsList = Stack.GetElements(elementCounts);
         int countInStack = elementsList.Count / GameSettings.NumberOfPlayers;
@@ -55,7 +60,7 @@ public class TableSettuper : MonoBehaviour
 
         for (var i = 0; i < stackElementLists.Count; ++i)
         {
-            Spawner.SpawnStack(panelPosition * initialPosition[i].BoardQuarter + offset, stackElementLists[i]);
+            Spawner.SpawnStack(stackType, panelPosition * initialPosition[i].BoardQuarter + offset, $"Graphics/{subPath}/Common", stackElementLists[i]);
         }
     }
 }

@@ -56,9 +56,10 @@ public class Spawner : MonoBehaviour
     {
         var corridorInstance = Instantiate(GetElementPrefab(), position, Quaternion.identity);
         corridorInstance.Spinnable = true;
-
         var corridorBackPath = "Graphics/Corridors/road1_explo_tex2_p3p10";
         SpritesLoader.Load(corridorInstance, pathFront, corridorBackPath);
+        corridorInstance.SetLayer(SortingLayers.Corridors);
+
         return corridorInstance;
     }
 
@@ -66,8 +67,9 @@ public class Spawner : MonoBehaviour
     {
         var passageInstance = Instantiate(GetElementPrefab(), position, Quaternion.identity);
         passageInstance.Spinnable = true;
-
         SpritesLoader.Load(passageInstance, "Graphics/Corridors/road_explo2_tex_v2");
+        passageInstance.SetLayer(SortingLayers.Passages);
+
         return passageInstance;
     }
 
@@ -120,10 +122,19 @@ public class Spawner : MonoBehaviour
         return playerPanelInstance;
     }
 
-    public Stack SpawnStack(Vector2 position, List<string> elements)
+    public Stack SpawnTilesStack(StackType stackType, Vector2 position, string path, List<string> elements)
     {
         var stack = Instantiate(Resources.Load<Stack>("Prefabs/Stack"), position, Quaternion.identity);
-        stack.Initialize(elements);
+        stack.Initialize(stackType, path, elements);
+        stack.SpawnOnTop();
+
+        return stack;
+    }
+
+    public Stack SpawnStack(StackType stackType, Vector2 position, string path, List<string> elements)
+    {
+        var stack = Instantiate(Resources.Load<Stack>("Prefabs/Stack"), position, Quaternion.identity);
+        stack.Initialize(stackType, path, elements);
         stack.SpawnOnTop();
 
         return stack;

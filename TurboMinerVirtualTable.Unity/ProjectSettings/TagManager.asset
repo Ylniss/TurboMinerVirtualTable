@@ -47,6 +47,9 @@ TagManager:
   - name: Corridors
     uniqueID: 419421129
     locked: 0
+  - name: Passages
+    uniqueID: 277542269
+    locked: 0
   - name: Tiles
     uniqueID: 4040218505
     locked: 0
