@@ -286,7 +286,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FrontSide: {fileID: 8945410451165957063}
   BackSide: {fileID: 8945410452110838747}
+  MouseEvents: {fileID: 0}
   Spinnable: 1
+  Removable: 1
   CollisionHelper: {fileID: 8945410452801836809}
   ContainedElements: []
 --- !u!114 &8945410452801836809

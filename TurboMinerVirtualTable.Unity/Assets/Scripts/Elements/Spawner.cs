@@ -16,6 +16,7 @@ public class Spawner : MonoBehaviour
     {
         var diamondTileInstance = Instantiate(GetElementPrefab(), position, Quaternion.identity);
         diamondTileInstance.Spinnable = false;
+        diamondTileInstance.Removable = false;
 
         SpritesLoader.Load(diamondTileInstance, "Graphics/Tiles/et_diamond_edit");
         diamondTileInstance.SetLayer(SortingLayers.Tiles);
@@ -77,6 +78,7 @@ public class Spawner : MonoBehaviour
     {
         var pawnInstance = Instantiate(GetElementPrefab(), position, Quaternion.identity);
         pawnInstance.Spinnable = false; //todo: true, create back graphics for that -> :|
+        pawnInstance.Removable = false;
 
         var pawnPath = $"Graphics/Pawns/pawn_{color}";
         SpritesLoader.Load(pawnInstance, pawnPath);
@@ -104,6 +106,7 @@ public class Spawner : MonoBehaviour
     {
         var actionTokenInstance = Instantiate(GetElementPrefab(), position, Quaternion.identity);
         actionTokenInstance.Spinnable = false;
+        actionTokenInstance.Removable = false;
 
         SpritesLoader.Load(actionTokenInstance, frontPath, backPath);
 

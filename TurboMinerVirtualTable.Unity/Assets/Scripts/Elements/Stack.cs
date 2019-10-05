@@ -28,12 +28,15 @@ public class Stack : MonoBehaviour
 
     void OnTriggerExit(Collider collider)
     {
+        var element = collider.gameObject.GetComponentInParent<Element>();
+
         // only taking object that is on stack from it can spawn another element on top
-        if (collider.gameObject.GetComponentInParent<Element>().GetInstanceID() != lastSpawned.GetInstanceID())
+        if (element.GetInstanceID() != lastSpawned.GetInstanceID())
         {
             return;
         }
 
+        element.Removable = true;
         SpawnOnTop();
     }
 
@@ -56,6 +59,7 @@ public class Stack : MonoBehaviour
                 break;
         }
 
+        spawnedElement.Removable = false; // cannot remove element on top of the stack
         elementsRefill.Add(elements.Last());
         elements.RemoveAt(elements.Count - 1);
         if (elements.Count == 0)

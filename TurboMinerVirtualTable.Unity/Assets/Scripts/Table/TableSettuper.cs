@@ -24,6 +24,15 @@ public class TableSettuper : MonoBehaviour
 
         Spawner.SpawnStack(StackType.Passage, new Vector2(31.0f, 3.0f), "Graphics/Corridors", new List<string> { "road_explo2_tex_v2" });
 
+        Spawner.SpawnStack(StackType.Tile, new Vector2(45.0f, -4.0f), "Graphics/Tiles/Common", new List<string> { "et_gold10_grey_edit" });
+        Spawner.SpawnStack(StackType.Tile, new Vector2(45.0f, 0.0f), "Graphics/Tiles/Common", new List<string> { "et_gold20_grey_edit" });
+        Spawner.SpawnStack(StackType.Tile, new Vector2(45.0f, 4.0f), "Graphics/Tiles/Common", new List<string> { "et_gold30_grey_edit" });
+
+        Spawner.SpawnStack(StackType.Tile, new Vector2(-46.0f, -6.0f), "Graphics/Tiles/Common", new List<string> { "et_ankh_v2_edit" });
+        Spawner.SpawnStack(StackType.Tile, new Vector2(-46.0f, -2.0f), "Graphics/Tiles/Common", new List<string> { "et_horseshoe_v2_edit" });
+        Spawner.SpawnStack(StackType.Tile, new Vector2(-46.0f, 2.0f), "Graphics/Tiles/Common", new List<string> { "et_sword_v3_edit" });
+        Spawner.SpawnStack(StackType.Tile, new Vector2(-46.0f, 6.0f), "Graphics/Tiles/Common", new List<string> { "et_backpack_v3_grey_edit" });
+
         for (var i = 0; i < GameSettings.NumberOfPlayers; ++i)
         {
             SetupPlayer(i, boardPosition, panelPosition, BoardPositioner.InitialPositions[i]);

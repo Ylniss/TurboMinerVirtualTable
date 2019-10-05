@@ -56,6 +56,11 @@ public class MouseEvents : MonoBehaviour
         {
             element.Rotate();
         }
+
+        if (Input.GetKeyDown(KeyCode.Delete) && element.Removable)
+        {
+            Destroy(element.gameObject);
+        }
     }
 
     private float lastClick = 0f;

@@ -9,9 +9,10 @@ public class Element : MonoBehaviour
     public Transform BackSide;
     public MouseEvents MouseEvents;
     public bool Spinnable;
+    public bool Removable;
     public CollisionHelper CollisionHelper;
     public List<Transform> ContainedElements = new List<Transform>();
-
+  
     public string Name { get; private set; }
 
     public static int MaxOrderInLayer = 0;
