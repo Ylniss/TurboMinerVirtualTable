@@ -10,9 +10,12 @@ public class ConfigDopdown : MonoBehaviour
     void Start()
     {
         var names = ConfigLoader.GetConfigNames(SubPath);
+
         foreach (var name in names)
         {
             Dropdown.options.Add(new TMP_Dropdown.OptionData(name));
         }
+
+        Dropdown.value = 0;
     }
 }
