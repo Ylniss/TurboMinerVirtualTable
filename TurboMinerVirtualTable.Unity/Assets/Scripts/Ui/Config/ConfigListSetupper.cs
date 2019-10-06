@@ -28,7 +28,7 @@ public class ConfigListSetupper : MonoBehaviour
             var text = configNameButtonInstance.GetComponentInChildren<Text>();
             text.text = configNames[i];
 
-            configNameButtonInstance.transform.localPosition = new Vector3(configNameButtonInstance.transform.localPosition.x + 282, -i*30-20, 0);
+            configNameButtonInstance.transform.localPosition = new Vector3(configNameButtonInstance.transform.localPosition.x + 225, -i*30-20, 0);
             configNameButtonInstance.GetComponent<Button>().onClick.AddListener(() => 
             {
                 ConfigMenu.LoadConfig(subPath, text.text);
