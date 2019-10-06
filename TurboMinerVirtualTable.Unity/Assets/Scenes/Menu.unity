@@ -329,10 +329,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba2aee5d31f24943a5ac0492dc8cfa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigList: {fileID: 0}
-  ConfigName: {fileID: 0}
-  ConfigSaver: {fileID: 0}
-  ConfigLoader: {fileID: 0}
+  ConfigList: {fileID: 1547422082}
+  ConfigName: {fileID: 1059991712}
+  ConfigSaver: {fileID: 47700841}
+  ConfigLoader: {fileID: 47700840}
 --- !u!114 &47700838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ffe7ef5bcaf0f849b6d561fd7b8713c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigMenu: {fileID: 0}
+  ConfigMenu: {fileID: 47700837}
 --- !u!114 &47700839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,7 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ced5bf8d145374db61dcedafd9fd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Converter: {fileID: 0}
+  Converter: {fileID: 47700839}
 --- !u!1 &60912995
 GameObject:
   m_ObjectHideFlags: 0
@@ -8883,8 +8883,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 066b5575e8a98db479cdaecfa5257267, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigMenu: {fileID: 0}
-  ConfigLoader: {fileID: 0}
+  ConfigMenu: {fileID: 1477184329}
+  ConfigLoader: {fileID: 1477184328}
 --- !u!114 &1477184326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8897,7 +8897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ced5bf8d145374db61dcedafd9fd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Converter: {fileID: 0}
+  Converter: {fileID: 1477184327}
 --- !u!114 &1477184327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8934,10 +8934,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba2aee5d31f24943a5ac0492dc8cfa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigList: {fileID: 0}
-  ConfigName: {fileID: 0}
-  ConfigSaver: {fileID: 0}
-  ConfigLoader: {fileID: 0}
+  ConfigList: {fileID: 1477184322}
+  ConfigName: {fileID: 834452271}
+  ConfigSaver: {fileID: 1477184326}
+  ConfigLoader: {fileID: 1477184328}
 --- !u!114 &1477184330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8950,7 +8950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33271377f9b890c46b8566a861a37d36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigListSettuper: {fileID: 0}
+  ConfigListSettuper: {fileID: 1477184325}
 --- !u!1 &1517081505
 GameObject:
   m_ObjectHideFlags: 0
@@ -9096,7 +9096,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ced5bf8d145374db61dcedafd9fd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Converter: {fileID: 0}
+  Converter: {fileID: 1547422076}
 --- !u!114 &1547422078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9121,10 +9121,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba2aee5d31f24943a5ac0492dc8cfa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigList: {fileID: 0}
-  ConfigName: {fileID: 0}
-  ConfigSaver: {fileID: 0}
-  ConfigLoader: {fileID: 0}
+  ConfigList: {fileID: 1547422082}
+  ConfigName: {fileID: 1059991712}
+  ConfigSaver: {fileID: 1547422077}
+  ConfigLoader: {fileID: 1547422078}
 --- !u!114 &1547422080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9137,8 +9137,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 066b5575e8a98db479cdaecfa5257267, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigMenu: {fileID: 0}
-  ConfigLoader: {fileID: 0}
+  ConfigMenu: {fileID: 1547422079}
+  ConfigLoader: {fileID: 1547422078}
 --- !u!114 &1547422081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9151,7 +9151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a03b289058248084bbe2953127ff8ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigListSettuper: {fileID: 0}
+  ConfigListSettuper: {fileID: 1547422080}
 --- !u!114 &1547422082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9617,10 +9617,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba2aee5d31f24943a5ac0492dc8cfa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigList: {fileID: 0}
-  ConfigName: {fileID: 0}
-  ConfigSaver: {fileID: 0}
-  ConfigLoader: {fileID: 0}
+  ConfigList: {fileID: 1477184322}
+  ConfigName: {fileID: 834452271}
+  ConfigSaver: {fileID: 1591436415}
+  ConfigLoader: {fileID: 1591436414}
 --- !u!114 &1591436413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9658,7 +9658,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ced5bf8d145374db61dcedafd9fd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Converter: {fileID: 0}
+  Converter: {fileID: 1591436416}
 --- !u!114 &1591436416
 MonoBehaviour:
   m_ObjectHideFlags: 0
