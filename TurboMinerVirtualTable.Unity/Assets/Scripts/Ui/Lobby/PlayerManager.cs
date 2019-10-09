@@ -28,6 +28,7 @@ public class PlayerManager : MonoBehaviour
         var position = new Vector3(PlayersList.transform.position.x, PlayersList.transform.position.y - PlayerLabels.Count * 45);
         var playerLabel = Instantiate(Resources.Load<PlayerLabel>("Prefabs/PlayerLabel"), position, Quaternion.identity, PlayersList.transform);
         playerLabel.NameLabel.text = "Player" + (PlayerLabels.Count + 1);
+        playerLabel.GetComponentInChildren<Button>().onClick.AddListener(() => RemovePlayer(playerLabel));
 
         for(int i = 0; i < PlayerLabels.Count; i++)
         {
@@ -37,7 +38,7 @@ public class PlayerManager : MonoBehaviour
         PlayerLabels.Add(playerLabel);
     }
 
-    public void RemovePlayersLabels()
+    public void RemovePlayers()
     {
         foreach(var label in PlayerLabels)
         {
@@ -47,6 +48,17 @@ public class PlayerManager : MonoBehaviour
 
     public void RemovePlayer(PlayerLabel label)
     {
+        Destroy(label.gameObject);
+
+        if (!(PlayerLabels.IndexOf(label) == PlayerLabels.Count))
+        {
+            FixLabelsPosition();
+        }
+
         PlayerLabels.Remove(label);
+    }
+
+    private void FixLabelsPosition()
+    {
     }
 }
