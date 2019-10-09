@@ -8,7 +8,7 @@ public class ColorPicker : MonoBehaviour
     private Color[] colors;
     private int currentColorIndex = 0;
 
-    void Start()
+    void Awake()
     {
         colors = new Color[]
         {
