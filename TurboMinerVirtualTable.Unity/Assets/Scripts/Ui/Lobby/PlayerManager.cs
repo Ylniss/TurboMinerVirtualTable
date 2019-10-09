@@ -57,18 +57,20 @@ public class PlayerManager : MonoBehaviour
     {
         foreach(var label in PlayerLabels)
         {
-            RemovePlayer(label);
+            Destroy(label.gameObject);
         }
+
+        PlayerLabels.Clear();
     }
 
     public void RemovePlayer(PlayerLabel label)
     {
-        Destroy(label.gameObject);
-
         if (!(PlayerLabels.IndexOf(label) == PlayerLabels.Count))
         {
             FixLabelsPosition();
         }
+
+        Destroy(label.gameObject);
 
         PlayerLabels.Remove(label);
     }
