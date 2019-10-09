@@ -3,16 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class PlayerManager : MonoBehaviour
 {
     public GameObject PlayersList;
+    public Button StartButton;
 
     private List<PlayerLabel> PlayerLabels;
 
     private void Start()
     {
         PlayerLabels = new List<PlayerLabel>();
+    }
+
+    private void Update()
+    {
+        if(PlayerLabels.Count > 1 && 
+           PlayerLabels.Select(l => l.GetComponentInChildren<ColorPicker>().image.color).Distinct().Count() == PlayerLabels.Count)
+        {
+            StartButton.interactable = true;
+        }
+        else
+        {
+            StartButton.interactable = false;
+        }
     }
 
     public void AddPlayer()
@@ -60,5 +75,6 @@ public class PlayerManager : MonoBehaviour
 
     private void FixLabelsPosition()
     {
+
     }
 }
