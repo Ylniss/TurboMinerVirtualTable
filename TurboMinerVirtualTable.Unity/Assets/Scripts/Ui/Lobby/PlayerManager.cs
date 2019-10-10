@@ -4,23 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using TMPro;
 
 public class PlayerManager : MonoBehaviour
 {
     public GameObject PlayersList;
     public Button StartButton;
 
-    private List<PlayerLabel> PlayerLabels;
+    private List<PlayerLabel> PlayersLabels;
 
     private void Start()
     {
-        PlayerLabels = new List<PlayerLabel>();
+        PlayersLabels = new List<PlayerLabel>();
     }
 
     private void Update()
     {
-        if(PlayerLabels.Count > 1 && 
-           PlayerLabels.Select(l => l.GetComponentInChildren<ColorPicker>().image.color).Distinct().Count() == PlayerLabels.Count)
+        if(PlayersLabels.Count > 1 && 
+           PlayersLabels.Select(l => l.GetComponentInChildren<ColorPicker>().image.color).Distinct().Count() == PlayersLabels.Count &&
+           PlayersLabels.Select(l => l.NameLabel.text).Distinct().Count() == PlayersLabels.Count)
         {
             StartButton.interactable = true;
         }
@@ -32,7 +34,7 @@ public class PlayerManager : MonoBehaviour
 
     public void AddPlayer()
     {
-        if(PlayerLabels.Count < 4)
+        if(PlayersLabels.Count < 4)
         {
             CreateUi();
         }
@@ -40,43 +42,57 @@ public class PlayerManager : MonoBehaviour
 
     private void CreateUi()
     {
-        var position = new Vector3(PlayersList.transform.position.x, PlayersList.transform.position.y - PlayerLabels.Count * 45);
+        var position = new Vector3(PlayersList.transform.position.x, PlayersList.transform.position.y - PlayersLabels.Count * 45);
         var playerLabel = Instantiate(Resources.Load<PlayerLabel>("Prefabs/PlayerLabel"), position, Quaternion.identity, PlayersList.transform);
-        playerLabel.NameLabel.text = "Player" + (PlayerLabels.Count + 1);
+        playerLabel.NameLabel.text = "Player" + (PlayersLabels.Count + 1);
         playerLabel.GetComponentInChildren<Button>().onClick.AddListener(() => RemovePlayer(playerLabel));
 
-        for(int i = 0; i < PlayerLabels.Count; i++)
+        SetColor(playerLabel);
+
+        PlayersLabels.Add(playerLabel);
+    }
+
+    private void SetColor(PlayerLabel playerLabel)
+    {
+        var playersColors = new List<Color>();
+
+        foreach(var label in PlayersLabels)
         {
-            playerLabel.GetComponentInChildren<ColorPicker>().ChangeColor();
+            playersColors.Add(label.GetComponentInChildren<ColorPicker>().image.color);
         }
 
-        PlayerLabels.Add(playerLabel);
+        playerLabel.GetComponentInChildren<ColorPicker>().ChooseFromAvailable(playersColors);
     }
 
     public void RemovePlayers()
     {
-        foreach(var label in PlayerLabels)
+        foreach(var label in PlayersLabels)
         {
             Destroy(label.gameObject);
         }
 
-        PlayerLabels.Clear();
+        PlayersLabels.Clear();
     }
 
     public void RemovePlayer(PlayerLabel label)
     {
-        if (!(PlayerLabels.IndexOf(label) == PlayerLabels.Count))
+        var removedLabelIndex = PlayersLabels.IndexOf(label);
+
+        PlayersLabels.Remove(label);
+
+        if (!(removedLabelIndex == PlayersLabels.Count))
         {
             FixLabelsPosition();
         }
 
         Destroy(label.gameObject);
-
-        PlayerLabels.Remove(label);
     }
 
     private void FixLabelsPosition()
     {
-
+        foreach(var label in PlayersLabels)
+        {
+            label.transform.position = new Vector3(PlayersList.transform.position.x, PlayersList.transform.position.y - PlayersLabels.IndexOf(label) * 45);
+        }
     }
 }
