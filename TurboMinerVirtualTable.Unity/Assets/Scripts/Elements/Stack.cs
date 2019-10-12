@@ -22,8 +22,6 @@ public class Stack : MonoBehaviour
         var sprite = Resources.Load<Sprite>($"{path}/{elements[0]}");
 
         transform.localScale = new Vector3(sprite.rect.width / 100, sprite.rect.height / 100, 1);
-
-        elements.Shuffle();
     }
 
     void OnTriggerExit(Collider collider)

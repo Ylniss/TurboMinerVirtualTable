@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
@@ -10,9 +9,44 @@ public class MainMenu : MonoBehaviour
         Screen.SetResolution(1664, 936, false);
     }
 
+    public void CreateGame()
+    {
+        ServerClientManager.Instance.CreateServer();
+    }
+
+    public void JoinGame()
+    {
+        ServerClientManager.Instance.Connect();
+        ServerClientManager.Instance.StartButton.interactable = false;
+        ServerClientManager.Instance.TilesConfigDropdown.interactable = false;
+        ServerClientManager.Instance.WidthChooserDropdown.interactable = false;
+        ServerClientManager.Instance.HeightChooserDropdown.interactable = false;
+        ServerClientManager.Instance.CorridorsConfigDropdown.interactable = false;
+    }
+
     public void StartGame()
     {
         GameSettuper.Setup();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        ServerClientManager.Instance.StartGame();
+    }
+
+    public void OnSettingChanged()
+    {
+        ServerClientManager.Instance.SendSettings();
+    }
+
+    public void Back()
+    {
+        DestroyIfExists<Client>();
+        DestroyIfExists<Server>();
+    }
+
+    private void DestroyIfExists<T>() where T : MonoBehaviour
+    {
+        var server = FindObjectOfType<T>();
+        if (server != null)
+        {
+            Destroy(server.gameObject);
+        }
     }
 }
