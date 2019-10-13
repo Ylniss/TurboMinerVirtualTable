@@ -71,13 +71,28 @@ public class ServerClientManager : MonoBehaviour
         client.Send(MessageCommands.Client.Start);
     }
 
-    public void SendSettings()
+    public void SendWidthSettings()
+    {
+        var width= GetDropdownCurrentChoice(WidthChooserDropdown);
+        client.Send($"{MessageCommands.Client.WidthSettings}|{width}");
+    }
+
+    public void SendHeightSettings()
+    {
+        var height = GetDropdownCurrentChoice(HeightChooserDropdown);
+        client.Send($"{MessageCommands.Client.HeightSettings}|{height}");
+    }
+
+    public void SendTilesSettings()
     {
         var tilesConfig = GetDropdownCurrentChoice(TilesConfigDropdown);
+        client.Send($"{MessageCommands.Client.TilesSettings}|{tilesConfig}");
+    }
+
+    public void SendCorridorsSettings()
+    {
         var corridorsConfig = GetDropdownCurrentChoice(CorridorsConfigDropdown);
-        var width= GetDropdownCurrentChoice(WidthChooserDropdown);
-        var height = GetDropdownCurrentChoice(HeightChooserDropdown);
-        client.Send($"{MessageCommands.Client.Settings}|{tilesConfig}|{corridorsConfig}|{width}|{height}");
+        client.Send($"{MessageCommands.Client.CorridorsSettings}|{corridorsConfig}");
     }
 
     private string GetDropdownCurrentChoice(TMP_Dropdown dropdown)
@@ -86,14 +101,34 @@ public class ServerClientManager : MonoBehaviour
         return dropdown.options[index].text;
     }
 
-    public void SetSettings(string settingsData)
+    public void SetWidthSettings(string widthData)
+    {
+        SetSettings(WidthChooserDropdown, widthData);
+    }
+
+    public void SetHeightSettings(string heightData)
+    {
+        SetSettings(HeightChooserDropdown, heightData);
+    }
+
+    public void SetTilesSettings(string tilesData)
+    {
+        SetSettings(TilesConfigDropdown, tilesData);
+    }
+
+    public void SetCorridorsSettings(string corridorsData)
+    {
+        SetSettings(CorridorsConfigDropdown, corridorsData);
+    }
+
+    private void SetSettings(TMP_Dropdown dropdown, string settingsData)
     {
         var settings = settingsData.Split('|');
-
-        TilesConfigDropdown.options.Add(new TMP_Dropdown.OptionData(settings[1]));
-        CorridorsConfigDropdown.options.Add(new TMP_Dropdown.OptionData(settings[2]));
-        WidthChooserDropdown.options.Add(new TMP_Dropdown.OptionData(settings[3]));
-        HeightChooserDropdown.options.Add(new TMP_Dropdown.OptionData(settings[4]));
+        if (!client.IsHost)
+        {
+            dropdown.options.Add(new TMP_Dropdown.OptionData(settings[1]));
+            dropdown.SetValueWithoutNotify(dropdown.options.Count - 1);
+        } 
     }
 
     private Client GetClient(string clientName)

@@ -88,7 +88,7 @@ public class Client : MonoBehaviour
                 {
                     UserConnected(message[i], false);
                 }
-                Send($"CWHO|{ClientName}|{(IsHost ? 1 : 0)}");
+                Send($"{MessageCommands.Client.Who}|{ClientName}|{(IsHost ? 1 : 0)}");
                 break;
 
             case MessageCommands.Server.Connected:
@@ -99,8 +99,20 @@ public class Client : MonoBehaviour
                 SceneManager.LoadScene("Table");
                 break;
 
-            case MessageCommands.Server.Settings:
-                ServerClientManager.Instance.SetSettings(data);
+            case MessageCommands.Server.WidthSettings:
+                ServerClientManager.Instance.SetWidthSettings(data);
+                break;
+
+            case MessageCommands.Server.HeightSettings:
+                ServerClientManager.Instance.SetHeightSettings(data);
+                break;
+
+            case MessageCommands.Server.TilesSettings:
+                ServerClientManager.Instance.SetTilesSettings(data);
+                break;
+
+            case MessageCommands.Server.CorridorsSettings:
+                ServerClientManager.Instance.SetCorridorsSettings(data);
                 break;
         }
 

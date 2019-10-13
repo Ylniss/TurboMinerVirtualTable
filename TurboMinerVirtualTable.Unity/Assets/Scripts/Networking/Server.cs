@@ -161,9 +161,20 @@ public class Server : MonoBehaviour
                 Broadcast(MessageCommands.Server.Start, clients);
                 break;
 
-            case MessageCommands.Client.Settings:
-                //todo: send separately :<
-                Broadcast($"{MessageCommands.Server.Settings}|{message[1]}|{message[2]}|{message[3]}|{message[4]}", clients);
+            case MessageCommands.Client.WidthSettings:
+                Broadcast($"{MessageCommands.Server.WidthSettings}|{message[1]}", clients);
+                break;
+
+            case MessageCommands.Client.HeightSettings:
+                Broadcast($"{MessageCommands.Server.HeightSettings}|{message[1]}", clients);
+                break;
+
+            case MessageCommands.Client.TilesSettings:
+                Broadcast($"{MessageCommands.Server.TilesSettings}|{message[1]}", clients);
+                break;
+
+            case MessageCommands.Client.CorridorsSettings:
+                Broadcast($"{MessageCommands.Server.CorridorsSettings}|{message[1]}", clients);
                 break;
         }
     }

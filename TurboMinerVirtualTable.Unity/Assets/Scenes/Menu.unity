@@ -833,7 +833,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 526771065}
-        m_MethodName: OnSettingChanged
+        m_MethodName: OnHeightSettingChanged
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1470,7 +1470,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 526771065}
-        m_MethodName: OnSettingChanged
+        m_MethodName: OnWidthSettingChanged
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9357,7 +9357,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 526771065}
-        m_MethodName: OnSettingChanged
+        m_MethodName: OnCorridorsSettingChanged
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12886,7 +12886,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 526771065}
-        m_MethodName: OnSettingChanged
+        m_MethodName: OnTilesSettingChanged
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

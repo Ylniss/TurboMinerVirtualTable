@@ -30,9 +30,24 @@ public class MainMenu : MonoBehaviour
         ServerClientManager.Instance.StartGame();
     }
 
-    public void OnSettingChanged()
+    public void OnWidthSettingChanged()
     {
-        ServerClientManager.Instance.SendSettings();
+        ServerClientManager.Instance.SendWidthSettings();
+    }
+
+    public void OnHeightSettingChanged()
+    {
+        ServerClientManager.Instance.SendHeightSettings();
+    }
+
+    public void OnTilesSettingChanged()
+    {
+        ServerClientManager.Instance.SendTilesSettings();
+    }
+
+    public void OnCorridorsSettingChanged()
+    {
+        ServerClientManager.Instance.SendCorridorsSettings();
     }
 
     public void Back()
