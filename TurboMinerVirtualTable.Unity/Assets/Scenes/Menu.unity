@@ -3933,6 +3933,7 @@ GameObject:
   - component: {fileID: 526771064}
   - component: {fileID: 526771065}
   - component: {fileID: 526771066}
+  - component: {fileID: 526771067}
   m_Layer: 0
   m_Name: MainMenu
   m_TagString: Untagged
@@ -3988,6 +3989,19 @@ MonoBehaviour:
   MapWidth: {fileID: 245488182}
   MapHeight: {fileID: 60912997}
   PlayerLabels: []
+  ConfigLoader: {fileID: 526771067}
+--- !u!114 &526771067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526771063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be9727a1da0889f4e92f9131c501e79c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &534042078
 GameObject:
   m_ObjectHideFlags: 0
@@ -4388,7 +4402,7 @@ GameObject:
   - component: {fileID: 572898427}
   - component: {fileID: 572898426}
   m_Layer: 0
-  m_Name: ServerClientManager
+  m_Name: MultiplayerManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4403,7 +4417,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 572898425}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5474f74e9db18a469aef15a673cee93, type: 3}
+  m_Script: {fileID: 11500000, guid: c80721ef40bf142458a2728c523781a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ServerPrefab: {fileID: 8115739811256896326, guid: ee7ed7196661e564c810f8b762eb7ff5,

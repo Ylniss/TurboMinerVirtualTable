@@ -158,7 +158,7 @@ public class Server : MonoBehaviour
                 break;
 
             case MessageCommands.Client.Start:
-                Broadcast(MessageCommands.Server.Start, clients);
+                Broadcast($"{MessageCommands.Server.Start}|{message[1]}|{message[2]}|{message[3]}|{message[4]}|{message[5]}", clients);
                 break;
 
             case MessageCommands.Client.WidthSettings:
@@ -169,12 +169,12 @@ public class Server : MonoBehaviour
                 Broadcast($"{MessageCommands.Server.HeightSettings}|{message[1]}", clients);
                 break;
 
-            case MessageCommands.Client.TilesSettings:
-                Broadcast($"{MessageCommands.Server.TilesSettings}|{message[1]}", clients);
+            case MessageCommands.Client.TilesConfigName:
+                Broadcast($"{MessageCommands.Server.TilesConfigName}|{message[1]}", clients);
                 break;
 
-            case MessageCommands.Client.CorridorsSettings:
-                Broadcast($"{MessageCommands.Server.CorridorsSettings}|{message[1]}", clients);
+            case MessageCommands.Client.CorridorsConfigName:
+                Broadcast($"{MessageCommands.Server.CorridorsConfigName}|{message[1]}", clients);
                 break;
         }
     }

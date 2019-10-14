@@ -96,23 +96,27 @@ public class Client : MonoBehaviour
                 break;
 
             case MessageCommands.Server.Start:
+                MultiplayerManager.Instance.SetTilesSettings(message[1]);
+                MultiplayerManager.Instance.SetCorridorsSettings(message[2]);
+                MultiplayerManager.Instance.SetMapSizeSettings(message[3], message[4]);
+                MultiplayerManager.Instance.SetPlayerSettings(message[5]);
                 SceneManager.LoadScene("Table");
                 break;
 
             case MessageCommands.Server.WidthSettings:
-                ServerClientManager.Instance.SetWidthSettings(data);
+                MultiplayerManager.Instance.SetLobbyWidthDropdown(data);
                 break;
 
             case MessageCommands.Server.HeightSettings:
-                ServerClientManager.Instance.SetHeightSettings(data);
+                MultiplayerManager.Instance.SetLobbyHeightDropdown(data);
                 break;
 
-            case MessageCommands.Server.TilesSettings:
-                ServerClientManager.Instance.SetTilesSettings(data);
+            case MessageCommands.Server.TilesConfigName:
+                MultiplayerManager.Instance.SetLobbyTilesConfigDropdown(data);
                 break;
 
-            case MessageCommands.Server.CorridorsSettings:
-                ServerClientManager.Instance.SetCorridorsSettings(data);
+            case MessageCommands.Server.CorridorsConfigName:
+                MultiplayerManager.Instance.SetLobbyCorridorsConfigDropdown(data);
                 break;
         }
 

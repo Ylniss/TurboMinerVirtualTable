@@ -1,4 +1,6 @@
 ﻿using Assets.Scripts.Settings.Models;
+using System;
+using System.Collections.Generic;
 
 public static class GameSettings
 {
@@ -11,7 +13,7 @@ public static class GameSettings
     }
 
     public static PlayerSettings[] PlayersSettings;
-    public static string TilesConfig;
-    public static string CorridorsConfig;
+    public static List<string> Tiles;
+    public static List<string> Corridors;
     public static MapSize MapSize;
 }

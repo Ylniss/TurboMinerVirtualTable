@@ -1,12 +1,17 @@
 ﻿using Assets.Scripts.Networking;
+using Assets.Scripts.Settings.Models;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ServerClientManager : MonoBehaviour
+public class MultiplayerManager : MonoBehaviour
 {
-    public static ServerClientManager Instance { get; set; }
+    public static MultiplayerManager Instance { get; set; }
 
     public GameObject ServerPrefab;
     public GameObject ClientPrefab;
@@ -66,33 +71,67 @@ public class ServerClientManager : MonoBehaviour
         }
     }
 
-    public void StartGame()
+    public void StartGame(GameSettuper gameSettuper)
     {
-        client.Send(MessageCommands.Client.Start);
+        gameSettuper.Setup();
+        var tiles = GameSettings.Tiles;
+        var corridors = GameSettings.Corridors;
+        var tilesCsv = string.Join(",", tiles.ToArray());
+        var corridorsCsv = string.Join(",", corridors.ToArray());
+        var mapWidth = GameSettings.MapSize.Width;
+        var mapHeight = GameSettings.MapSize.Height;
+
+        var playerSettingsArray = new PlayerSettingsArray();
+        playerSettingsArray.Array = GameSettings.PlayersSettings;
+
+        var playerSettingsJson = JsonUtility.ToJson(playerSettingsArray);
+        client.Send($"{MessageCommands.Client.Start}|{tilesCsv}|{corridorsCsv}|{mapWidth}|{mapHeight}|{playerSettingsJson}");
     }
 
-    public void SendWidthSettings()
+    public void SendLobbyWidth()
     {
         var width= GetDropdownCurrentChoice(WidthChooserDropdown);
         client.Send($"{MessageCommands.Client.WidthSettings}|{width}");
     }
 
-    public void SendHeightSettings()
+    public void SendLobbyHeight()
     {
         var height = GetDropdownCurrentChoice(HeightChooserDropdown);
         client.Send($"{MessageCommands.Client.HeightSettings}|{height}");
     }
 
-    public void SendTilesSettings()
+    public void SendLobbyTilesConfigName()
     {
         var tilesConfig = GetDropdownCurrentChoice(TilesConfigDropdown);
-        client.Send($"{MessageCommands.Client.TilesSettings}|{tilesConfig}");
+        client.Send($"{MessageCommands.Client.TilesConfigName}|{tilesConfig}");
     }
 
-    public void SendCorridorsSettings()
+    public void SendLobbyCorridorsConfigName()
     {
         var corridorsConfig = GetDropdownCurrentChoice(CorridorsConfigDropdown);
-        client.Send($"{MessageCommands.Client.CorridorsSettings}|{corridorsConfig}");
+        client.Send($"{MessageCommands.Client.CorridorsConfigName}|{corridorsConfig}");
+    }
+
+    public void SetTilesSettings(string tilesCsv)
+    {
+        var tiles = tilesCsv.Split(',');
+        GameSettings.Tiles = tiles.ToList();
+    }
+
+    public void SetCorridorsSettings(string corridorsCsv)
+    {
+        var corridors = corridorsCsv.Split(',');
+        GameSettings.Corridors = corridors.ToList();
+    }
+
+    public void SetMapSizeSettings(string width, string height)
+    {
+        GameSettings.MapSize = new MapSize(int.Parse(width), int.Parse(height));
+    }
+
+    public void SetPlayerSettings(string playerSettingsJson)
+    {
+        GameSettings.PlayersSettings = JsonUtility.FromJson<PlayerSettingsArray>(playerSettingsJson).Array;
     }
 
     private string GetDropdownCurrentChoice(TMP_Dropdown dropdown)
@@ -101,27 +140,27 @@ public class ServerClientManager : MonoBehaviour
         return dropdown.options[index].text;
     }
 
-    public void SetWidthSettings(string widthData)
+    public void SetLobbyWidthDropdown(string widthData)
     {
-        SetSettings(WidthChooserDropdown, widthData);
+        SetLobbyDropdown(WidthChooserDropdown, widthData);
     }
 
-    public void SetHeightSettings(string heightData)
+    public void SetLobbyHeightDropdown(string heightData)
     {
-        SetSettings(HeightChooserDropdown, heightData);
+        SetLobbyDropdown(HeightChooserDropdown, heightData);
     }
 
-    public void SetTilesSettings(string tilesData)
+    public void SetLobbyTilesConfigDropdown(string tilesData)
     {
-        SetSettings(TilesConfigDropdown, tilesData);
+        SetLobbyDropdown(TilesConfigDropdown, tilesData);
     }
 
-    public void SetCorridorsSettings(string corridorsData)
+    public void SetLobbyCorridorsConfigDropdown(string corridorsData)
     {
-        SetSettings(CorridorsConfigDropdown, corridorsData);
+        SetLobbyDropdown(CorridorsConfigDropdown, corridorsData);
     }
 
-    private void SetSettings(TMP_Dropdown dropdown, string settingsData)
+    private void SetLobbyDropdown(TMP_Dropdown dropdown, string settingsData)
     {
         var settings = settingsData.Split('|');
         if (!client.IsHost)

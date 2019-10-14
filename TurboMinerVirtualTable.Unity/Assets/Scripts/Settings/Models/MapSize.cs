@@ -1,5 +1,8 @@
-﻿namespace Assets.Scripts.Settings.Models
+﻿using System;
+
+namespace Assets.Scripts.Settings.Models
 {
+    [Serializable]
     public class MapSize
     {
         public int Width;

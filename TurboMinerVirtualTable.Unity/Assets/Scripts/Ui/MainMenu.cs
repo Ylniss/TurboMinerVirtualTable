@@ -11,47 +11,43 @@ public class MainMenu : MonoBehaviour
 
     public void CreateGame()
     {
-        ServerClientManager.Instance.CreateServer();
+        MultiplayerManager.Instance.CreateServer();
     }
 
     public void JoinGame()
     {
-        ServerClientManager.Instance.Connect();
-        ServerClientManager.Instance.StartButton.interactable = false;
-        ServerClientManager.Instance.TilesConfigDropdown.interactable = false;
-        ServerClientManager.Instance.WidthChooserDropdown.interactable = false;
-        ServerClientManager.Instance.HeightChooserDropdown.interactable = false;
-        ServerClientManager.Instance.CorridorsConfigDropdown.interactable = false;
+        MultiplayerManager.Instance.Connect();
+        SetControlsInteractable(false);
     }
 
     public void StartGame()
     {
-        GameSettuper.Setup();
-        ServerClientManager.Instance.StartGame();
+        MultiplayerManager.Instance.StartGame(GameSettuper);
     }
 
     public void OnWidthSettingChanged()
     {
-        ServerClientManager.Instance.SendWidthSettings();
+        MultiplayerManager.Instance.SendLobbyWidth();
     }
 
     public void OnHeightSettingChanged()
     {
-        ServerClientManager.Instance.SendHeightSettings();
+        MultiplayerManager.Instance.SendLobbyHeight();
     }
 
     public void OnTilesSettingChanged()
     {
-        ServerClientManager.Instance.SendTilesSettings();
+        MultiplayerManager.Instance.SendLobbyTilesConfigName();
     }
 
     public void OnCorridorsSettingChanged()
     {
-        ServerClientManager.Instance.SendCorridorsSettings();
+        MultiplayerManager.Instance.SendLobbyCorridorsConfigName();
     }
 
     public void Back()
     {
+        SetControlsInteractable(true);
         DestroyIfExists<Client>();
         DestroyIfExists<Server>();
     }
@@ -63,5 +59,14 @@ public class MainMenu : MonoBehaviour
         {
             Destroy(server.gameObject);
         }
+    }
+
+    private void SetControlsInteractable(bool interactable)
+    {
+        MultiplayerManager.Instance.StartButton.interactable = interactable;
+        MultiplayerManager.Instance.TilesConfigDropdown.interactable = interactable;
+        MultiplayerManager.Instance.WidthChooserDropdown.interactable = interactable;
+        MultiplayerManager.Instance.HeightChooserDropdown.interactable = interactable;
+        MultiplayerManager.Instance.CorridorsConfigDropdown.interactable = interactable;
     }
 }

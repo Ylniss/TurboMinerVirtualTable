@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Assets.Scripts.Networking
+﻿namespace Assets.Scripts.Networking
 {
     public static class MessageCommands
     {
@@ -15,8 +9,8 @@ namespace Assets.Scripts.Networking
             public const string Start = "SSTR";
             public const string WidthSettings = "SSETW";
             public const string HeightSettings = "SSETH";
-            public const string TilesSettings = "SSETT";
-            public const string CorridorsSettings = "SSETC";
+            public const string TilesConfigName = "STCFG";
+            public const string CorridorsConfigName = "SCCFG";
         }
 
         public static class Client
@@ -27,8 +21,8 @@ namespace Assets.Scripts.Networking
             public const string Settings = "CSET";
             public const string WidthSettings = "CSETW";
             public const string HeightSettings = "CSETH";
-            public const string TilesSettings = "CSETT";
-            public const string CorridorsSettings = "CSETC";
+            public const string TilesConfigName = "CTCFG";
+            public const string CorridorsConfigName = "CCCFG";
         }
     }
 }
