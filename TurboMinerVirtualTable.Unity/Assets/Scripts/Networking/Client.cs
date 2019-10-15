@@ -122,6 +122,10 @@ public class Client : MonoBehaviour
             case MessageCommands.Server.ElementPosition:
                 MultiplayerManager.Instance.SetElementPosition(int.Parse(message[1]), float.Parse(message[2]), float.Parse(message[3]));
                 break;
+
+            case MessageCommands.Server.ElementLayer:
+                MultiplayerManager.Instance.IncrementElementLayer(int.Parse(message[1]));
+                break;
         }
 
     }

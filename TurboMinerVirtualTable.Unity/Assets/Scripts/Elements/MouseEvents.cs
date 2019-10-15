@@ -19,12 +19,14 @@ public class MouseEvents : MonoBehaviour
         offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z));
         ContainedElementsOffsets = new Vector2[element.ContainedElements.Count];
         element.IncrementLayerOrder();
+        MultiplayerManager.Instance.SendIncrementElementLayer(element.Id);
 
-        for(var i = 0; i < ContainedElementsOffsets.Length; ++i)
+        for (var i = 0; i < ContainedElementsOffsets.Length; ++i)
         {
             ContainedElementsOffsets[i] = transform.position - element.ContainedElements[i].position;
             var containedElement = element.ContainedElements[i].gameObject.GetComponent<Element>();
             containedElement.IncrementLayerOrder();
+            MultiplayerManager.Instance.SendIncrementElementLayer(containedElement.Id);
         }
 
         OnDoubleClick();

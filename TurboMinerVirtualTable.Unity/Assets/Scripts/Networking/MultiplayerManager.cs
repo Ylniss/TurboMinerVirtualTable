@@ -117,11 +117,21 @@ public class MultiplayerManager : MonoBehaviour
         client.Send($"{MessageCommands.Client.ElementPosition}|{elementId}|{position.x}|{position.y}");
     }
 
+    public void SendIncrementElementLayer(int elementId)
+    {
+        client.Send($"{MessageCommands.Client.ElementLayer}|{elementId}");
+    }
+
+    public void IncrementElementLayer(int elementId)
+    {
+        var element = Element.Get(elementId);
+        element.IncrementLayerOrder();
+    }
+
     public void SetElementPosition(int id, float x, float y)
     {
-        var elements = GameObject.FindObjectsOfType<Element>();
+        var element = Element.Get(id);
 
-        var element = elements.Single(e => e.Id == id);
         element.transform.position = new Vector2(x, y);
     }
 

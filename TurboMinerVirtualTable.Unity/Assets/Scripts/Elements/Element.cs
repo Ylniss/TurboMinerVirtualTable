@@ -1,11 +1,11 @@
 ﻿using Assets.Scripts.Elements;
 using Assets.Scripts.Utils.Extensions;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Element : MonoBehaviour
-{
-    public static int IdIncrement = 0;
+{  
     public int Id;
 
     public Transform FrontSide;
@@ -21,10 +21,11 @@ public class Element : MonoBehaviour
     public static int MaxOrderInLayer = 0;
 
     private BoxCollider2D boxCollider;
+    private static int idIncrement = 0;
 
     void Start()
     {
-        Id = ++IdIncrement;
+        Id = ++idIncrement;
 
         var frontSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
         Name = frontSpriteRenderer.sprite.name;
@@ -106,7 +107,11 @@ public class Element : MonoBehaviour
 
         frontSpriteRenderer.sortingOrder = ++MaxOrderInLayer;
         backSpriteRenderer.sortingOrder = MaxOrderInLayer;
+    }
 
-        //todo: send that to server...
+    public static Element Get(int id)
+    {
+        var elements = GameObject.FindObjectsOfType<Element>();
+        return elements.Single(e => e.Id == id);
     }
 }

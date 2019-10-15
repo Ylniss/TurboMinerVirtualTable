@@ -157,7 +157,7 @@ public class Server : MonoBehaviour
                 Broadcast($"{MessageCommands.Server.Connected}|{client.ClientName}", clients);
                 break;
 
-            case MessageCommands.Client.Start:
+            case MessageCommands.Client.Start: //todo: for all, clients except client?
                 Broadcast($"{MessageCommands.Server.Start}|{message[1]}|{message[2]}|{message[3]}|{message[4]}|{message[5]}", clients);
                 break;
 
@@ -179,6 +179,10 @@ public class Server : MonoBehaviour
 
             case MessageCommands.Client.ElementPosition:
                 Broadcast($"{MessageCommands.Server.ElementPosition}|{message[1]}|{message[2]}|{message[3]}", clients);
+                break;
+
+            case MessageCommands.Client.ElementLayer:
+                Broadcast($"{MessageCommands.Server.ElementLayer}|{message[1]}", clients);
                 break;
         }
     }
