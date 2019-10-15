@@ -112,6 +112,19 @@ public class MultiplayerManager : MonoBehaviour
         client.Send($"{MessageCommands.Client.CorridorsConfigName}|{corridorsConfig}");
     }
 
+    public void SendElementPosition(int elementId, Vector2 position)
+    {
+        client.Send($"{MessageCommands.Client.ElementPosition}|{elementId}|{position.x}|{position.y}");
+    }
+
+    public void SetElementPosition(int id, float x, float y)
+    {
+        var elements = GameObject.FindObjectsOfType<Element>();
+
+        var element = elements.Single(e => e.Id == id);
+        element.transform.position = new Vector2(x, y);
+    }
+
     public void SetTilesSettings(string tilesCsv)
     {
         var tiles = tilesCsv.Split(',');

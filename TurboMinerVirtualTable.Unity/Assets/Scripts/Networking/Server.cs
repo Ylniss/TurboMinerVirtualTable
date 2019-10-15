@@ -176,6 +176,10 @@ public class Server : MonoBehaviour
             case MessageCommands.Client.CorridorsConfigName:
                 Broadcast($"{MessageCommands.Server.CorridorsConfigName}|{message[1]}", clients);
                 break;
+
+            case MessageCommands.Client.ElementPosition:
+                Broadcast($"{MessageCommands.Server.ElementPosition}|{message[1]}|{message[2]}|{message[3]}", clients);
+                break;
         }
     }
 }

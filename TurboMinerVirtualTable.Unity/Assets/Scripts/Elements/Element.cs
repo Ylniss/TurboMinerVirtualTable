@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Element : MonoBehaviour
 {
+    public static int IdIncrement = 0;
+    public int Id;
+
     public Transform FrontSide;
     public Transform BackSide;
     public MouseEvents MouseEvents;
@@ -21,6 +24,8 @@ public class Element : MonoBehaviour
 
     void Start()
     {
+        Id = ++IdIncrement;
+
         var frontSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
         Name = frontSpriteRenderer.sprite.name;
 
@@ -64,6 +69,7 @@ public class Element : MonoBehaviour
         if (Spinnable)
         {
             transform.Rotate(0, 0, -90 * numOfTimes);
+            //todo: send to server
         }
     }
 
@@ -100,5 +106,7 @@ public class Element : MonoBehaviour
 
         frontSpriteRenderer.sortingOrder = ++MaxOrderInLayer;
         backSpriteRenderer.sortingOrder = MaxOrderInLayer;
+
+        //todo: send that to server...
     }
 }

@@ -41,10 +41,14 @@ public class MouseEvents : MonoBehaviour
 
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
         element.transform.position = curPosition;
+        MultiplayerManager.Instance.SendElementPosition(element.Id, curPosition);
 
         for(var i = 0; i < element.ContainedElements.Count; ++i)
         {
-            element.ContainedElements[i].position = new Vector3(curPosition.x - ContainedElementsOffsets[i].x, curPosition.y - ContainedElementsOffsets[i].y, element.ContainedElements[i].position.z);
+            var containedElementPosition = new Vector2(curPosition.x - ContainedElementsOffsets[i].x, curPosition.y - ContainedElementsOffsets[i].y);
+            element.ContainedElements[i].position = containedElementPosition;
+            var containedElement = element.ContainedElements[i].gameObject.GetComponent<Element>();
+            MultiplayerManager.Instance.SendElementPosition(containedElement.Id, containedElementPosition); //todo: change to send elements position and send at once
         }
 
         IsDragging = true;

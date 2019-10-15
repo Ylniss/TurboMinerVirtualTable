@@ -118,6 +118,10 @@ public class Client : MonoBehaviour
             case MessageCommands.Server.CorridorsConfigName:
                 MultiplayerManager.Instance.SetLobbyCorridorsConfigDropdown(data);
                 break;
+
+            case MessageCommands.Server.ElementPosition:
+                MultiplayerManager.Instance.SetElementPosition(int.Parse(message[1]), float.Parse(message[2]), float.Parse(message[3]));
+                break;
         }
 
     }

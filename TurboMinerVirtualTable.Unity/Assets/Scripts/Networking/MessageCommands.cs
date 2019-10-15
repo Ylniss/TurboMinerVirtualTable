@@ -11,6 +11,7 @@
             public const string HeightSettings = "SSETH";
             public const string TilesConfigName = "STCFG";
             public const string CorridorsConfigName = "SCCFG";
+            public const string ElementPosition = "SPOS";
         }
 
         public static class Client
@@ -23,6 +24,7 @@
             public const string HeightSettings = "CSETH";
             public const string TilesConfigName = "CTCFG";
             public const string CorridorsConfigName = "CCCFG";
+            public const string ElementPosition = "CPOS";
         }
     }
 }
