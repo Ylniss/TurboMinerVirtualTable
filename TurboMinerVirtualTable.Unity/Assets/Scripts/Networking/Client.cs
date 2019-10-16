@@ -104,27 +104,35 @@ public class Client : MonoBehaviour
                 break;
 
             case MessageCommands.Server.WidthSettings:
-                MultiplayerManager.Instance.SetLobbyWidthDropdown(data);
+                MultiplayerManager.Instance.SetLobbyWidthDropdown(message[1]);
                 break;
 
             case MessageCommands.Server.HeightSettings:
-                MultiplayerManager.Instance.SetLobbyHeightDropdown(data);
+                MultiplayerManager.Instance.SetLobbyHeightDropdown(message[1]);
                 break;
 
             case MessageCommands.Server.TilesConfigName:
-                MultiplayerManager.Instance.SetLobbyTilesConfigDropdown(data);
+                MultiplayerManager.Instance.SetLobbyTilesConfigDropdown(message[1]);
                 break;
 
             case MessageCommands.Server.CorridorsConfigName:
-                MultiplayerManager.Instance.SetLobbyCorridorsConfigDropdown(data);
+                MultiplayerManager.Instance.SetLobbyCorridorsConfigDropdown(message[1]);
                 break;
 
             case MessageCommands.Server.ElementPosition:
-                MultiplayerManager.Instance.SetElementPosition(int.Parse(message[1]), float.Parse(message[2]), float.Parse(message[3]));
+                MultiplayerManager.Instance.SetElementPosition(message[1]);
                 break;
 
             case MessageCommands.Server.ElementLayer:
                 MultiplayerManager.Instance.IncrementElementLayer(int.Parse(message[1]));
+                break;
+
+            case MessageCommands.Server.ElementTurn:
+                MultiplayerManager.Instance.TurnElementOnOtherSide(int.Parse(message[1]));
+                break;
+
+            case MessageCommands.Server.ElementRotate:
+                MultiplayerManager.Instance.RotateElement(int.Parse(message[1]));
                 break;
         }
 

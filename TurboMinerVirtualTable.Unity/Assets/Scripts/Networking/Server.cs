@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
@@ -135,7 +136,7 @@ public class Server : MonoBehaviour
         }
     }
 
-    private void Broadcast(string data, List<ServerClient> serverClients)
+    private void Broadcast(string data, IEnumerable<ServerClient> serverClients)
     {
         foreach (var serverClient in serverClients)
         {
@@ -149,6 +150,8 @@ public class Server : MonoBehaviour
 
         var message = data.Split('|');
 
+        var clientsNoSender = clients.Except(new List<ServerClient>() { client });
+
         switch (message[0])
         {
             case MessageCommands.Client.Who:
@@ -158,31 +161,39 @@ public class Server : MonoBehaviour
                 break;
 
             case MessageCommands.Client.Start: //todo: for all, clients except client?
-                Broadcast($"{MessageCommands.Server.Start}|{message[1]}|{message[2]}|{message[3]}|{message[4]}|{message[5]}", clients);
+                Broadcast($"{MessageCommands.Server.Start}|{message[1]}|{message[2]}|{message[3]}|{message[4]}|{message[5]}", clientsNoSender);
                 break;
 
             case MessageCommands.Client.WidthSettings:
-                Broadcast($"{MessageCommands.Server.WidthSettings}|{message[1]}", clients);
+                Broadcast($"{MessageCommands.Server.WidthSettings}|{message[1]}", clientsNoSender);
                 break;
 
             case MessageCommands.Client.HeightSettings:
-                Broadcast($"{MessageCommands.Server.HeightSettings}|{message[1]}", clients);
+                Broadcast($"{MessageCommands.Server.HeightSettings}|{message[1]}", clientsNoSender);
                 break;
 
             case MessageCommands.Client.TilesConfigName:
-                Broadcast($"{MessageCommands.Server.TilesConfigName}|{message[1]}", clients);
+                Broadcast($"{MessageCommands.Server.TilesConfigName}|{message[1]}", clientsNoSender);
                 break;
 
             case MessageCommands.Client.CorridorsConfigName:
-                Broadcast($"{MessageCommands.Server.CorridorsConfigName}|{message[1]}", clients);
+                Broadcast($"{MessageCommands.Server.CorridorsConfigName}|{message[1]}", clientsNoSender);
                 break;
 
             case MessageCommands.Client.ElementPosition:
-                Broadcast($"{MessageCommands.Server.ElementPosition}|{message[1]}|{message[2]}|{message[3]}", clients);
+                Broadcast($"{MessageCommands.Server.ElementPosition}|{message[1]}", clientsNoSender);
                 break;
 
             case MessageCommands.Client.ElementLayer:
-                Broadcast($"{MessageCommands.Server.ElementLayer}|{message[1]}", clients);
+                Broadcast($"{MessageCommands.Server.ElementLayer}|{message[1]}", clientsNoSender);
+                break;
+
+            case MessageCommands.Client.ElementTurn:
+                Broadcast($"{MessageCommands.Server.ElementTurn}|{message[1]}", clientsNoSender);
+                break;
+
+            case MessageCommands.Client.ElementRotate:
+                Broadcast($"{MessageCommands.Server.ElementRotate}|{message[1]}", clientsNoSender);
                 break;
         }
     }

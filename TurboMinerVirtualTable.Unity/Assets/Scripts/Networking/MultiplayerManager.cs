@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Networking;
+using Assets.Scripts.Networking.Models;
 using Assets.Scripts.Settings.Models;
 using System;
 using System.Collections.Generic;
@@ -112,14 +113,25 @@ public class MultiplayerManager : MonoBehaviour
         client.Send($"{MessageCommands.Client.CorridorsConfigName}|{corridorsConfig}");
     }
 
-    public void SendElementPosition(int elementId, Vector2 position)
+    public void SendElementPosition(ElementPositionArray elements)
     {
-        client.Send($"{MessageCommands.Client.ElementPosition}|{elementId}|{position.x}|{position.y}");
+        var jsonElements = JsonUtility.ToJson(elements);
+        client.Send($"{MessageCommands.Client.ElementPosition}|{jsonElements}");
     }
 
     public void SendIncrementElementLayer(int elementId)
     {
         client.Send($"{MessageCommands.Client.ElementLayer}|{elementId}");
+    }
+
+    public void SendTurnElementOnOtherSide(int elementId)
+    {
+        client.Send($"{MessageCommands.Client.ElementTurn}|{elementId}");
+    }
+
+    public void SendRotateElement(int elementId)
+    {
+        client.Send($"{MessageCommands.Client.ElementRotate}|{elementId}");
     }
 
     public void IncrementElementLayer(int elementId)
@@ -128,11 +140,26 @@ public class MultiplayerManager : MonoBehaviour
         element.IncrementLayerOrder();
     }
 
-    public void SetElementPosition(int id, float x, float y)
+    public void TurnElementOnOtherSide(int elementId)
     {
-        var element = Element.Get(id);
+        var element = Element.Get(elementId);
+        element.TurnOnOtherSide();
+    }
 
-        element.transform.position = new Vector2(x, y);
+    public void RotateElement(int elementId)
+    {
+        var element = Element.Get(elementId);
+        element.Rotate();
+    }
+
+    public void SetElementPosition(string elementsJson)
+    {
+        var elements = JsonUtility.FromJson<ElementPositionArray>(elementsJson);
+        foreach(var elementPosition in elements.Array)
+        {
+            var element = Element.Get(elementPosition.Id);
+            element.transform.position = elementPosition.Position;
+        }      
     }
 
     public void SetTilesSettings(string tilesCsv)
@@ -185,10 +212,9 @@ public class MultiplayerManager : MonoBehaviour
 
     private void SetLobbyDropdown(TMP_Dropdown dropdown, string settingsData)
     {
-        var settings = settingsData.Split('|');
         if (!client.IsHost)
         {
-            dropdown.options.Add(new TMP_Dropdown.OptionData(settings[1]));
+            dropdown.options.Add(new TMP_Dropdown.OptionData(settingsData));
             dropdown.SetValueWithoutNotify(dropdown.options.Count - 1);
         } 
     }

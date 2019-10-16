@@ -13,6 +13,8 @@
             public const string CorridorsConfigName = "SCCFG";
             public const string ElementPosition = "SEPOS";
             public const string ElementLayer = "SELAY";
+            public const string ElementTurn = "SETUR";
+            public const string ElementRotate = "SEROT";
         }
 
         public static class Client
@@ -27,6 +29,8 @@
             public const string CorridorsConfigName = "CCCFG";
             public const string ElementPosition = "CEPOS";
             public const string ElementLayer = "CELAY";
+            public const string ElementTurn = "CETUR";
+            public const string ElementRotate = "CEROT";
         }
     }
 }

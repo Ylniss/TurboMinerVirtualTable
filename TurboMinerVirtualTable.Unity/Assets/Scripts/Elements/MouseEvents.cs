@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Networking.Models;
+using UnityEngine;
 
 public class MouseEvents : MonoBehaviour
 {
@@ -43,16 +44,19 @@ public class MouseEvents : MonoBehaviour
 
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
         element.transform.position = curPosition;
-        MultiplayerManager.Instance.SendElementPosition(element.Id, curPosition);
 
-        for(var i = 0; i < element.ContainedElements.Count; ++i)
+        var elementPositions = new ElementPositionArray(element.ContainedElements.Count + 1);
+        elementPositions.Array[0] = new ElementPosition(element.Id, curPosition);
+
+        for (var i = 0; i < element.ContainedElements.Count; ++i)
         {
             var containedElementPosition = new Vector2(curPosition.x - ContainedElementsOffsets[i].x, curPosition.y - ContainedElementsOffsets[i].y);
             element.ContainedElements[i].position = containedElementPosition;
             var containedElement = element.ContainedElements[i].gameObject.GetComponent<Element>();
-            MultiplayerManager.Instance.SendElementPosition(containedElement.Id, containedElementPosition); //todo: change to send elements position and send at once
+            elementPositions.Array[i + 1] = new ElementPosition(containedElement.Id, containedElementPosition);
         }
 
+        MultiplayerManager.Instance.SendElementPosition(elementPositions);
         IsDragging = true;
     }
 
@@ -61,6 +65,7 @@ public class MouseEvents : MonoBehaviour
         if (Input.GetMouseButtonDown(1)) // right mouse button
         {
             element.Rotate();
+            MultiplayerManager.Instance.SendRotateElement(element.Id);
         }
 
         if (Input.GetKeyDown(KeyCode.Delete) && element.Removable)
@@ -77,6 +82,7 @@ public class MouseEvents : MonoBehaviour
         if ((lastClick + interval) > Time.time)
         {
             element.TurnOnOtherSide();
+            MultiplayerManager.Instance.SendTurnElementOnOtherSide(element.Id);
         }
 
         lastClick = Time.time;

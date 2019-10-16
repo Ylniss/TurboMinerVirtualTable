@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class MainMenu : MonoBehaviour
     public void StartGame()
     {
         MultiplayerManager.Instance.StartGame(GameSettuper);
+        SceneManager.LoadScene("Table");
     }
 
     public void OnWidthSettingChanged()
