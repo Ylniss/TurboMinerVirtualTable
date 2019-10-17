@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        MultiplayerManager.Instance.StartGame(GameSettuper);
+        MultiplayerManager.Instance.SendStartGame(GameSettuper);
         SceneManager.LoadScene("Table");
     }
 

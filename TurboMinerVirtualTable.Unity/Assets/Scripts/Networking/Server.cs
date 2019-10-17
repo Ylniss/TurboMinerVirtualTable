@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Networking;
+using Assets.Scripts.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -160,7 +161,7 @@ public class Server : MonoBehaviour
                 Broadcast($"{MessageCommands.Server.Connected}|{client.ClientName}", clients);
                 break;
 
-            case MessageCommands.Client.Start: //todo: for all, clients except client?
+            case MessageCommands.Client.Start:
                 Broadcast($"{MessageCommands.Server.Start}|{message[1]}|{message[2]}|{message[3]}|{message[4]}|{message[5]}", clientsNoSender);
                 break;
 
@@ -184,6 +185,10 @@ public class Server : MonoBehaviour
                 Broadcast($"{MessageCommands.Server.ElementPosition}|{message[1]}", clientsNoSender);
                 break;
 
+            case MessageCommands.Client.ElementStopDrag:
+                Broadcast($"{MessageCommands.Server.ElementStopDrag}|{message[1]}", clientsNoSender);
+                break;
+
             case MessageCommands.Client.ElementLayer:
                 Broadcast($"{MessageCommands.Server.ElementLayer}|{message[1]}", clientsNoSender);
                 break;
@@ -193,7 +198,11 @@ public class Server : MonoBehaviour
                 break;
 
             case MessageCommands.Client.ElementRotate:
-                Broadcast($"{MessageCommands.Server.ElementRotate}|{message[1]}", clientsNoSender);
+                Broadcast($"{MessageCommands.Server.ElementRotate}|{message[1]}", clients);
+                break;
+
+            case MessageCommands.Client.RollDice:
+                Broadcast($"{MessageCommands.Server.RollDice}|{RngHelper.GetRandom(1, 6)}", clients);
                 break;
         }
     }

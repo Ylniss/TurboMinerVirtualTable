@@ -2,10 +2,7 @@
 using Assets.Scripts.Networking.Models;
 using Assets.Scripts.Settings.Models;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -72,7 +69,7 @@ public class MultiplayerManager : MonoBehaviour
         }
     }
 
-    public void StartGame(GameSettuper gameSettuper)
+    public void SendStartGame(GameSettuper gameSettuper)
     {
         gameSettuper.Setup();
         var tiles = GameSettings.Tiles;
@@ -91,7 +88,7 @@ public class MultiplayerManager : MonoBehaviour
 
     public void SendLobbyWidth()
     {
-        var width= GetDropdownCurrentChoice(WidthChooserDropdown);
+        var width = GetDropdownCurrentChoice(WidthChooserDropdown);
         client.Send($"{MessageCommands.Client.WidthSettings}|{width}");
     }
 
@@ -113,15 +110,21 @@ public class MultiplayerManager : MonoBehaviour
         client.Send($"{MessageCommands.Client.CorridorsConfigName}|{corridorsConfig}");
     }
 
-    public void SendElementPosition(ElementPositionArray elements)
+    public void SendElementsPositions(ElementPositionArray elements)
     {
         var jsonElements = JsonUtility.ToJson(elements);
         client.Send($"{MessageCommands.Client.ElementPosition}|{jsonElements}");
     }
 
-    public void SendIncrementElementLayer(int elementId)
+    public void SendStopElementDrag(int elementId)
     {
-        client.Send($"{MessageCommands.Client.ElementLayer}|{elementId}");
+        client.Send($"{MessageCommands.Client.ElementStopDrag}|{elementId}");
+    }
+
+    public void SendIncrementElementsLayers(ElementIdArray elementIds)
+    {
+        var jsonElements = JsonUtility.ToJson(elementIds);
+        client.Send($"{MessageCommands.Client.ElementLayer}|{jsonElements}");
     }
 
     public void SendTurnElementOnOtherSide(int elementId)
@@ -134,10 +137,25 @@ public class MultiplayerManager : MonoBehaviour
         client.Send($"{MessageCommands.Client.ElementRotate}|{elementId}");
     }
 
-    public void IncrementElementLayer(int elementId)
+    public void SendRollDice()
     {
-        var element = Element.Get(elementId);
-        element.IncrementLayerOrder();
+        client.Send($"{MessageCommands.Client.RollDice}");
+    }
+
+    public void RollDice(int finalDiceSide)
+    {
+        var dice = FindObjectOfType<Dice>();
+        dice.StartRolling(finalDiceSide);
+    }
+
+    public void IncrementElementsLayers(string jsonElementIds)
+    {
+        var elementIds = JsonUtility.FromJson<ElementIdArray>(jsonElementIds);
+        foreach (var elementId in elementIds.Array)
+        {
+            var element = Element.Get(elementId.Id);
+            element.IncrementLayerOrder();
+        }
     }
 
     public void TurnElementOnOtherSide(int elementId)
@@ -152,14 +170,22 @@ public class MultiplayerManager : MonoBehaviour
         element.Rotate();
     }
 
-    public void SetElementPosition(string elementsJson)
+    public void SetElementsPositions(string elementsJson)
     {
         var elements = JsonUtility.FromJson<ElementPositionArray>(elementsJson);
-        foreach(var elementPosition in elements.Array)
+        var containerElement = Element.Get(elements.Array[0].Id);
+        containerElement.IsDragged = true;
+        foreach (var elementPosition in elements.Array)
         {
-            var element = Element.Get(elementPosition.Id);
+            var element = Element.Get(elementPosition.Id);    
             element.transform.position = elementPosition.Position;
-        }      
+        }
+    }
+
+    public void StopElementDrag(int elementId)
+    {
+        var element = Element.Get(elementId);
+        element.IsDragged = false;
     }
 
     public void SetTilesSettings(string tilesCsv)
@@ -216,7 +242,7 @@ public class MultiplayerManager : MonoBehaviour
         {
             dropdown.options.Add(new TMP_Dropdown.OptionData(settingsData));
             dropdown.SetValueWithoutNotify(dropdown.options.Count - 1);
-        } 
+        }
     }
 
     private Client GetClient(string clientName)

@@ -5,20 +5,31 @@ using System.Linq;
 using UnityEngine;
 
 public class Element : MonoBehaviour
-{  
+{
     public int Id;
 
     public Transform FrontSide;
     public Transform BackSide;
-    public MouseEvents MouseEvents;
     public bool Spinnable;
     public bool Removable;
     public CollisionHelper CollisionHelper;
     public List<Transform> ContainedElements = new List<Transform>();
-  
+
     public string Name { get; private set; }
 
-    public static int MaxOrderInLayer = 0;
+    public bool IsDragged
+    {
+        get
+        {
+            return GetComponentInChildren<MouseEvents>().IsDragged;
+        }
+        set
+        {
+            GetComponentInChildren<MouseEvents>().IsDragged = value;
+        }
+    }
+
+    public static int MaxOrderInLayer = 1;
 
     private BoxCollider2D boxCollider;
     private static int idIncrement = 0;
@@ -31,20 +42,16 @@ public class Element : MonoBehaviour
         Name = frontSpriteRenderer.sprite.name;
 
         boxCollider = GetComponent<BoxCollider2D>();
-        boxCollider.size = new Vector2(frontSpriteRenderer.bounds.size.x, frontSpriteRenderer.bounds.size.y);   
+        boxCollider.size = new Vector2(frontSpriteRenderer.bounds.size.x, frontSpriteRenderer.bounds.size.y);
     }
 
     void OnTriggerStay2D(Collider2D otherCollider)
     {
         if (boxCollider != null && boxCollider.name == otherCollider.name && CollisionHelper.IsFullyContained(boxCollider, otherCollider))
         {
-            //Debug.Log($"{boxCollider.name} - {boxCollider.transform.position} collides with {otherCollider.name} - {otherCollider.transform.position}");
-            var otherElement = otherCollider.transform;
-
-            var otherElementContainedElements = otherElement.gameObject.GetComponent<Element>().ContainedElements;
-            var isOtherElementDragging = otherElement.GetComponentInChildren<MouseEvents>().IsDragging;
-            var isCurrentDragging = GetComponentInChildren<MouseEvents>().IsDragging;
-            if (!otherElementContainedElements.Contains(transform) && !isOtherElementDragging && isCurrentDragging)
+            var otherElement = otherCollider.transform.gameObject.GetComponent<Element>();
+            var otherElementContainedElements = otherElement.ContainedElements;
+            if (!otherElementContainedElements.Contains(transform) && !otherElement.IsDragged && IsDragged)
             {
                 otherElementContainedElements.Add(transform);
             }
@@ -70,7 +77,6 @@ public class Element : MonoBehaviour
         if (Spinnable)
         {
             transform.Rotate(0, 0, -90 * numOfTimes);
-            //todo: send to server
         }
     }
 
@@ -102,8 +108,14 @@ public class Element : MonoBehaviour
 
     public void IncrementLayerOrder()
     {
+
         var frontSpriteRenderer = FrontSide.GetComponent<SpriteRenderer>();
         var backSpriteRenderer = BackSide.GetComponent<SpriteRenderer>();
+
+        if (frontSpriteRenderer.sortingOrder == MaxOrderInLayer)
+        {
+            return;
+        }
 
         frontSpriteRenderer.sortingOrder = ++MaxOrderInLayer;
         backSpriteRenderer.sortingOrder = MaxOrderInLayer;
@@ -111,7 +123,7 @@ public class Element : MonoBehaviour
 
     public static Element Get(int id)
     {
-        var elements = GameObject.FindObjectsOfType<Element>();
+        var elements = FindObjectsOfType<Element>();
         return elements.Single(e => e.Id == id);
     }
 }

@@ -120,11 +120,15 @@ public class Client : MonoBehaviour
                 break;
 
             case MessageCommands.Server.ElementPosition:
-                MultiplayerManager.Instance.SetElementPosition(message[1]);
+                MultiplayerManager.Instance.SetElementsPositions(message[1]);
+                break;
+
+            case MessageCommands.Server.ElementStopDrag:
+                MultiplayerManager.Instance.StopElementDrag(int.Parse(message[1]));
                 break;
 
             case MessageCommands.Server.ElementLayer:
-                MultiplayerManager.Instance.IncrementElementLayer(int.Parse(message[1]));
+                MultiplayerManager.Instance.IncrementElementsLayers(message[1]);
                 break;
 
             case MessageCommands.Server.ElementTurn:
@@ -133,6 +137,10 @@ public class Client : MonoBehaviour
 
             case MessageCommands.Server.ElementRotate:
                 MultiplayerManager.Instance.RotateElement(int.Parse(message[1]));
+                break;
+
+            case MessageCommands.Server.RollDice:
+                MultiplayerManager.Instance.RollDice(int.Parse(message[1]));
                 break;
         }
 

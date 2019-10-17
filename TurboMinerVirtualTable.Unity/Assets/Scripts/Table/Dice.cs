@@ -10,6 +10,7 @@ public class Dice : MonoBehaviour
     private bool isRolling;
     private int randomDiceSide = 0;
     private int previousRandomDiceSide = 0;
+    private int finalDiceSide = 0;
 
     private void Start()
     {
@@ -19,8 +20,14 @@ public class Dice : MonoBehaviour
 
     private void OnMouseDown()
     {
+        MultiplayerManager.Instance.SendRollDice();
+    }
+
+    public void StartRolling(int finalRollSide)
+    {
         if (!isRolling)
         {
+            this.finalDiceSide = finalRollSide;
             StartCoroutine("RollTheDice");
         }
     }
@@ -40,7 +47,8 @@ public class Dice : MonoBehaviour
             yield return Roll(rollSpeed);
         }
 
-        var finalSide = randomDiceSide + 1;
+        spriteRenderer.sprite = diceSides[finalDiceSide - 1];
+        var finalSide = finalDiceSide;
         isRolling = false;
         Debug.Log(finalSide);
     }

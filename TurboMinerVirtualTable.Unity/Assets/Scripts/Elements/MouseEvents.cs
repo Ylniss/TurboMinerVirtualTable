@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class MouseEvents : MonoBehaviour
 {
-    public bool IsDragging;
+    public bool IsDragged;
    
     private Element element;
+    private Vector2 lastCursorPosition;
 
     void Start()
     {
@@ -13,63 +14,79 @@ public class MouseEvents : MonoBehaviour
         SetupMouseBoxCollider();
     }
 
-    private Vector3 offset;
+    private Vector2 offset;
     private Vector2[] ContainedElementsOffsets;
     void OnMouseDown()
     {
-        offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z));
+        offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
         ContainedElementsOffsets = new Vector2[element.ContainedElements.Count];
         element.IncrementLayerOrder();
-        MultiplayerManager.Instance.SendIncrementElementLayer(element.Id);
+
+        // element positions to send via network
+        var elementIds = new ElementIdArray(element.ContainedElements.Count + 1);
+        elementIds.Array[0] = new ElementId(element.Id);
 
         for (var i = 0; i < ContainedElementsOffsets.Length; ++i)
         {
             ContainedElementsOffsets[i] = transform.position - element.ContainedElements[i].position;
             var containedElement = element.ContainedElements[i].gameObject.GetComponent<Element>();
             containedElement.IncrementLayerOrder();
-            MultiplayerManager.Instance.SendIncrementElementLayer(containedElement.Id);
+            elementIds.Array[i + 1] = new ElementId(containedElement.Id);
         }
-
-        OnDoubleClick();
+     
+        if (!OnDoubleClick())
+        {
+            MultiplayerManager.Instance.SendIncrementElementsLayers(elementIds);
+        }
     }
 
     void OnMouseUp()
     {
-        IsDragging = false;
+        IsDragged = false;
+        MultiplayerManager.Instance.SendStopElementDrag(element.Id);
     }
 
     void OnMouseDrag()
     {
-        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z);
+        var cursorScreenPoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 
-        Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-        element.transform.position = curPosition;
+        var cursorPosition = (Vector2)Camera.main.ScreenToWorldPoint(cursorScreenPoint) + offset;
 
+        if(lastCursorPosition == cursorPosition)
+        {
+            return;
+        }
+
+        element.transform.position = cursorPosition;
+
+        // element positions to send via network
         var elementPositions = new ElementPositionArray(element.ContainedElements.Count + 1);
-        elementPositions.Array[0] = new ElementPosition(element.Id, curPosition);
+        elementPositions.Array[0] = new ElementPosition(element.Id, cursorPosition);
 
         for (var i = 0; i < element.ContainedElements.Count; ++i)
         {
-            var containedElementPosition = new Vector2(curPosition.x - ContainedElementsOffsets[i].x, curPosition.y - ContainedElementsOffsets[i].y);
+            var containedElementPosition = new Vector2(cursorPosition.x - ContainedElementsOffsets[i].x, cursorPosition.y - ContainedElementsOffsets[i].y);
             element.ContainedElements[i].position = containedElementPosition;
             var containedElement = element.ContainedElements[i].gameObject.GetComponent<Element>();
             elementPositions.Array[i + 1] = new ElementPosition(containedElement.Id, containedElementPosition);
         }
 
-        MultiplayerManager.Instance.SendElementPosition(elementPositions);
-        IsDragging = true;
+        MultiplayerManager.Instance.SendElementsPositions(elementPositions);
+        IsDragged = true;
+
+        lastCursorPosition = cursorPosition;
     }
 
     void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(1)) // right mouse button
         {
-            element.Rotate();
             MultiplayerManager.Instance.SendRotateElement(element.Id);
         }
 
         if (Input.GetKeyDown(KeyCode.Delete) && element.Removable)
         {
+            //todo: send destroy element
             Destroy(element.gameObject);
         }
     }
@@ -77,15 +94,17 @@ public class MouseEvents : MonoBehaviour
     private float lastClick = 0f;
     private float interval = 0.3f;
 
-    private void OnDoubleClick()
+    private bool OnDoubleClick()
     {
         if ((lastClick + interval) > Time.time)
         {
             element.TurnOnOtherSide();
             MultiplayerManager.Instance.SendTurnElementOnOtherSide(element.Id);
+            return true;
         }
 
         lastClick = Time.time;
+        return false;
     }
 
     private void SetupMouseBoxCollider()
