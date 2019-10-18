@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerLabelsManager : MonoBehaviour
 {
     public GameObject PlayersList;
     public Button StartButton;
@@ -18,11 +17,9 @@ public class PlayerManager : MonoBehaviour
         PlayersLabels = new List<PlayerLabel>();
     }
 
-    private void Update()
+    public void ToggleStartButtonInteractability()
     {
-        if(PlayersLabels.Count > 1 && 
-           PlayersLabels.Select(l => l.GetComponentInChildren<ColorPicker>().image.color).Distinct().Count() == PlayersLabels.Count &&
-           PlayersLabels.Select(l => l.NameLabel.text).Distinct().Count() == PlayersLabels.Count)
+        if(PlayersLabels.Count > 1 && ArePlayersColoursDifferent() && ArePlayersNamesDifferent())
         {
             StartButton.interactable = true;
         }
@@ -32,24 +29,50 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    private bool ArePlayersColoursDifferent()
+    {
+        return PlayersLabels.Select(l => l.GetComponentInChildren<ColorPicker>().image.color).Distinct().Count() == PlayersLabels.Count;
+    }
+
+    private bool ArePlayersNamesDifferent()
+    {
+        return PlayersLabels.Select(l => l.NameLabel.text).Distinct().Count() == PlayersLabels.Count;
+    }
+
     public void AddPlayer()
     {
         if(PlayersLabels.Count < 4)
         {
-            CreateUi();
+            SetupUi();
         }
     }
 
-    private void CreateUi()
+    private void SetupUi()
     {
         var position = new Vector3(PlayersList.transform.position.x, PlayersList.transform.position.y - PlayersLabels.Count * 45);
         var playerLabel = Instantiate(Resources.Load<PlayerLabel>("Prefabs/PlayerLabel"), position, Quaternion.identity, PlayersList.transform);
         playerLabel.NameLabel.text = "Player" + (PlayersLabels.Count + 1);
-        playerLabel.GetComponentInChildren<Button>().onClick.AddListener(() => RemovePlayer(playerLabel));
 
+        AddListeners(playerLabel);
         SetColor(playerLabel);
 
         PlayersLabels.Add(playerLabel);
+    }
+
+    private void AddListeners(PlayerLabel playerLabel)
+    {
+        var buttons = playerLabel.GetComponentsInChildren<Button>();
+
+        var colorPickerButton = buttons.FirstOrDefault(b => b.gameObject.name == "ColorPickerButton");
+        colorPickerButton.onClick.AddListener(() => ToggleStartButtonInteractability());
+
+        var removePlayerButton = buttons.FirstOrDefault(b => b.gameObject.name == "RemovePlayerButton");
+        removePlayerButton.onClick.AddListener(() => RemovePlayer(playerLabel));
+        removePlayerButton.onClick.AddListener(() => ToggleStartButtonInteractability());
+
+        var namePicker = GetComponentInChildren<TMP_InputField>();
+        namePicker.onValueChanged.AddListener((input) => ToggleStartButtonInteractability());
+        namePicker.onSelect.AddListener((input) => ToggleStartButtonInteractability());
     }
 
     private void SetColor(PlayerLabel playerLabel)
@@ -80,7 +103,7 @@ public class PlayerManager : MonoBehaviour
 
         PlayersLabels.Remove(label);
 
-        if (!(removedLabelIndex == PlayersLabels.Count))
+        if (removedLabelIndex != PlayersLabels.Count)
         {
             FixLabelsPosition();
         }
