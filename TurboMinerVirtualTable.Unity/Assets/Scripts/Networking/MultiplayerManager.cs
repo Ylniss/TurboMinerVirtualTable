@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Networking;
 using Assets.Scripts.Networking.Models;
 using Assets.Scripts.Settings.Models;
+using Assets.Scripts.Utils.Extensions;
 using System;
 using System.Linq;
 using TMPro;
@@ -140,6 +141,35 @@ public class MultiplayerManager : MonoBehaviour
     public void SendRollDice()
     {
         client.Send($"{MessageCommands.Client.RollDice}");
+    }
+
+    public void SendDestroyElement(int elementId)
+    {
+        client.Send($"{MessageCommands.Client.ElementDestroy}|{elementId}");
+    }
+
+    public void SendRefillStack(StackRefill stackRefill)
+    {
+        if (client.IsHost)
+        {
+            stackRefill.RefillArray.Shuffle();
+            var stackRefillJson = JsonUtility.ToJson(stackRefill);
+            client.Send($"{MessageCommands.Client.StackRefill}|{stackRefillJson}");
+        }      
+    }
+
+    public void RefillStack(string stackRefillJson)
+    {
+        var stackRefill = JsonUtility.FromJson<StackRefill>(stackRefillJson);
+        var stack = Stack.Get(stackRefill.Id);
+        stack.Elements = stackRefill.RefillArray.ToList();
+        stack.SpawnOnTop();
+    }
+
+    public void DestroyElement(int elementId)
+    {
+        var element = Element.Get(elementId);
+        Destroy(element.gameObject);
     }
 
     public void RollDice(int finalDiceSide)

@@ -86,8 +86,7 @@ public class MouseEvents : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Delete) && element.Removable)
         {
-            //todo: send destroy element
-            Destroy(element.gameObject);
+            MultiplayerManager.Instance.SendDestroyElement(element.Id);
         }
     }
 

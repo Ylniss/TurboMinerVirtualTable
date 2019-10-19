@@ -16,7 +16,9 @@
             public const string ElementLayer = "SELAY";
             public const string ElementTurn = "SETUR";
             public const string ElementRotate = "SEROT";
+            public const string ElementDestroy = "SDEST";
             public const string RollDice = "SDICE";
+            public const string StackRefill = "SSTKR";
         }
 
         public static class Client
@@ -33,7 +35,9 @@
             public const string ElementLayer = "CELAY";
             public const string ElementTurn = "CETUR";
             public const string ElementRotate = "CEROT";
+            public const string ElementDestroy = "CDEST";
             public const string RollDice = "CDICE";
+            public const string StackRefill = "CSTKR";
         }
     }
 }

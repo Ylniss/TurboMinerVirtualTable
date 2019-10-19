@@ -201,8 +201,16 @@ public class Server : MonoBehaviour
                 Broadcast($"{MessageCommands.Server.ElementRotate}|{message[1]}", clients);
                 break;
 
+            case MessageCommands.Client.ElementDestroy:
+                Broadcast($"{MessageCommands.Server.ElementDestroy}|{message[1]}", clients);
+                break;
+
             case MessageCommands.Client.RollDice:
                 Broadcast($"{MessageCommands.Server.RollDice}|{RngHelper.GetRandom(1, 6)}", clients);
+                break;
+
+            case MessageCommands.Client.StackRefill:
+                Broadcast($"{MessageCommands.Server.StackRefill}|{message[1]}", clients);
                 break;
         }
     }

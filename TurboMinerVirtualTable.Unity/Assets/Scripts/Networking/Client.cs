@@ -139,8 +139,16 @@ public class Client : MonoBehaviour
                 MultiplayerManager.Instance.RotateElement(int.Parse(message[1]));
                 break;
 
+            case MessageCommands.Server.ElementDestroy:
+                MultiplayerManager.Instance.DestroyElement(int.Parse(message[1]));
+                break;
+
             case MessageCommands.Server.RollDice:
                 MultiplayerManager.Instance.RollDice(int.Parse(message[1]));
+                break;
+
+            case MessageCommands.Server.StackRefill:
+                MultiplayerManager.Instance.RefillStack(message[1]);
                 break;
         }
 

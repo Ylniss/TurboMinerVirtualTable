@@ -119,6 +119,10 @@ public class Element : MonoBehaviour
 
         frontSpriteRenderer.sortingOrder = ++MaxOrderInLayer;
         backSpriteRenderer.sortingOrder = MaxOrderInLayer;
+
+        var boxCollider = GetComponentInChildren<BoxCollider>();
+        var startingHeight = SortingLayers.LayerHeights[frontSpriteRenderer.sortingLayerName];
+        boxCollider.SetHeight(startingHeight + 0.01f * MaxOrderInLayer);
     }
 
     public static Element Get(int id)
