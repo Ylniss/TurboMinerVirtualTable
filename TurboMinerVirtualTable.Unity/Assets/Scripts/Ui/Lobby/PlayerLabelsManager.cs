@@ -19,7 +19,7 @@ public class PlayerLabelsManager : MonoBehaviour
 
     public void ToggleStartButtonInteractability()
     {
-        if(PlayersLabels.Count > 1 && ArePlayersColoursDifferent() && ArePlayersNamesDifferent())
+        if(PlayersLabels.Count > 1 && ArePlayersColoursDifferent())
         {
             StartButton.interactable = true;
         }
@@ -52,10 +52,10 @@ public class PlayerLabelsManager : MonoBehaviour
         var position = new Vector3(PlayersList.transform.position.x, PlayersList.transform.position.y - PlayersLabels.Count * 45);
         var playerLabel = Instantiate(Resources.Load<PlayerLabel>("Prefabs/PlayerLabel"), position, Quaternion.identity, PlayersList.transform);
 
-        if(playerLabel.NameLabel.text == "")
-        {
-            playerLabel.NameLabel.text = "Player" + (PlayersLabels.Count + 1);
-        }
+        //if(playerLabel.NameLabel.text == "")
+        //{
+        //    playerLabel.NameLabel.text = "Player" + (PlayersLabels.Count + 1);
+        //}
 
         AddListeners(playerLabel);
         SetColor(playerLabel);
