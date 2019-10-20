@@ -51,7 +51,11 @@ public class PlayerLabelsManager : MonoBehaviour
     {
         var position = new Vector3(PlayersList.transform.position.x, PlayersList.transform.position.y - PlayersLabels.Count * 45);
         var playerLabel = Instantiate(Resources.Load<PlayerLabel>("Prefabs/PlayerLabel"), position, Quaternion.identity, PlayersList.transform);
-        playerLabel.NameLabel.text = "Player" + (PlayersLabels.Count + 1);
+
+        if(playerLabel.NameLabel.text == "")
+        {
+            playerLabel.NameLabel.text = "Player" + (PlayersLabels.Count + 1);
+        }
 
         AddListeners(playerLabel);
         SetColor(playerLabel);
@@ -69,10 +73,6 @@ public class PlayerLabelsManager : MonoBehaviour
         var removePlayerButton = buttons.FirstOrDefault(b => b.gameObject.name == "RemovePlayerButton");
         removePlayerButton.onClick.AddListener(() => RemovePlayer(playerLabel));
         removePlayerButton.onClick.AddListener(() => ToggleStartButtonInteractability());
-
-        var namePicker = GetComponentInChildren<TMP_InputField>();
-        namePicker.onValueChanged.AddListener((input) => ToggleStartButtonInteractability());
-        namePicker.onSelect.AddListener((input) => ToggleStartButtonInteractability());
     }
 
     private void SetColor(PlayerLabel playerLabel)
@@ -85,16 +85,6 @@ public class PlayerLabelsManager : MonoBehaviour
         }
 
         playerLabel.GetComponentInChildren<ColorPicker>().ChooseFromAvailable(playersColors);
-    }
-
-    public void RemovePlayers()
-    {
-        foreach(var label in PlayersLabels)
-        {
-            Destroy(label.gameObject);
-        }
-
-        PlayersLabels.Clear();
     }
 
     public void RemovePlayer(PlayerLabel label)
