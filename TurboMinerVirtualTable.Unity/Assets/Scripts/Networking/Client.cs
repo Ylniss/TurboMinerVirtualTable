@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Networking;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
@@ -20,7 +21,7 @@ public class Client : MonoBehaviour
     private List<GameClient> players = new List<GameClient>();
 
     private void Start()
-    {
+    { 
         DontDestroyOnLoad(gameObject);
     }
 
@@ -89,6 +90,7 @@ public class Client : MonoBehaviour
                     UserConnected(message[i], false);
                 }
                 Send($"{MessageCommands.Client.Who}|{ClientName}|{(IsHost ? 1 : 0)}");
+
                 break;
 
             case MessageCommands.Server.Connected:

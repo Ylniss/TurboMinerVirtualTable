@@ -8,9 +8,12 @@ public class MouseEvents : MonoBehaviour
     private Element element;
     private Vector2 lastCursorPosition;
 
+    private DataSender dataSender;
+
     void Start()
     {
         element = GetComponentInParent<Element>();
+        dataSender = FindObjectOfType<DataSender>();
         SetupMouseBoxCollider();
     }
 
@@ -36,14 +39,14 @@ public class MouseEvents : MonoBehaviour
      
         if (!OnDoubleClick())
         {
-            MultiplayerManager.Instance.SendIncrementElementsLayers(elementIds);
+            dataSender.SendIncrementElementsLayers(elementIds);
         }
     }
 
     void OnMouseUp()
     {
         IsDragged = false;
-        MultiplayerManager.Instance.SendStopElementDrag(element.Id);
+        dataSender.SendStopElementDrag(element.Id);
     }
 
     void OnMouseDrag()
@@ -71,7 +74,7 @@ public class MouseEvents : MonoBehaviour
             elementPositions.Array[i + 1] = new ElementPosition(containedElement.Id, containedElementPosition);
         }
 
-        MultiplayerManager.Instance.SendElementsPositions(elementPositions);
+        dataSender.SendElementsPositions(elementPositions);
         IsDragged = true;
 
         lastCursorPosition = cursorPosition;
@@ -81,12 +84,12 @@ public class MouseEvents : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1)) // right mouse button
         {
-            MultiplayerManager.Instance.SendRotateElement(element.Id);
+            dataSender.SendRotateElement(element.Id);
         }
 
         if (Input.GetKeyDown(KeyCode.Delete) && element.Removable)
         {
-            MultiplayerManager.Instance.SendDestroyElement(element.Id);
+            dataSender.SendDestroyElement(element.Id);
         }
     }
 
@@ -98,7 +101,7 @@ public class MouseEvents : MonoBehaviour
         if ((lastClick + interval) > Time.time)
         {
             element.TurnOnOtherSide();
-            MultiplayerManager.Instance.SendTurnElementOnOtherSide(element.Id);
+            dataSender.SendTurnElementOnOtherSide(element.Id);
             return true;
         }
 

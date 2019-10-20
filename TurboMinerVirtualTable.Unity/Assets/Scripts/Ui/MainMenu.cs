@@ -4,10 +4,12 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public GameSettuper GameSettuper;
+    private DataSender dataSender;
 
     void Start()
     {
         Screen.SetResolution(1664, 936, false);
+        dataSender = FindObjectOfType<DataSender>();
     }
 
     public void CreateGame()
@@ -23,28 +25,28 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        MultiplayerManager.Instance.SendStartGame(GameSettuper);
+        dataSender.SendStartGame(GameSettuper);
         SceneManager.LoadScene("Table");
     }
 
     public void OnWidthSettingChanged()
     {
-        MultiplayerManager.Instance.SendLobbyWidth();
+        dataSender.SendLobbyWidth();
     }
 
     public void OnHeightSettingChanged()
     {
-        MultiplayerManager.Instance.SendLobbyHeight();
+        dataSender.SendLobbyHeight();
     }
 
     public void OnTilesSettingChanged()
     {
-        MultiplayerManager.Instance.SendLobbyTilesConfigName();
+        dataSender.SendLobbyTilesConfigName();
     }
 
     public void OnCorridorsSettingChanged()
     {
-        MultiplayerManager.Instance.SendLobbyCorridorsConfigName();
+        dataSender.SendLobbyCorridorsConfigName();
     }
 
     public void Back()

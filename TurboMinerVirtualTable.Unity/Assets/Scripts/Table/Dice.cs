@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using Assets.Scripts.Utils;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Dice : MonoBehaviour
 {
@@ -12,22 +11,25 @@ public class Dice : MonoBehaviour
     private int previousRandomDiceSide = 0;
     private int finalDiceSide = 0;
 
+    private DataSender dataSender;
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         diceSides = Resources.LoadAll<Sprite>("Graphics/Dice");
+        dataSender = FindObjectOfType<DataSender>();
     }
 
     private void OnMouseDown()
     {
-        MultiplayerManager.Instance.SendRollDice();
+        dataSender.SendRollDice();
     }
 
     public void StartRolling(int finalRollSide)
     {
         if (!isRolling)
         {
-            this.finalDiceSide = finalRollSide;
+            finalDiceSide = finalRollSide;
             StartCoroutine("RollTheDice");
         }
     }

@@ -27,9 +27,12 @@ public class MultiplayerManager : MonoBehaviour
     private Client client;
     private Server server;
 
+    private DataSender dataSender;
+
     private void Start()
     {
         Instance = this;
+        dataSender = FindObjectOfType<DataSender>();
         DontDestroyOnLoad(gameObject);
     }
 
@@ -42,6 +45,7 @@ public class MultiplayerManager : MonoBehaviour
             client = GetClient("Host");
             client.IsHost = true;
             client.ConnectToServer("127.0.0.1", server.Port);
+            dataSender.Init();
         }
         catch (Exception e)
         {
@@ -62,100 +66,13 @@ public class MultiplayerManager : MonoBehaviour
         {
             client = GetClient("Client");
             client.ConnectToServer(hostAddress, 58964);
+            dataSender.Init();
         }
         catch (Exception e)
         {
             Debug.Log(e.Message);
             throw;
         }
-    }
-
-    public void SendStartGame(GameSettuper gameSettuper)
-    {
-        gameSettuper.Setup();
-        var tiles = GameSettings.Tiles;
-        var corridors = GameSettings.Corridors;
-        var tilesCsv = string.Join(",", tiles.ToArray());
-        var corridorsCsv = string.Join(",", corridors.ToArray());
-        var mapWidth = GameSettings.MapSize.Width;
-        var mapHeight = GameSettings.MapSize.Height;
-
-        var playerSettingsArray = new PlayerSettingsArray();
-        playerSettingsArray.Array = GameSettings.PlayersSettings;
-
-        var playerSettingsJson = JsonUtility.ToJson(playerSettingsArray);
-        client.Send($"{MessageCommands.Client.Start}|{tilesCsv}|{corridorsCsv}|{mapWidth}|{mapHeight}|{playerSettingsJson}");
-    }
-
-    public void SendLobbyWidth()
-    {
-        var width = GetDropdownCurrentChoice(WidthChooserDropdown);
-        client.Send($"{MessageCommands.Client.WidthSettings}|{width}");
-    }
-
-    public void SendLobbyHeight()
-    {
-        var height = GetDropdownCurrentChoice(HeightChooserDropdown);
-        client.Send($"{MessageCommands.Client.HeightSettings}|{height}");
-    }
-
-    public void SendLobbyTilesConfigName()
-    {
-        var tilesConfig = GetDropdownCurrentChoice(TilesConfigDropdown);
-        client.Send($"{MessageCommands.Client.TilesConfigName}|{tilesConfig}");
-    }
-
-    public void SendLobbyCorridorsConfigName()
-    {
-        var corridorsConfig = GetDropdownCurrentChoice(CorridorsConfigDropdown);
-        client.Send($"{MessageCommands.Client.CorridorsConfigName}|{corridorsConfig}");
-    }
-
-    public void SendElementsPositions(ElementPositionArray elements)
-    {
-        var jsonElements = JsonUtility.ToJson(elements);
-        client.Send($"{MessageCommands.Client.ElementPosition}|{jsonElements}");
-    }
-
-    public void SendStopElementDrag(int elementId)
-    {
-        client.Send($"{MessageCommands.Client.ElementStopDrag}|{elementId}");
-    }
-
-    public void SendIncrementElementsLayers(ElementIdArray elementIds)
-    {
-        var jsonElements = JsonUtility.ToJson(elementIds);
-        client.Send($"{MessageCommands.Client.ElementLayer}|{jsonElements}");
-    }
-
-    public void SendTurnElementOnOtherSide(int elementId)
-    {
-        client.Send($"{MessageCommands.Client.ElementTurn}|{elementId}");
-    }
-
-    public void SendRotateElement(int elementId)
-    {
-        client.Send($"{MessageCommands.Client.ElementRotate}|{elementId}");
-    }
-
-    public void SendRollDice()
-    {
-        client.Send($"{MessageCommands.Client.RollDice}");
-    }
-
-    public void SendDestroyElement(int elementId)
-    {
-        client.Send($"{MessageCommands.Client.ElementDestroy}|{elementId}");
-    }
-
-    public void SendRefillStack(StackRefill stackRefill)
-    {
-        if (client.IsHost)
-        {
-            stackRefill.RefillArray.Shuffle();
-            var stackRefillJson = JsonUtility.ToJson(stackRefill);
-            client.Send($"{MessageCommands.Client.StackRefill}|{stackRefillJson}");
-        }      
     }
 
     public void RefillStack(string stackRefillJson)
@@ -238,12 +155,6 @@ public class MultiplayerManager : MonoBehaviour
     public void SetPlayerSettings(string playerSettingsJson)
     {
         GameSettings.PlayersSettings = JsonUtility.FromJson<PlayerSettingsArray>(playerSettingsJson).Array;
-    }
-
-    private string GetDropdownCurrentChoice(TMP_Dropdown dropdown)
-    {
-        var index = dropdown.value != -1 ? dropdown.value : 0;
-        return dropdown.options[index].text;
     }
 
     public void SetLobbyWidthDropdown(string widthData)

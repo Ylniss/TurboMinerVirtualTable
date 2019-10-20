@@ -14,11 +14,13 @@ public class Stack : MonoBehaviour
 
     private Element lastSpawned;
     private StackType stackType;
+    private DataSender dataSender;
 
     private static int idIncrement = 0;
 
     private void Start()
     {
+        dataSender = FindObjectOfType<DataSender>();
         Id = ++idIncrement;
     }
 
@@ -83,7 +85,7 @@ public class Stack : MonoBehaviour
     private void Refill()
     {
         var stackRefill = new StackRefill(Id, elementsRefill.ToArray());
-        MultiplayerManager.Instance.SendRefillStack(stackRefill);
+        dataSender.SendRefillStack(stackRefill);
         elementsRefill.Clear();
     }
 

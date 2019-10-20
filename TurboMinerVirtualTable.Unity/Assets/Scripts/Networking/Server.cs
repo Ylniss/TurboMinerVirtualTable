@@ -18,9 +18,12 @@ public class Server : MonoBehaviour
     private TcpListener server;
     private bool serverStarted;
 
+    private DataSender dataSender;
+
     public void Init()
     {
         DontDestroyOnLoad(gameObject);
+        dataSender = FindObjectOfType<DataSender>();
         clients = new List<ServerClient>();
         disconnectList = new List<ServerClient>();
 
