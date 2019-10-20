@@ -8,7 +8,7 @@ public class TableSettuper : MonoBehaviour
 {
     public Spawner Spawner;
     public BoardPositioner BoardPositioner;
-        
+
     void Start()
     {
         var diamond = Spawner.SpawnDiamond(new Vector2(0, 0));
@@ -44,7 +44,7 @@ public class TableSettuper : MonoBehaviour
         var corridor = Spawner.SpawnLCorridor(worldPosition);
         corridor.Rotate(initialPosition.Rotation);
 
-        var playerColor = GameSettings.PlayersSettings[playerIndex].Color; 
+        var playerColor = GameSettings.PlayersSettings[playerIndex].Color;
         var pawn = Spawner.SpawnPawn(playerColor, worldPosition);
         corridor.ContainedElements.Add(pawn.transform);
 

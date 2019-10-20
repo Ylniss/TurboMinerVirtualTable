@@ -2,7 +2,6 @@
 using Assets.Scripts.Networking.Models;
 using Assets.Scripts.Settings.Models;
 using Assets.Scripts.Utils.Extensions;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 

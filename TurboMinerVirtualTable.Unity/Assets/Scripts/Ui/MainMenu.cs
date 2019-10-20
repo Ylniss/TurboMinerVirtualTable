@@ -19,7 +19,7 @@ public class MainMenu : MonoBehaviour
         MultiplayerManager.Instance.CreateServer();
 
         var dropdowns = FindObjectsOfType<ConfigDopdown>();
-        foreach(var dropdown in dropdowns)
+        foreach (var dropdown in dropdowns)
         {
             dropdown.Init();
         }

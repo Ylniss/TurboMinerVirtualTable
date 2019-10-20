@@ -38,7 +38,7 @@ public class ElementCounter : MonoBehaviour
     {
         --Count;
 
-        if(Count < 0)
+        if (Count < 0)
         {
             Count = 0;
         }

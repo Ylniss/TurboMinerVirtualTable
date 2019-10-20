@@ -37,7 +37,7 @@ public class ConfigMenu : MonoBehaviour
         var elementCounts = ConfigLoader.Load(subPath, name);
         var elementCounters = gameObject.transform.parent.GetComponentsInChildren<ElementCounter>();
 
-        for(var i = 0; i < elementCounts.Length; ++i)
+        for (var i = 0; i < elementCounts.Length; ++i)
         {
             elementCounters[i].Count = elementCounts[i].Count;
         }

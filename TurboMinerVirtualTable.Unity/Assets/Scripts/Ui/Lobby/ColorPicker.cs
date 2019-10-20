@@ -24,7 +24,7 @@ public class ColorPicker : MonoBehaviour
     public void ChangeColor()
     {
         ++currentColorIndex;
-        if(currentColorIndex == colors.Length)
+        if (currentColorIndex == colors.Length)
         {
             currentColorIndex = 0;
         }

@@ -41,7 +41,7 @@ public class Dice : MonoBehaviour
 
         for (int i = 0; i <= 20; i++)
         {
-            if(i % 2 == 0)
+            if (i % 2 == 0)
             {
                 rollSpeed += 0.01f;
             }
@@ -57,10 +57,10 @@ public class Dice : MonoBehaviour
 
     private WaitForSeconds Roll(float rollSpeed)
     {
-        while(previousRandomDiceSide == randomDiceSide)
+        while (previousRandomDiceSide == randomDiceSide)
         {
             randomDiceSide = Random.Range(0, 6);
-        }   
+        }
         spriteRenderer.sprite = diceSides[randomDiceSide];
         previousRandomDiceSide = randomDiceSide;
         return new WaitForSeconds(rollSpeed);

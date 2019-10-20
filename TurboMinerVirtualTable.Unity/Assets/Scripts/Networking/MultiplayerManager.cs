@@ -1,7 +1,5 @@
-﻿using Assets.Scripts.Networking;
-using Assets.Scripts.Networking.Models;
+﻿using Assets.Scripts.Networking.Models;
 using Assets.Scripts.Settings.Models;
-using Assets.Scripts.Utils.Extensions;
 using System;
 using System.Linq;
 using TMPro;
@@ -124,7 +122,7 @@ public class MultiplayerManager : MonoBehaviour
         containerElement.IsDragged = true;
         foreach (var elementPosition in elements.Array)
         {
-            var element = Element.Get(elementPosition.Id);    
+            var element = Element.Get(elementPosition.Id);
             element.transform.position = elementPosition.Position;
         }
     }

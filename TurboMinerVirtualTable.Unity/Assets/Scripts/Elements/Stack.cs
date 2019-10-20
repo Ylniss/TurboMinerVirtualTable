@@ -55,7 +55,7 @@ public class Stack : MonoBehaviour
         else
         {
             SpawnOnTop();
-        }      
+        }
     }
 
     public Element SpawnOnTop()

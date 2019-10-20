@@ -16,7 +16,7 @@ public class TilesConfigMenu : MonoBehaviour
         for (var i = 0; i < tileSprites.Length; ++i)
         {
             var offset = new Vector3(i / rowCount * 180, -70 * (i % rowCount), 0);
-            ConfigMenu.SetupCounter(tileCounter,origin, offset, tileSprites[i]);
+            ConfigMenu.SetupCounter(tileCounter, origin, offset, tileSprites[i]);
         }
     }
 

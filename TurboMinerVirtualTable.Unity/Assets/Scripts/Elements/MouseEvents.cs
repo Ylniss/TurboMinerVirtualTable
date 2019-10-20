@@ -4,7 +4,7 @@ using UnityEngine;
 public class MouseEvents : MonoBehaviour
 {
     public bool IsDragged;
-   
+
     private Element element;
     private Vector2 lastCursorPosition;
 
@@ -36,7 +36,7 @@ public class MouseEvents : MonoBehaviour
             containedElement.IncrementLayerOrder();
             elementIds.Array[i + 1] = new ElementId(containedElement.Id);
         }
-     
+
         if (!OnDoubleClick())
         {
             dataSender.SendIncrementElementsLayers(elementIds);
@@ -55,7 +55,7 @@ public class MouseEvents : MonoBehaviour
 
         var cursorPosition = (Vector2)Camera.main.ScreenToWorldPoint(cursorScreenPoint) + offset;
 
-        if(lastCursorPosition == cursorPosition)
+        if (lastCursorPosition == cursorPosition)
         {
             return;
         }

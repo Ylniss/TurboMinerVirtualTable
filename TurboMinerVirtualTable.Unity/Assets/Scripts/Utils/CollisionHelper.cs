@@ -2,9 +2,9 @@
 
 public class CollisionHelper : MonoBehaviour
 {
-    public bool IsFullyContained(Collider2D collider, Collider2D otherCollider) 
+    public bool IsFullyContained(Collider2D collider, Collider2D otherCollider)
     {
-        if(collider == null || otherCollider == null)
+        if (collider == null || otherCollider == null)
         {
             return false;
         }

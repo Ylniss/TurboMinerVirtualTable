@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Settings.Models;
-using System;
 using System.Collections.Generic;
 
 public static class GameSettings
