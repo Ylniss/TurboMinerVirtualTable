@@ -1,9 +1,10 @@
 ﻿using Assets.Scripts.Networking;
 using System;
-using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,10 +22,26 @@ public class Client : MonoBehaviour
     private List<GameClient> players = new List<GameClient>();
     private DataSender dataSender;
 
+    private Thread readThread;
+    private bool threadStop;
+
+    private ConcurrentQueue<Action> mainThreadActions = new ConcurrentQueue<Action>();
+
     private void Start()
-    { 
+    {
         DontDestroyOnLoad(gameObject);
         dataSender = FindObjectOfType<DataSender>();
+    }
+
+    private void Update()
+    {
+        if (!mainThreadActions.IsEmpty)
+        {
+            while (mainThreadActions.TryDequeue(out var action))
+            {
+                action.Invoke();
+            }
+        }
     }
 
     public bool ConnectToServer(string host, int port)
@@ -41,6 +58,10 @@ public class Client : MonoBehaviour
             writer = new StreamWriter(stream);
             reader = new StreamReader(stream);
             socketReady = true;
+
+            readThread = new Thread(new ThreadStart(ReadData));
+            readThread.IsBackground = true;
+            readThread.Start();
         }
         catch (Exception e)
         {
@@ -50,19 +71,30 @@ public class Client : MonoBehaviour
         return socketReady;
     }
 
-    private void Update()
+    private void ReadData()
     {
-        if (!socketReady)
+        while (!threadStop)
         {
-            return;
-        }
-
-        if (stream.DataAvailable)
-        {
-            string data = reader.ReadLine();
-            if (data != null)
+            if (!socketReady)
             {
-                OnIncomingData(data);
+                continue;
+            }
+
+            if (stream.DataAvailable)
+            {
+                string data;
+                while ((data = reader.ReadLine()) != null)
+                {
+                    if (data != null)
+                    {
+                        OnIncomingData(data);
+                    }
+
+                    if (threadStop)
+                    {
+                        break; // prevents socket error, because on app exit socket is closed from another thread before this thread ends
+                    }
+                }
             }
         }
     }
@@ -104,66 +136,108 @@ public class Client : MonoBehaviour
                 break;
 
             case MessageCommands.Server.Start:
-                MultiplayerManager.Instance.SetTilesSettings(message[1]);
-                MultiplayerManager.Instance.SetCorridorsSettings(message[2]);
-                MultiplayerManager.Instance.SetMapSizeSettings(message[3], message[4]);
-                MultiplayerManager.Instance.SetPlayerSettings(message[5]);
-                SceneManager.LoadScene("Table");
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.SetTilesSettings(message[1]);
+                    MultiplayerManager.Instance.SetCorridorsSettings(message[2]);
+                    MultiplayerManager.Instance.SetMapSizeSettings(message[3], message[4]);
+                    MultiplayerManager.Instance.SetPlayerSettings(message[5]);
+                    SceneManager.LoadScene("Table");
+                });
                 break;
 
             case MessageCommands.Server.WidthSettings:
-                MultiplayerManager.Instance.SetLobbyWidthDropdown(message[1]);
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.SetLobbyWidthDropdown(message[1]);
+                });
                 break;
 
             case MessageCommands.Server.HeightSettings:
-                MultiplayerManager.Instance.SetLobbyHeightDropdown(message[1]);
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.SetLobbyHeightDropdown(message[1]);
+                });
                 break;
 
             case MessageCommands.Server.TilesConfigName:
-                MultiplayerManager.Instance.SetLobbyTilesConfigDropdown(message[1]);
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.SetLobbyTilesConfigDropdown(message[1]);
+                });
                 break;
 
             case MessageCommands.Server.CorridorsConfigName:
-                MultiplayerManager.Instance.SetLobbyCorridorsConfigDropdown(message[1]);
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.SetLobbyCorridorsConfigDropdown(message[1]);
+                });
                 break;
 
             case MessageCommands.Server.LobbySettings:
-                MultiplayerManager.Instance.SetLobbyWidthDropdown(message[1]);
-                MultiplayerManager.Instance.SetLobbyHeightDropdown(message[2]);
-                MultiplayerManager.Instance.SetLobbyTilesConfigDropdown(message[3]);
-                MultiplayerManager.Instance.SetLobbyCorridorsConfigDropdown(message[4]);
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.SetLobbyWidthDropdown(message[1]);
+                    MultiplayerManager.Instance.SetLobbyHeightDropdown(message[2]);
+                    MultiplayerManager.Instance.SetLobbyTilesConfigDropdown(message[3]);
+                    MultiplayerManager.Instance.SetLobbyCorridorsConfigDropdown(message[4]);
+                });
                 break;
 
             case MessageCommands.Server.ElementPosition:
-                MultiplayerManager.Instance.SetElementsPositions(message[1]);
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.SetElementsPositions(message[1]);
+                });
                 break;
 
             case MessageCommands.Server.ElementStopDrag:
-                MultiplayerManager.Instance.StopElementDrag(int.Parse(message[1]));
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.StopElementDrag(int.Parse(message[1]));
+                });
                 break;
 
             case MessageCommands.Server.ElementLayer:
-                MultiplayerManager.Instance.IncrementElementsLayers(message[1]);
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.IncrementElementsLayers(message[1]);
+                });
                 break;
 
             case MessageCommands.Server.ElementTurn:
-                MultiplayerManager.Instance.TurnElementOnOtherSide(int.Parse(message[1]));
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.TurnElementOnOtherSide(int.Parse(message[1]));
+                });
                 break;
 
             case MessageCommands.Server.ElementRotate:
-                MultiplayerManager.Instance.RotateElement(int.Parse(message[1]));
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.RotateElement(int.Parse(message[1]));
+                });
                 break;
 
             case MessageCommands.Server.ElementDestroy:
-                MultiplayerManager.Instance.DestroyElement(int.Parse(message[1]));
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.DestroyElement(int.Parse(message[1]));
+                });
                 break;
 
             case MessageCommands.Server.RollDice:
-                MultiplayerManager.Instance.RollDice(int.Parse(message[1]));
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.RollDice(int.Parse(message[1]));
+                });
                 break;
 
             case MessageCommands.Server.StackRefill:
-                MultiplayerManager.Instance.RefillStack(message[1]);
+                mainThreadActions.Enqueue(() =>
+                {
+                    MultiplayerManager.Instance.RefillStack(message[1]);
+                });
                 break;
         }
 
@@ -194,11 +268,11 @@ public class Client : MonoBehaviour
             return;
         }
 
+        threadStop = true;
         stream.Close();
         writer.Close();
         reader.Close();
         socket.Close();
-
         socketReady = false;
     }
 }

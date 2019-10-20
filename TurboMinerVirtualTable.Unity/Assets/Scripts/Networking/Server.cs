@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 using UnityEngine;
 
 public class Server : MonoBehaviour
@@ -18,12 +20,12 @@ public class Server : MonoBehaviour
     private TcpListener server;
     private bool serverStarted;
 
-    private DataSender dataSender;
+    private Thread readThread;
+    private bool threadStop;
 
     public void Init()
     {
         DontDestroyOnLoad(gameObject);
-        dataSender = FindObjectOfType<DataSender>();
         clients = new List<ServerClient>();
         disconnectList = new List<ServerClient>();
 
@@ -34,6 +36,10 @@ public class Server : MonoBehaviour
 
             StartListening();
             serverStarted = true;
+
+            readThread = new Thread(new ThreadStart(ReadData));
+            readThread.IsBackground = true;
+            readThread.Start();
         }
         catch (Exception e)
         {
@@ -41,41 +47,48 @@ public class Server : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void ReadData()
     {
-        if (!serverStarted)
+        while (!threadStop)
         {
-            return;
-        }
-
-        foreach (var client in clients)
-        {
-            if (!IsConnected(client.Tcp))
+            if (!serverStarted)
             {
-                client.Tcp.Close();
-                disconnectList.Add(client);
                 continue;
             }
 
-            var networkStream = client.Tcp.GetStream();
-
-            if (networkStream.DataAvailable)
+            foreach (var client in clients.ToList()) //ToList because list may change during foreach loop, so make copy to prevent that
             {
-                var streamReader = new StreamReader(networkStream, true);
-                string data = streamReader.ReadLine();
-
-                if (data != null)
+                if (client == null)
                 {
-                    OnIncomingData(client, data);
+                    continue;
+                }
+
+                if (!IsConnected(client.Tcp))
+                {
+                    client.Tcp.Close();
+                    disconnectList.Add(client);
+                    continue;
+                }
+
+                var networkStream = client.Tcp.GetStream();
+
+                if (networkStream.DataAvailable)
+                {
+                    var streamReader = new StreamReader(networkStream, true);
+                    var data = streamReader.ReadLine();
+                    if (data != null)
+                    {
+                        OnIncomingData(client, data);
+                    }
                 }
             }
-        }
 
-        for (int i = 0; i < disconnectList.Count - 1; ++i)
-        {
-            // Tell our player somebody has disconnected
-            clients.Remove(disconnectList[i]);
-            disconnectList.RemoveAt(i);
+            for (int i = 0; i < disconnectList.Count - 1; ++i)
+            {
+                // Tell our player somebody has disconnected
+                clients.Remove(disconnectList[i]);
+                disconnectList.RemoveAt(i);
+            }
         }
     }
 
@@ -220,5 +233,19 @@ public class Server : MonoBehaviour
                 Broadcast($"{MessageCommands.Server.StackRefill}|{message[1]}", clients);
                 break;
         }
+    }
+    private void OnApplicationQuit()
+    {
+        CloseServer();
+    }
+    private void OnDisable()
+    {
+        CloseServer();
+    }
+
+    private void CloseServer()
+    {
+        threadStop = true;
+        server.Stop();
     }
 }
