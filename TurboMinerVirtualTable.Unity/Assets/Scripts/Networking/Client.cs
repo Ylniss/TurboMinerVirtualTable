@@ -19,10 +19,12 @@ public class Client : MonoBehaviour
     private StreamReader reader;
 
     private List<GameClient> players = new List<GameClient>();
+    private DataSender dataSender;
 
     private void Start()
     { 
         DontDestroyOnLoad(gameObject);
+        dataSender = FindObjectOfType<DataSender>();
     }
 
     public bool ConnectToServer(string host, int port)
@@ -95,6 +97,10 @@ public class Client : MonoBehaviour
 
             case MessageCommands.Server.Connected:
                 UserConnected(message[1], false);
+                if (IsHost)
+                {
+                    dataSender.SendAllLobbySettings();
+                }
                 break;
 
             case MessageCommands.Server.Start:
@@ -119,6 +125,13 @@ public class Client : MonoBehaviour
 
             case MessageCommands.Server.CorridorsConfigName:
                 MultiplayerManager.Instance.SetLobbyCorridorsConfigDropdown(message[1]);
+                break;
+
+            case MessageCommands.Server.LobbySettings:
+                MultiplayerManager.Instance.SetLobbyWidthDropdown(message[1]);
+                MultiplayerManager.Instance.SetLobbyHeightDropdown(message[2]);
+                MultiplayerManager.Instance.SetLobbyTilesConfigDropdown(message[3]);
+                MultiplayerManager.Instance.SetLobbyCorridorsConfigDropdown(message[4]);
                 break;
 
             case MessageCommands.Server.ElementPosition:

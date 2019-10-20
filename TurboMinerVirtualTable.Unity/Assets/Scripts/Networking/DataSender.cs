@@ -56,14 +56,23 @@ public class DataSender : MonoBehaviour
 
     public void SendLobbyTilesConfigName()
     {
-        var tilesConfig = GetDropdownCurrentChoice(TilesConfigDropdown);
-        client.Send($"{MessageCommands.Client.TilesConfigName}|{tilesConfig}");
+        var tilesConfigName = GetDropdownCurrentChoice(TilesConfigDropdown);
+        client.Send($"{MessageCommands.Client.TilesConfigName}|{tilesConfigName}");
     }
 
     public void SendLobbyCorridorsConfigName()
     {
-        var corridorsConfig = GetDropdownCurrentChoice(CorridorsConfigDropdown);
-        client.Send($"{MessageCommands.Client.CorridorsConfigName}|{corridorsConfig}");
+        var corridorsConfigName = GetDropdownCurrentChoice(CorridorsConfigDropdown);
+        client.Send($"{MessageCommands.Client.CorridorsConfigName}|{corridorsConfigName}");
+    }
+
+    public void SendAllLobbySettings()
+    {
+        var width = GetDropdownCurrentChoice(WidthChooserDropdown);
+        var height = GetDropdownCurrentChoice(HeightChooserDropdown);
+        var tilesConfigName = GetDropdownCurrentChoice(TilesConfigDropdown);
+        var corridorsConfigName = GetDropdownCurrentChoice(CorridorsConfigDropdown);
+        client.Send($"{MessageCommands.Client.LobbySettings}|{width}|{height}|{tilesConfigName}|{corridorsConfigName}");
     }
 
     public void SendElementsPositions(ElementPositionArray elements)

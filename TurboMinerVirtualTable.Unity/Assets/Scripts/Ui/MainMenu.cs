@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
@@ -15,6 +17,15 @@ public class MainMenu : MonoBehaviour
     public void CreateGame()
     {
         MultiplayerManager.Instance.CreateServer();
+
+        var dropdowns = FindObjectsOfType<ConfigDopdown>();
+        foreach(var dropdown in dropdowns)
+        {
+            dropdown.Init();
+        }
+
+        SetupMapSizeDropdown(MultiplayerManager.Instance.WidthChooserDropdown);
+        SetupMapSizeDropdown(MultiplayerManager.Instance.HeightChooserDropdown);
     }
 
     public void JoinGame()
@@ -47,6 +58,16 @@ public class MainMenu : MonoBehaviour
     public void OnCorridorsSettingChanged()
     {
         dataSender.SendLobbyCorridorsConfigName();
+    }
+
+    private void SetupMapSizeDropdown(TMP_Dropdown dropdown)
+    {
+        dropdown.options = new List<TMP_Dropdown.OptionData>()
+        {
+            new TMP_Dropdown.OptionData("5"),
+            new TMP_Dropdown.OptionData("7"),
+            new TMP_Dropdown.OptionData("9")
+        };
     }
 
     public void Back()

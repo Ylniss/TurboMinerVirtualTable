@@ -48,7 +48,7 @@ public class Server : MonoBehaviour
             return;
         }
 
-        foreach (ServerClient client in clients)
+        foreach (var client in clients)
         {
             if (!IsConnected(client.Tcp))
             {
@@ -57,7 +57,7 @@ public class Server : MonoBehaviour
                 continue;
             }
 
-            NetworkStream networkStream = client.Tcp.GetStream();
+            var networkStream = client.Tcp.GetStream();
 
             if (networkStream.DataAvailable)
             {
@@ -184,6 +184,10 @@ public class Server : MonoBehaviour
                 Broadcast($"{MessageCommands.Server.CorridorsConfigName}|{message[1]}", clientsNoSender);
                 break;
 
+            case MessageCommands.Client.LobbySettings:
+                Broadcast($"{MessageCommands.Server.LobbySettings}|{message[1]}|{message[2]}|{message[3]}|{message[4]}", clientsNoSender);
+                break;
+
             case MessageCommands.Client.ElementPosition:
                 Broadcast($"{MessageCommands.Server.ElementPosition}|{message[1]}", clientsNoSender);
                 break;
@@ -197,7 +201,7 @@ public class Server : MonoBehaviour
                 break;
 
             case MessageCommands.Client.ElementTurn:
-                Broadcast($"{MessageCommands.Server.ElementTurn}|{message[1]}", clientsNoSender);
+                Broadcast($"{MessageCommands.Server.ElementTurn}|{message[1]}", clients);
                 break;
 
             case MessageCommands.Client.ElementRotate:

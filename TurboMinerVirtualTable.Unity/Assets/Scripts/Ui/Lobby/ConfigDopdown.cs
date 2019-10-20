@@ -9,8 +9,14 @@ public class ConfigDopdown : MonoBehaviour
 
     void Start()
     {
+        Init();
+    }
+
+    public void Init()
+    {
         var names = ConfigLoader.GetConfigNames(SubPath);
 
+        Dropdown.options.Clear();
         foreach (var name in names)
         {
             Dropdown.options.Add(new TMP_Dropdown.OptionData(name));

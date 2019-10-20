@@ -100,7 +100,6 @@ public class MouseEvents : MonoBehaviour
     {
         if ((lastClick + interval) > Time.time)
         {
-            element.TurnOnOtherSide();
             dataSender.SendTurnElementOnOtherSide(element.Id);
             return true;
         }

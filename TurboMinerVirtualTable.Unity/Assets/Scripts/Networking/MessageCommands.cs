@@ -11,6 +11,7 @@
             public const string HeightSettings = "SSETH";
             public const string TilesConfigName = "STCFG";
             public const string CorridorsConfigName = "SCCFG";
+            public const string LobbySettings = "SLOBBY";
             public const string ElementPosition = "SEPOS";
             public const string ElementStopDrag = "SEDRG";
             public const string ElementLayer = "SELAY";
@@ -30,6 +31,7 @@
             public const string HeightSettings = "CSETH";
             public const string TilesConfigName = "CTCFG";
             public const string CorridorsConfigName = "CCCFG";
+            public const string LobbySettings = "CLOBBY";
             public const string ElementPosition = "CEPOS";
             public const string ElementStopDrag = "CEDRG";
             public const string ElementLayer = "CELAY";
