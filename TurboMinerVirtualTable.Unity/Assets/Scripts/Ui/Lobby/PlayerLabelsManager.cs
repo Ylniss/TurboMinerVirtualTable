@@ -34,11 +34,6 @@ public class PlayerLabelsManager : MonoBehaviour
         return PlayersLabels.Select(l => l.GetComponentInChildren<ColorPicker>().image.color).Distinct().Count() == PlayersLabels.Count;
     }
 
-    private bool ArePlayersNamesDifferent()
-    {
-        return PlayersLabels.Select(l => l.NameLabel.text).Distinct().Count() == PlayersLabels.Count;
-    }
-
     public void AddPlayer()
     {
         if(PlayersLabels.Count < 4)
