@@ -16,10 +16,10 @@ public class MultiplayerManager : MonoBehaviour
     public TMP_InputField PlayerNameInput;
     public TMP_InputField HostIpInput;
 
-    public TMP_Dropdown TilesConfigDropdown;
-    public TMP_Dropdown CorridorsConfigDropdown;
-    public TMP_Dropdown WidthChooserDropdown;
-    public TMP_Dropdown HeightChooserDropdown;
+    //public TMP_Dropdown TilesConfigDropdown;
+    //public TMP_Dropdown CorridorsConfigDropdown;
+    //public TMP_Dropdown WidthChooserDropdown;
+    //public TMP_Dropdown HeightChooserDropdown;
     public Button StartButton;
 
     private Client client;
@@ -153,35 +153,6 @@ public class MultiplayerManager : MonoBehaviour
     public void SetPlayerSettings(string playerSettingsJson)
     {
         GameSettings.PlayersSettings = JsonUtility.FromJson<PlayerSettingsArray>(playerSettingsJson).Array;
-    }
-
-    public void SetLobbyWidthDropdown(string widthData)
-    {
-        SetLobbyDropdown(WidthChooserDropdown, widthData);
-    }
-
-    public void SetLobbyHeightDropdown(string heightData)
-    {
-        SetLobbyDropdown(HeightChooserDropdown, heightData);
-    }
-
-    public void SetLobbyTilesConfigDropdown(string tilesData)
-    {
-        SetLobbyDropdown(TilesConfigDropdown, tilesData);
-    }
-
-    public void SetLobbyCorridorsConfigDropdown(string corridorsData)
-    {
-        SetLobbyDropdown(CorridorsConfigDropdown, corridorsData);
-    }
-
-    private void SetLobbyDropdown(TMP_Dropdown dropdown, string settingsData)
-    {
-        if (!client.IsHost)
-        {
-            dropdown.options.Add(new TMP_Dropdown.OptionData(settingsData));
-            dropdown.SetValueWithoutNotify(dropdown.options.Count - 1);
-        }
     }
 
     private Client GetClient(string clientName)

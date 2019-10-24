@@ -5512,10 +5512,6 @@ MonoBehaviour:
     type: 3}
   PlayerNameInput: {fileID: 1580418766}
   HostIpInput: {fileID: 90387612}
-  TilesConfigDropdown: {fileID: 1924183761}
-  CorridorsConfigDropdown: {fileID: 1333447546}
-  WidthChooserDropdown: {fileID: 215757154}
-  HeightChooserDropdown: {fileID: 99399175}
   StartButton: {fileID: 1139765679}
 --- !u!4 &639578504
 Transform:
@@ -5793,6 +5789,7 @@ GameObject:
   m_Component:
   - component: {fileID: 761556725}
   - component: {fileID: 761556727}
+  - component: {fileID: 761556726}
   m_Layer: 0
   m_Name: LobbyMenu
   m_TagString: Untagged
@@ -5821,6 +5818,22 @@ Transform:
   m_Father: {fileID: 2034389207}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &761556726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761556724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369f980b8c8167742af322d010d363dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TilesConfigDropdown: {fileID: 1924183761}
+  CorridorsConfigDropdown: {fileID: 1333447546}
+  WidthChooserDropdown: {fileID: 215757154}
+  HeightChooserDropdown: {fileID: 99399175}
 --- !u!114 &761556727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9133,6 +9146,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370557963}
   m_CullTransparentMesh: 0
+--- !u!1 &1394225400
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1394225402}
+  - component: {fileID: 1394225401}
+  m_Layer: 0
+  m_Name: ActionsQueue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1394225401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1394225400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b5f07d6c39711c45b4a3b0be5b725ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LobbyDropdowns: {fileID: 761556726}
+--- !u!4 &1394225402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1394225400}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1395316345
 GameObject:
   m_ObjectHideFlags: 0
@@ -10882,6 +10939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameSettuper: {fileID: 1587544417}
+  LobbyDropdowns: {fileID: 761556726}
 --- !u!4 &1587544419
 Transform:
   m_ObjectHideFlags: 0

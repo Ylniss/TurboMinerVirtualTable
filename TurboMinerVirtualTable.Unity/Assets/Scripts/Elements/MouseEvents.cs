@@ -17,11 +17,20 @@ public class MouseEvents : MonoBehaviour
         SetupMouseBoxCollider();
     }
 
+    private Vector2 CursorPosition
+    {
+        get
+        {
+            var cursorScreenPoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            return Camera.main.ScreenToWorldPoint(cursorScreenPoint);
+        }
+    }
+
     private Vector2 offset;
     private Vector2[] ContainedElementsOffsets;
     void OnMouseDown()
     {
-        offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+        offset = (Vector2)transform.position - CursorPosition;
         ContainedElementsOffsets = new Vector2[element.ContainedElements.Count];
         element.IncrementLayerOrder();
 
@@ -51,9 +60,7 @@ public class MouseEvents : MonoBehaviour
 
     void OnMouseDrag()
     {
-        var cursorScreenPoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-
-        var cursorPosition = (Vector2)Camera.main.ScreenToWorldPoint(cursorScreenPoint) + offset;
+        var cursorPosition = CursorPosition + offset;
 
         if (lastCursorPosition == cursorPosition)
         {

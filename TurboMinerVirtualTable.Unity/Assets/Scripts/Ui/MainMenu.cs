@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public GameSettuper GameSettuper;
+    public LobbyDropdowns LobbyDropdowns;
     private DataSender dataSender;
 
     void Start()
@@ -24,8 +25,8 @@ public class MainMenu : MonoBehaviour
             dropdown.Init();
         }
 
-        SetupMapSizeDropdown(MultiplayerManager.Instance.WidthChooserDropdown);
-        SetupMapSizeDropdown(MultiplayerManager.Instance.HeightChooserDropdown);
+        SetupMapSizeDropdown(LobbyDropdowns.WidthChooserDropdown);
+        SetupMapSizeDropdown(LobbyDropdowns.HeightChooserDropdown);
     }
 
     public void JoinGame()
@@ -89,9 +90,9 @@ public class MainMenu : MonoBehaviour
     private void SetControlsInteractable(bool interactable)
     {
         MultiplayerManager.Instance.StartButton.interactable = interactable;
-        MultiplayerManager.Instance.TilesConfigDropdown.interactable = interactable;
-        MultiplayerManager.Instance.WidthChooserDropdown.interactable = interactable;
-        MultiplayerManager.Instance.HeightChooserDropdown.interactable = interactable;
-        MultiplayerManager.Instance.CorridorsConfigDropdown.interactable = interactable;
+        LobbyDropdowns.TilesConfigDropdown.interactable = interactable;
+        LobbyDropdowns.WidthChooserDropdown.interactable = interactable;
+        LobbyDropdowns.HeightChooserDropdown.interactable = interactable;
+        LobbyDropdowns.CorridorsConfigDropdown.interactable = interactable;
     }
 }
