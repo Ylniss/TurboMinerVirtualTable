@@ -1,23 +1,27 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
     public GameSettuper GameSettuper;
     public LobbyDropdowns LobbyDropdowns;
     private DataSender dataSender;
+    private HostService hostService;
 
     void Start()
     {
         Screen.SetResolution(1664, 936, false);
         dataSender = FindObjectOfType<DataSender>();
+        hostService = FindObjectOfType<HostService>();
     }
 
     public void CreateGame()
     {
-        MultiplayerManager.Instance.CreateServer();
+        hostService.CreateServer();
 
         var dropdowns = FindObjectsOfType<ConfigDopdown>();
         foreach (var dropdown in dropdowns)
@@ -31,7 +35,7 @@ public class MainMenu : MonoBehaviour
 
     public void JoinGame()
     {
-        MultiplayerManager.Instance.Connect();
+        hostService.Connect();
         SetControlsInteractable(false);
     }
 
@@ -89,7 +93,8 @@ public class MainMenu : MonoBehaviour
 
     private void SetControlsInteractable(bool interactable)
     {
-        MultiplayerManager.Instance.StartButton.interactable = interactable;
+        var startButton = GetComponentsInChildren<Button>().Single(x => x.name == "StartButton");
+        startButton.interactable = interactable;
         LobbyDropdowns.TilesConfigDropdown.interactable = interactable;
         LobbyDropdowns.WidthChooserDropdown.interactable = interactable;
         LobbyDropdowns.HeightChooserDropdown.interactable = interactable;
