@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-public class ConfigDopdown : MonoBehaviour
+public class ConfigDropdown : MonoBehaviour
 {
     public ConfigLoader ConfigLoader;
     public TMP_Dropdown Dropdown;

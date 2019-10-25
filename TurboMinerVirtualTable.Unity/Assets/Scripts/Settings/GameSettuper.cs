@@ -1,25 +1,31 @@
 ﻿using Assets.Scripts.Settings.Models;
 using Assets.Scripts.Utils.Extensions;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class GameSettuper : MonoBehaviour
 {
-    public TMP_Text TilesConfig;
-    public TMP_Text CorridorsConfig;
-    public TMP_Text MapWidth;
-    public TMP_Text MapHeight;
-    public PlayerLabel[] PlayerLabels;
-
+    public LobbyDropdowns LobbyDropdowns;
     public ConfigLoader ConfigLoader;
+
+    private PlayerLabel[] PlayerLabels;
 
     public void Setup()
     {
-        GameSettings.Tiles = GetShuffledStackElements("Tiles", TilesConfig.text);
-        GameSettings.Corridors = GetShuffledStackElements("Corridors", CorridorsConfig.text);
-        GameSettings.MapSize = new MapSize(int.Parse(MapWidth.text), int.Parse(MapHeight.text));
+        GameSettings.Tiles = GetShuffledStackElements("Tiles", LobbyDropdowns.GetTilesConfigText());
+        GameSettings.Corridors = GetShuffledStackElements("Corridors", LobbyDropdowns.GetCorridorsConfigText());
+        GameSettings.MapSize = GetMapSize();
 
+        SetupPlayerSettings();
+    }
+
+    private MapSize GetMapSize()
+    {
+        return new MapSize(int.Parse(LobbyDropdowns.GetWidthText()), int.Parse(LobbyDropdowns.GetHeightText()));
+    }
+
+    private void SetupPlayerSettings()
+    {
         PlayerLabels = transform.root.GetComponentsInChildren<PlayerLabel>();
         GameSettings.PlayersSettings = new PlayerSettings[PlayerLabels.Length];
         for (var i = 0; i < PlayerLabels.Length; ++i)

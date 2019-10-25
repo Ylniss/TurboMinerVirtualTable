@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.Networking;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
@@ -8,8 +7,6 @@ using UnityEngine;
 
 public class Client : MonoBehaviour
 {
-
-
     public string ClientName;
     public bool IsHost;
 
@@ -19,8 +16,6 @@ public class Client : MonoBehaviour
     private StreamWriter writer;
     private StreamReader reader;
 
-    private List<GameClient> players = new List<GameClient>();
-    private DataSender dataSender;
     private ActionsQueue actions;
 
     private Thread readThread;
@@ -29,7 +24,11 @@ public class Client : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
-        dataSender = FindObjectOfType<DataSender>();
+
+    }
+
+    private void Init()
+    {
         actions = FindObjectOfType<ActionsQueue>();
     }
 
@@ -40,6 +39,7 @@ public class Client : MonoBehaviour
             return false;
         }
 
+        Init();
         try
         {
             socket = new TcpClient(host, port);
@@ -78,11 +78,6 @@ public class Client : MonoBehaviour
                     {
                         OnIncomingData(data);
                     }
-
-                    if (threadStop)
-                    {
-                        break; // prevents socket error, because on app exit socket is closed from another thread before this thread ends
-                    }
                 }
             }
         }
@@ -104,36 +99,13 @@ public class Client : MonoBehaviour
         Debug.Log($"Client: {data}");
 
         var messageFromServer = data.Split('|');
-        switch (messageFromServer[0])
+
+        if (messageFromServer[0] == MessageCommands.Server.Who)
         {
-            case MessageCommands.Server.Who:
-                for (int i = 1; i < messageFromServer.Length - 1; ++i)
-                {
-                    UserConnected(messageFromServer[i], false);
-                }
-                Send($"{MessageCommands.Client.Who}|{ClientName}|{(IsHost ? 1 : 0)}");
-
-                break;
-
-            case MessageCommands.Server.Connected:
-                UserConnected(messageFromServer[1], false);
-                if (IsHost)
-                {
-                    dataSender.SendAllLobbySettings();
-                }
-                break;
+            Send($"{MessageCommands.Client.Who}|{ClientName}|{(IsHost ? 1 : 0)}");
         }
 
-        actions.AddActionAccordingTo(messageFromServer);
-    }
-
-    private void UserConnected(string name, bool host)
-    {
-        var gameClient = new GameClient();
-        gameClient.Name = name;
-        gameClient.IsHost = host;
-
-        players.Add(gameClient);
+        actions.AddActionAccordingTo(messageFromServer, IsHost);
     }
 
     private void OnApplicationQuit()

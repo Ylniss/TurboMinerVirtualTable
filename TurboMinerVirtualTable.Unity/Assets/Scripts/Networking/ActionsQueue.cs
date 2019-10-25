@@ -29,10 +29,23 @@ public class ActionsQueue : MonoBehaviour
         }
     }
 
-    public void AddActionAccordingTo(string[] message)
+    public void AddActionAccordingTo(string[] message, bool isHost)
     {
         switch (message[0])
         {
+            case MessageCommands.Server.Connected:
+                mainThreadActions.Enqueue(() =>
+                {
+                    if (isHost)
+                    {
+                        // resend all dropdown selected options when new client connected
+                        LobbyDropdowns.WidthChooserDropdown.onValueChanged.Invoke(0);
+                        LobbyDropdowns.HeightChooserDropdown.onValueChanged.Invoke(0);
+                        LobbyDropdowns.TilesConfigDropdown.onValueChanged.Invoke(0);
+                        LobbyDropdowns.CorridorsConfigDropdown.onValueChanged.Invoke(0);
+                    }
+                });
+                break;
             case MessageCommands.Server.Start:
                 mainThreadActions.Enqueue(() =>
                 {
@@ -68,16 +81,6 @@ public class ActionsQueue : MonoBehaviour
             case MessageCommands.Server.CorridorsConfigName:
                 mainThreadActions.Enqueue(() =>
                 {
-                    LobbyDropdowns.SetCorridorsConfig(message[1]);
-                });
-                break;
-
-            case MessageCommands.Server.LobbySettings:
-                mainThreadActions.Enqueue(() =>
-                {
-                    LobbyDropdowns.SetWidth(message[1]);
-                    LobbyDropdowns.SetHeight(message[1]);
-                    LobbyDropdowns.SetTilesConfig(message[1]);
                     LobbyDropdowns.SetCorridorsConfig(message[1]);
                 });
                 break;

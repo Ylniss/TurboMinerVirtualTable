@@ -1021,7 +1021,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1587544418}
+      - m_Target: {fileID: 761556730}
         m_MethodName: OnHeightSettingChanged
         m_Mode: 1
         m_Arguments:
@@ -1382,7 +1382,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1587544418}
+      - m_Target: {fileID: 761556730}
         m_MethodName: OnWidthSettingChanged
         m_Mode: 1
         m_Arguments:
@@ -2955,6 +2955,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1587544418}
+        m_MethodName: CreateGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1587544415}
         m_MethodName: SetActive
         m_Mode: 6
@@ -2969,17 +2980,6 @@ MonoBehaviour:
       - m_Target: {fileID: 761556724}
         m_MethodName: SetActive
         m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1587544418}
-        m_MethodName: CreateGame
-        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4288,7 +4288,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 426101108}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd4591d8a92690c408e231ebbb7cede2, type: 3}
+  m_Script: {fileID: 11500000, guid: 86d9cacc1602a734cbe7e8bd6cc65ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ConfigLoader: {fileID: 426101110}
@@ -5778,36 +5778,6 @@ Transform:
   m_Father: {fileID: 761556725}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &757111675
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 757111676}
-  m_Layer: 0
-  m_Name: HostService
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &757111676
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 757111675}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &761556724
 GameObject:
   m_ObjectHideFlags: 0
@@ -5817,7 +5787,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 761556725}
+  - component: {fileID: 761556730}
   - component: {fileID: 761556727}
+  - component: {fileID: 761556729}
+  - component: {fileID: 761556728}
   - component: {fileID: 761556726}
   m_Layer: 0
   m_Name: LobbyMenu
@@ -5876,6 +5849,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayersList: {fileID: 755114146}
+  StartButton: {fileID: 1139765679}
+--- !u!114 &761556728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761556724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be9727a1da0889f4e92f9131c501e79c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &761556729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761556724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5c3a07ff18c2cd40ad422380e957072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LobbyDropdowns: {fileID: 761556726}
+  ConfigLoader: {fileID: 761556728}
+--- !u!114 &761556730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761556724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 537f9c3af8dd9c742957c9ef769781e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameSettuper: {fileID: 761556729}
+  LobbyDropdowns: {fileID: 761556726}
   StartButton: {fileID: 1139765679}
 --- !u!1 &768865277
 GameObject:
@@ -8020,6 +8034,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1107340224}
   - component: {fileID: 1107340223}
+  - component: {fileID: 1107340225}
   m_Layer: 0
   m_Name: DataSender
   m_TagString: Untagged
@@ -8039,10 +8054,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ebaeb9e4550ef14388cc90fa52bf6e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TilesConfigDropdown: {fileID: 1924183761}
-  CorridorsConfigDropdown: {fileID: 1333447546}
-  WidthChooserDropdown: {fileID: 215757154}
-  HeightChooserDropdown: {fileID: 99399175}
+  LobbyDropdowns: {fileID: 1107340225}
 --- !u!4 &1107340224
 Transform:
   m_ObjectHideFlags: 0
@@ -8057,6 +8069,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1107340225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107340222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369f980b8c8167742af322d010d363dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TilesConfigDropdown: {fileID: 1924183761}
+  CorridorsConfigDropdown: {fileID: 1333447546}
+  WidthChooserDropdown: {fileID: 215757154}
+  HeightChooserDropdown: {fileID: 99399175}
 --- !u!1 &1116818302
 GameObject:
   m_ObjectHideFlags: 0
@@ -8249,7 +8277,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1587544418}
+      - m_Target: {fileID: 761556730}
         m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
@@ -8355,7 +8383,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1175934456}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd4591d8a92690c408e231ebbb7cede2, type: 3}
+  m_Script: {fileID: 11500000, guid: 86d9cacc1602a734cbe7e8bd6cc65ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ConfigLoader: {fileID: 1175934458}
@@ -8967,7 +8995,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1587544418}
+      - m_Target: {fileID: 761556730}
         m_MethodName: OnCorridorsSettingChanged
         m_Mode: 1
         m_Arguments:
@@ -10916,8 +10944,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1587544419}
   - component: {fileID: 1587544418}
-  - component: {fileID: 1587544417}
-  - component: {fileID: 1587544416}
   m_Layer: 0
   m_Name: MainMenu
   m_TagString: Untagged
@@ -10925,36 +10951,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1587544416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587544415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be9727a1da0889f4e92f9131c501e79c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1587544417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587544415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5c3a07ff18c2cd40ad422380e957072, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TilesConfig: {fileID: 1246637805}
-  CorridorsConfig: {fileID: 1621051339}
-  MapWidth: {fileID: 245488182}
-  MapHeight: {fileID: 60912997}
-  PlayerLabels: []
-  ConfigLoader: {fileID: 1587544416}
 --- !u!114 &1587544418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10967,8 +10963,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfdc549d233d3ba4189da91209421848, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameSettuper: {fileID: 1587544417}
-  LobbyDropdowns: {fileID: 761556726}
 --- !u!4 &1587544419
 Transform:
   m_ObjectHideFlags: 0
@@ -11295,6 +11289,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1608744638}
+  - component: {fileID: 1608744639}
   m_Layer: 0
   m_Name: ConnectMenu
   m_TagString: Untagged
@@ -11319,6 +11314,18 @@ Transform:
   m_Father: {fileID: 2034389207}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1608744639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608744637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75df191bbbd77044c866b21f73e07af0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1611491955
 GameObject:
   m_ObjectHideFlags: 0
@@ -11904,7 +11911,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1587544418}
+      - m_Target: {fileID: 1608744639}
         m_MethodName: JoinGame
         m_Mode: 1
         m_Arguments:
@@ -12667,6 +12674,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 761556730}
+        m_MethodName: Back
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1838528087
@@ -13100,7 +13118,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1587544418}
+      - m_Target: {fileID: 761556730}
         m_MethodName: OnTilesSettingChanged
         m_Mode: 1
         m_Arguments:

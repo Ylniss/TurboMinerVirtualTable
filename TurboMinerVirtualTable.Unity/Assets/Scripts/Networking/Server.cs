@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using UnityEngine;
 
@@ -195,10 +194,6 @@ public class Server : MonoBehaviour
 
             case MessageCommands.Client.CorridorsConfigName:
                 Broadcast($"{MessageCommands.Server.CorridorsConfigName}|{message[1]}", clientsNoSender);
-                break;
-
-            case MessageCommands.Client.LobbySettings:
-                Broadcast($"{MessageCommands.Server.LobbySettings}|{message[1]}|{message[2]}|{message[3]}|{message[4]}", clientsNoSender);
                 break;
 
             case MessageCommands.Client.ElementPosition:

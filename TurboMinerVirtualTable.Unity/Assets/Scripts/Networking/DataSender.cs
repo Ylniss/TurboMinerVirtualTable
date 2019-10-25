@@ -2,18 +2,13 @@
 using Assets.Scripts.Networking.Models;
 using Assets.Scripts.Settings.Models;
 using Assets.Scripts.Utils.Extensions;
-using TMPro;
 using UnityEngine;
 
 public class DataSender : MonoBehaviour
 {
+    public LobbyDropdowns LobbyDropdowns;
+
     private Client client;
-
-    public TMP_Dropdown TilesConfigDropdown;
-    public TMP_Dropdown CorridorsConfigDropdown;
-    public TMP_Dropdown WidthChooserDropdown;
-    public TMP_Dropdown HeightChooserDropdown;
-
     void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -41,36 +36,32 @@ public class DataSender : MonoBehaviour
         client.Send($"{MessageCommands.Client.Start}|{tilesCsv}|{corridorsCsv}|{mapWidth}|{mapHeight}|{playerSettingsJson}");
     }
 
-    public void SendLobbyWidth()
+    public void SendLobbyWidth(string width)
     {
-        var width = GetDropdownCurrentChoice(WidthChooserDropdown);
         client.Send($"{MessageCommands.Client.WidthSettings}|{width}");
     }
 
-    public void SendLobbyHeight()
+    public void SendLobbyHeight(string height)
     {
-        var height = GetDropdownCurrentChoice(HeightChooserDropdown);
         client.Send($"{MessageCommands.Client.HeightSettings}|{height}");
     }
 
-    public void SendLobbyTilesConfigName()
+    public void SendLobbyTilesConfigName(string tilesConfigName)
     {
-        var tilesConfigName = GetDropdownCurrentChoice(TilesConfigDropdown);
         client.Send($"{MessageCommands.Client.TilesConfigName}|{tilesConfigName}");
     }
 
-    public void SendLobbyCorridorsConfigName()
+    public void SendLobbyCorridorsConfigName(string corridorsConfigName)
     {
-        var corridorsConfigName = GetDropdownCurrentChoice(CorridorsConfigDropdown);
         client.Send($"{MessageCommands.Client.CorridorsConfigName}|{corridorsConfigName}");
     }
 
     public void SendAllLobbySettings()
     {
-        var width = GetDropdownCurrentChoice(WidthChooserDropdown);
-        var height = GetDropdownCurrentChoice(HeightChooserDropdown);
-        var tilesConfigName = GetDropdownCurrentChoice(TilesConfigDropdown);
-        var corridorsConfigName = GetDropdownCurrentChoice(CorridorsConfigDropdown);
+        var width = LobbyDropdowns.GetWidthText();
+        var height = LobbyDropdowns.GetHeightText();
+        var tilesConfigName = LobbyDropdowns.GetTilesConfigText();
+        var corridorsConfigName = LobbyDropdowns.GetCorridorsConfigText();
         client.Send($"{MessageCommands.Client.LobbySettings}|{width}|{height}|{tilesConfigName}|{corridorsConfigName}");
     }
 
@@ -119,11 +110,5 @@ public class DataSender : MonoBehaviour
             var stackRefillJson = JsonUtility.ToJson(stackRefill);
             client.Send($"{MessageCommands.Client.StackRefill}|{stackRefillJson}");
         }
-    }
-
-    private string GetDropdownCurrentChoice(TMP_Dropdown dropdown)
-    {
-        var index = dropdown.value != -1 ? dropdown.value : 0;
-        return dropdown.options[index].text;
     }
 }
