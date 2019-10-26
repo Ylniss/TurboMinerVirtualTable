@@ -17,10 +17,8 @@ public class Server : MonoBehaviour
     private List<ServerClient> disconnectList;
 
     private TcpListener server;
-    private bool serverStarted;
 
-    private Thread readThread;
-    private bool threadStop;
+    private List<Thread> clientThreads = new List<Thread>();
 
     public void Init()
     {
@@ -34,60 +32,10 @@ public class Server : MonoBehaviour
             server.Start();
 
             StartListening();
-            serverStarted = true;
-
-            readThread = new Thread(new ThreadStart(ReadData));
-            readThread.IsBackground = true;
-            readThread.Start();
         }
         catch (Exception e)
         {
             Debug.Log($"Socket error: {e.Message}");
-        }
-    }
-
-    private void ReadData()
-    {
-        while (!threadStop)
-        {
-            if (!serverStarted)
-            {
-                continue;
-            }
-
-            foreach (var client in clients.ToList()) //ToList because list may change during foreach loop, so make copy to prevent that
-            {
-                if (client == null)
-                {
-                    continue;
-                }
-
-                if (!IsConnected(client.Tcp))
-                {
-                    client.Tcp.Close();
-                    disconnectList.Add(client);
-                    continue;
-                }
-
-                var networkStream = client.Tcp.GetStream();
-
-                if (networkStream.DataAvailable)
-                {
-                    var streamReader = new StreamReader(networkStream, true);
-                    var data = streamReader.ReadLine();
-                    if (data != null)
-                    {
-                        OnIncomingData(client, data);
-                    }
-                }
-            }
-
-            for (int i = 0; i < disconnectList.Count - 1; ++i)
-            {
-                // Tell our player somebody has disconnected
-                clients.Remove(disconnectList[i]);
-                disconnectList.RemoveAt(i);
-            }
         }
     }
 
@@ -109,11 +57,52 @@ public class Server : MonoBehaviour
 
         var serverClient = new ServerClient(listener.EndAcceptTcpClient(result));
         clients.Add(serverClient);
+        StartClientThread(serverClient);
+
         Debug.Log("Somebody has connected!");
 
         StartListening();
 
         Broadcast($"{MessageCommands.Server.Who}|{allUseres}", serverClient);
+    }
+
+    private void StartClientThread(ServerClient client)
+    {
+        var thread = new Thread(() => ReadData(client));
+        thread.Start();
+        thread.IsBackground = true;
+        clientThreads.Add(thread);
+    }
+
+    private void ReadData(ServerClient client)
+    {
+        while (true)
+        {
+            if (client == null)
+            {
+                return;
+            }
+
+            if (!IsConnected(client.Tcp))
+            {
+                client.Tcp.Close();
+                disconnectList.Add(client);
+                clients.Remove(client);
+                return;
+            }
+
+            var stream = client.Tcp.GetStream();
+
+            if (stream.DataAvailable)
+            {
+                var reader = new StreamReader(stream, true);
+                string data;
+                while ((data = reader.ReadLine()) != null)
+                {
+                    OnIncomingData(client, data);
+                }
+            }
+        }
     }
 
     private bool IsConnected(TcpClient client)
@@ -240,7 +229,10 @@ public class Server : MonoBehaviour
 
     private void CloseServer()
     {
-        threadStop = true;
+        foreach(var thread in clientThreads)
+        {
+            thread.Abort();
+        }
         server.Stop();
     }
 }

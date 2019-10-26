@@ -13,11 +13,12 @@ public class LobbyMenu : MonoBehaviour
     private void OnEnable()
     {
         dataSender = FindObjectOfType<DataSender>();
-
-        LobbyDropdowns.ResetWidthAndHeight();
-        LobbyDropdowns.InitConfigs();
-
         var isHost = FindObjectOfType<Client>().IsHost;
+        if (isHost)
+        {
+            LobbyDropdowns.ResetWidthAndHeight();
+            LobbyDropdowns.InitConfigs();
+        }
         LobbyDropdowns.SetInteractable(isHost);
     }
 

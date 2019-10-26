@@ -34,17 +34,17 @@ public class ActionsQueue : MonoBehaviour
         switch (message[0])
         {
             case MessageCommands.Server.Connected:
-                mainThreadActions.Enqueue(() =>
+                if (isHost)
                 {
-                    if (isHost)
+                    mainThreadActions.Enqueue(() =>
                     {
                         // resend all dropdown selected options when new client connected
                         LobbyDropdowns.WidthChooserDropdown.onValueChanged.Invoke(0);
                         LobbyDropdowns.HeightChooserDropdown.onValueChanged.Invoke(0);
                         LobbyDropdowns.TilesConfigDropdown.onValueChanged.Invoke(0);
                         LobbyDropdowns.CorridorsConfigDropdown.onValueChanged.Invoke(0);
-                    }
-                });
+                    });
+                }
                 break;
             case MessageCommands.Server.Start:
                 mainThreadActions.Enqueue(() =>
@@ -58,31 +58,43 @@ public class ActionsQueue : MonoBehaviour
                 break;
 
             case MessageCommands.Server.WidthSettings:
-                mainThreadActions.Enqueue(() =>
+                if (!isHost)
                 {
-                    LobbyDropdowns.SetWidth(message[1]);
-                });
+                    mainThreadActions.Enqueue(() =>
+                    {
+                        LobbyDropdowns.SetWidth(message[1]);
+                    });
+                }
                 break;
 
             case MessageCommands.Server.HeightSettings:
-                mainThreadActions.Enqueue(() =>
+                if (!isHost)
                 {
-                    LobbyDropdowns.SetHeight(message[1]);
-                });
+                    mainThreadActions.Enqueue(() =>
+                    {
+                        LobbyDropdowns.SetHeight(message[1]);
+                    });
+                }
                 break;
 
             case MessageCommands.Server.TilesConfigName:
-                mainThreadActions.Enqueue(() =>
+                if (!isHost)
                 {
-                    LobbyDropdowns.SetTilesConfig(message[1]);
-                });
+                    mainThreadActions.Enqueue(() =>
+                    {
+                        LobbyDropdowns.SetTilesConfig(message[1]);
+                    });
+                }
                 break;
 
             case MessageCommands.Server.CorridorsConfigName:
-                mainThreadActions.Enqueue(() =>
+                if (!isHost)
                 {
-                    LobbyDropdowns.SetCorridorsConfig(message[1]);
-                });
+                    mainThreadActions.Enqueue(() =>
+                    {
+                        LobbyDropdowns.SetCorridorsConfig(message[1]);
+                    });
+                }
                 break;
 
             case MessageCommands.Server.ElementPosition:

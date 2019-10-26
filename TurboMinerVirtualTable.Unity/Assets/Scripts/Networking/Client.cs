@@ -24,7 +24,6 @@ public class Client : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
-
     }
 
     private void Init()
@@ -74,10 +73,7 @@ public class Client : MonoBehaviour
                 string data;
                 while ((data = reader.ReadLine()) != null)
                 {
-                    if (data != null)
-                    {
-                        OnIncomingData(data);
-                    }
+                    OnIncomingData(data); 
                 }
             }
         }
@@ -90,8 +86,17 @@ public class Client : MonoBehaviour
             return;
         }
 
-        writer.WriteLine(data);
-        writer.Flush();
+        try
+        {
+            writer.WriteLine(data);
+            writer.Flush();
+        }
+        catch(Exception)
+        {
+            //todo: message about server disconnection
+            CloseSocket();
+            return;
+        }   
     }
 
     private void OnIncomingData(string data)
@@ -112,6 +117,7 @@ public class Client : MonoBehaviour
     {
         CloseSocket();
     }
+
     private void OnDisable()
     {
         CloseSocket();
@@ -125,6 +131,8 @@ public class Client : MonoBehaviour
         }
 
         threadStop = true;
+        readThread.Abort();
+
         stream.Close();
         writer.Close();
         reader.Close();

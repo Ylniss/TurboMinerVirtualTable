@@ -26,7 +26,7 @@ public class LobbyDropdowns : MonoBehaviour
 
     public string GetHeightText()
     {
-        return GetDropdownText(WidthChooserDropdown);
+        return GetDropdownText(HeightChooserDropdown);
     }
 
     public void SetTilesConfig(string tilesData)

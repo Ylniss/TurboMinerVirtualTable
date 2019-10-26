@@ -38,22 +38,34 @@ public class DataSender : MonoBehaviour
 
     public void SendLobbyWidth(string width)
     {
-        client.Send($"{MessageCommands.Client.WidthSettings}|{width}");
+        if (client.IsHost)
+        {
+            client.Send($"{MessageCommands.Client.WidthSettings}|{width}");
+        }
     }
 
     public void SendLobbyHeight(string height)
     {
-        client.Send($"{MessageCommands.Client.HeightSettings}|{height}");
+        if (client.IsHost)
+        {
+            client.Send($"{MessageCommands.Client.HeightSettings}|{height}");
+        }
     }
 
     public void SendLobbyTilesConfigName(string tilesConfigName)
     {
-        client.Send($"{MessageCommands.Client.TilesConfigName}|{tilesConfigName}");
+        if (client.IsHost)
+        {
+            client.Send($"{MessageCommands.Client.TilesConfigName}|{tilesConfigName}");
+        }
     }
 
     public void SendLobbyCorridorsConfigName(string corridorsConfigName)
     {
-        client.Send($"{MessageCommands.Client.CorridorsConfigName}|{corridorsConfigName}");
+        if (client.IsHost)
+        {
+            client.Send($"{MessageCommands.Client.CorridorsConfigName}|{corridorsConfigName}");
+        }
     }
 
     public void SendAllLobbySettings()
