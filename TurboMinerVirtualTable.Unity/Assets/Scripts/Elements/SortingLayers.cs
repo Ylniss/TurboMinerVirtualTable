@@ -12,10 +12,10 @@ namespace Assets.Scripts.Elements
 
         public static Dictionary<string, float> LayerHeights = new Dictionary<string, float>
         {
-            { Pawns, 6.0f },
-            { Tiles, 5.0f },
-            { Passages, 4.0f },
-            { Corridors, 3.0f }
+            { Pawns, 200.0f },
+            { Tiles, 105.0f },
+            { Passages, 55.0f },
+            { Corridors, 5.0f }
         };
     }
 }

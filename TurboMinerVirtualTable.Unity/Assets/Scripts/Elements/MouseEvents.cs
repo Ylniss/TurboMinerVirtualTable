@@ -1,79 +1,118 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Networking.Models;
+using UnityEngine;
 
 public class MouseEvents : MonoBehaviour
 {
-    public bool IsDragging;
-   
+    public bool IsDragged;
+
     private Element element;
+    private Vector2 lastCursorPosition;
+
+    private DataSender dataSender;
 
     void Start()
     {
         element = GetComponentInParent<Element>();
+        dataSender = FindObjectOfType<DataSender>();
         SetupMouseBoxCollider();
     }
 
-    private Vector3 offset;
+    private Vector2 CursorPosition
+    {
+        get
+        {
+            var cursorScreenPoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            return Camera.main.ScreenToWorldPoint(cursorScreenPoint);
+        }
+    }
+
+    private Vector2 offset;
     private Vector2[] ContainedElementsOffsets;
     void OnMouseDown()
     {
-        offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z));
+        offset = (Vector2)transform.position - CursorPosition;
         ContainedElementsOffsets = new Vector2[element.ContainedElements.Count];
         element.IncrementLayerOrder();
 
-        for(var i = 0; i < ContainedElementsOffsets.Length; ++i)
+        // element positions to send via network
+        var elementIds = new ElementIdArray(element.ContainedElements.Count + 1);
+        elementIds.Array[0] = new ElementId(element.Id);
+
+        for (var i = 0; i < ContainedElementsOffsets.Length; ++i)
         {
             ContainedElementsOffsets[i] = transform.position - element.ContainedElements[i].position;
             var containedElement = element.ContainedElements[i].gameObject.GetComponent<Element>();
             containedElement.IncrementLayerOrder();
+            elementIds.Array[i + 1] = new ElementId(containedElement.Id);
         }
 
-        OnDoubleClick();
+        if (!OnDoubleClick())
+        {
+            dataSender.SendIncrementElementsLayers(elementIds);
+        }
     }
 
     void OnMouseUp()
     {
-        IsDragging = false;
+        IsDragged = false;
+        dataSender.SendStopElementDrag(element.Id);
     }
 
     void OnMouseDrag()
     {
-        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z);
+        var cursorPosition = CursorPosition + offset;
 
-        Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-        element.transform.position = curPosition;
-
-        for(var i = 0; i < element.ContainedElements.Count; ++i)
+        if (lastCursorPosition == cursorPosition)
         {
-            element.ContainedElements[i].position = new Vector3(curPosition.x - ContainedElementsOffsets[i].x, curPosition.y - ContainedElementsOffsets[i].y, element.ContainedElements[i].position.z);
+            return;
         }
 
-        IsDragging = true;
+        element.transform.position = cursorPosition;
+
+        // element positions to send via network
+        var elementPositions = new ElementPositionArray(element.ContainedElements.Count + 1);
+        elementPositions.Array[0] = new ElementPosition(element.Id, cursorPosition);
+
+        for (var i = 0; i < element.ContainedElements.Count; ++i)
+        {
+            var containedElementPosition = new Vector2(cursorPosition.x - ContainedElementsOffsets[i].x, cursorPosition.y - ContainedElementsOffsets[i].y);
+            element.ContainedElements[i].position = containedElementPosition;
+            var containedElement = element.ContainedElements[i].gameObject.GetComponent<Element>();
+            elementPositions.Array[i + 1] = new ElementPosition(containedElement.Id, containedElementPosition);
+        }
+
+        dataSender.SendElementsPositions(elementPositions);
+        IsDragged = true;
+
+        lastCursorPosition = cursorPosition;
     }
 
     void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(1)) // right mouse button
         {
-            element.Rotate();
+            dataSender.SendRotateElement(element.Id);
         }
 
         if (Input.GetKeyDown(KeyCode.Delete) && element.Removable)
         {
-            Destroy(element.gameObject);
+            dataSender.SendDestroyElement(element.Id);
         }
     }
 
     private float lastClick = 0f;
     private float interval = 0.3f;
 
-    private void OnDoubleClick()
+    private bool OnDoubleClick()
     {
         if ((lastClick + interval) > Time.time)
         {
-            element.TurnOnOtherSide();
+            dataSender.SendTurnElementOnOtherSide(element.Id);
+            return true;
         }
 
         lastClick = Time.time;
+        return false;
     }
 
     private void SetupMouseBoxCollider()

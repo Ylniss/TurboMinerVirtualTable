@@ -14,7 +14,7 @@ public class PlayerPanel : MonoBehaviour
         if (transform.position.y < 0)
         {
             Text.transform.position = new Vector2(transform.position.x, -textOffset);
-        }  
+        }
         else
         {
             Text.transform.position = new Vector2(transform.position.x, textOffset);
@@ -27,7 +27,7 @@ public class PlayerPanel : MonoBehaviour
         else
         {
             Text.alignment = TextAlignmentOptions.Left;
-        }     
+        }
     }
 
     public Color Color

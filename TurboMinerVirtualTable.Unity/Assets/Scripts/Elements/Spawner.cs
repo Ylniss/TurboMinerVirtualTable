@@ -125,15 +125,6 @@ public class Spawner : MonoBehaviour
         return playerPanelInstance;
     }
 
-    public Stack SpawnTilesStack(StackType stackType, Vector2 position, string path, List<string> elements)
-    {
-        var stack = Instantiate(Resources.Load<Stack>("Prefabs/Stack"), position, Quaternion.identity);
-        stack.Initialize(stackType, path, elements);
-        stack.SpawnOnTop();
-
-        return stack;
-    }
-
     public Stack SpawnStack(StackType stackType, Vector2 position, string path, List<string> elements)
     {
         var stack = Instantiate(Resources.Load<Stack>("Prefabs/Stack"), position, Quaternion.identity);

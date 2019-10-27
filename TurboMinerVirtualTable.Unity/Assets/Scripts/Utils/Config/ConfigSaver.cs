@@ -20,10 +20,11 @@ public class ConfigSaver : MonoBehaviour
         }
 
         string path = $"{directory}/{name}.cfg";
-        var stream = new FileStream(path, FileMode.Create);
-        var formatter = new BinaryFormatter();
-        var elementCounts = Converter.ConvertMany(elementCounters);
-        formatter.Serialize(stream, elementCounts);
-        stream.Close();
+        using (var stream = new FileStream(path, FileMode.Create))
+        {
+            var formatter = new BinaryFormatter();
+            var elementCounts = Converter.ConvertMany(elementCounters);
+            formatter.Serialize(stream, elementCounts);
+        }
     }
 }

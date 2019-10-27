@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using Assets.Scripts.Utils;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Dice : MonoBehaviour
 {
@@ -10,17 +9,27 @@ public class Dice : MonoBehaviour
     private bool isRolling;
     private int randomDiceSide = 0;
     private int previousRandomDiceSide = 0;
+    private int finalDiceSide = 0;
+
+    private DataSender dataSender;
 
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         diceSides = Resources.LoadAll<Sprite>("Graphics/Dice");
+        dataSender = FindObjectOfType<DataSender>();
     }
 
     private void OnMouseDown()
     {
+        dataSender.SendRollDice();
+    }
+
+    public void StartRolling(int finalRollSide)
+    {
         if (!isRolling)
         {
+            finalDiceSide = finalRollSide;
             StartCoroutine("RollTheDice");
         }
     }
@@ -32,7 +41,7 @@ public class Dice : MonoBehaviour
 
         for (int i = 0; i <= 20; i++)
         {
-            if(i % 2 == 0)
+            if (i % 2 == 0)
             {
                 rollSpeed += 0.01f;
             }
@@ -40,17 +49,18 @@ public class Dice : MonoBehaviour
             yield return Roll(rollSpeed);
         }
 
-        var finalSide = randomDiceSide + 1;
+        spriteRenderer.sprite = diceSides[finalDiceSide - 1];
+        var finalSide = finalDiceSide;
         isRolling = false;
         Debug.Log(finalSide);
     }
 
     private WaitForSeconds Roll(float rollSpeed)
     {
-        while(previousRandomDiceSide == randomDiceSide)
+        while (previousRandomDiceSide == randomDiceSide)
         {
             randomDiceSide = Random.Range(0, 6);
-        }   
+        }
         spriteRenderer.sprite = diceSides[randomDiceSide];
         previousRandomDiceSide = randomDiceSide;
         return new WaitForSeconds(rollSpeed);
