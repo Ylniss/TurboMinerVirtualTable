@@ -20,9 +20,9 @@ public class LobbyMenu : MonoBehaviour
             LobbyDropdowns.InitConfigs();
 
             var playerName = GetComponent<PlayerName>();
-            var playerLabelsManager = GetComponent<PlayerLabelsManager>();
+            var playerLabelsBuilder = GetComponent<PlayerLabelsBuilder>();
 
-            playerLabelsManager.AddPlayer(playerName.Load());
+            playerLabelsBuilder.AddPlayer(playerName.Load());
         }
         LobbyDropdowns.SetInteractable(isHost);
     }

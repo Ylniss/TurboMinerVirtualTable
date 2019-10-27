@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerLabelsManager : MonoBehaviour
+public class PlayerLabelsBuilder : MonoBehaviour
 {
     public GameObject PlayersList;
     public Button StartButton;
