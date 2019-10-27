@@ -8,12 +8,7 @@ public class PlayerLabelsManager : MonoBehaviour
     public GameObject PlayersList;
     public Button StartButton;
 
-    private List<PlayerLabel> PlayersLabels;
-
-    private void Start()
-    {
-        PlayersLabels = new List<PlayerLabel>();
-    }
+    private List<PlayerLabel> PlayersLabels = new List<PlayerLabel>();
 
     public void ToggleStartButtonInteractability()
     {
@@ -32,27 +27,22 @@ public class PlayerLabelsManager : MonoBehaviour
         return PlayersLabels.Select(l => l.GetComponentInChildren<ColorPicker>().image.color).Distinct().Count() == PlayersLabels.Count;
     }
 
-    public void AddPlayer()
+    public void AddPlayer(string name)
     {
         if(PlayersLabels.Count < 4)
         {
-            SetupUi();
+            CreatePlayerLabel(name);
         }
     }
 
-    private void SetupUi()
+    private void CreatePlayerLabel(string name)
     {
         var position = new Vector3(PlayersList.transform.position.x, PlayersList.transform.position.y - PlayersLabels.Count * 45);
         var playerLabel = Instantiate(Resources.Load<PlayerLabel>("Prefabs/PlayerLabel"), position, Quaternion.identity, PlayersList.transform);
 
-        //if(playerLabel.NameLabel.text == "")
-        //{
-        //    playerLabel.NameLabel.text = "Player" + (PlayersLabels.Count + 1);
-        //}
-
+        playerLabel.NameLabel.text = name;
         AddListeners(playerLabel);
         SetColor(playerLabel);
-
         PlayersLabels.Add(playerLabel);
     }
 

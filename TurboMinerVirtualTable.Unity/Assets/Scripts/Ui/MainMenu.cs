@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,27 +6,24 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     private HostService hostService;
-    private string path;
-
     private TMP_InputField playerNameInput;
-
+    private PlayerName playerName;
     private Button joinButton;
     private Button createButton;
 
     void Start()
     {
-        path = $"{Application.persistentDataPath}/player.txt";
-
         Screen.SetResolution(1664, 936, false);
         hostService = FindObjectOfType<HostService>();
         playerNameInput = GetComponentInChildren<TMP_InputField>();
+        playerName = GetComponent<PlayerName>();
 
         var buttons = GetComponentsInChildren<Button>();
 
         joinButton = buttons.Single(b => b.gameObject.name == "JoinButton");
         createButton = buttons.Single(b => b.gameObject.name == "CreateButton");
 
-        LoadPlayerName();
+        playerNameInput.text = playerName.Load();
         SetButtonsInteractability();
     }
 
@@ -58,24 +53,6 @@ public class MainMenu : MonoBehaviour
 
     public void OnPlayerNameDeselect()
     {
-        SavePlayerName();
-    }
-
-    private void SavePlayerName()
-    {
-        using (var stream = new StreamWriter(path))
-        {
-            stream.WriteLine(playerNameInput.text);
-        }
-    }
-
-    private void LoadPlayerName()
-    {
-        if (!File.Exists(path))
-        {
-            return;
-        }
-
-        playerNameInput.text = File.ReadAllLines(path)[0];
+        playerName.Save(playerNameInput.text);
     }
 }

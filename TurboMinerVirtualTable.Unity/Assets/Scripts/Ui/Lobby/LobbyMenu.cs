@@ -18,6 +18,11 @@ public class LobbyMenu : MonoBehaviour
         {
             LobbyDropdowns.ResetWidthAndHeight();
             LobbyDropdowns.InitConfigs();
+
+            var playerName = GetComponent<PlayerName>();
+            var playerLabelsManager = GetComponent<PlayerLabelsManager>();
+
+            playerLabelsManager.AddPlayer(playerName.Load());
         }
         LobbyDropdowns.SetInteractable(isHost);
     }

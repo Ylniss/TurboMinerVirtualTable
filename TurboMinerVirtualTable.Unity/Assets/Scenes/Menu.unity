@@ -3727,7 +3727,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 0.27450982}
     m_PressedColor: {r: 1, g: 1, b: 1, a: 0.45490196}
     m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.039215688}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5792,6 +5792,7 @@ GameObject:
   - component: {fileID: 761556729}
   - component: {fileID: 761556728}
   - component: {fileID: 761556726}
+  - component: {fileID: 761556731}
   m_Layer: 0
   m_Name: LobbyMenu
   m_TagString: Untagged
@@ -5891,6 +5892,18 @@ MonoBehaviour:
   GameSettuper: {fileID: 761556729}
   LobbyDropdowns: {fileID: 761556726}
   StartButton: {fileID: 1139765679}
+--- !u!114 &761556731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761556724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dcdf0f731569da46b537ef861cd8718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &768865277
 GameObject:
   m_ObjectHideFlags: 0
@@ -10703,7 +10716,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1587544418}
-        m_MethodName: SavePlayerName
+        m_MethodName: OnPlayerNameDeselect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10727,7 +10740,18 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1587544418}
+        m_MethodName: OnPlayerNameChange
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: TMPro.TMP_InputField+OnChangeEvent, Unity.TextMeshPro, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_OnTouchScreenKeyboardStatusChanged:
@@ -10955,6 +10979,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1587544419}
   - component: {fileID: 1587544418}
+  - component: {fileID: 1587544416}
   m_Layer: 0
   m_Name: MainMenu
   m_TagString: Untagged
@@ -10962,6 +10987,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1587544416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587544415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dcdf0f731569da46b537ef861cd8718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1587544418
 MonoBehaviour:
   m_ObjectHideFlags: 0
